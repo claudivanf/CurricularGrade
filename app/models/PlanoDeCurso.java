@@ -6,19 +6,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.transaction.NotSupportedException;
 
 import managers.GerenciadorDeCadeiras;
+import play.db.ebean.Model;
 
 /**
  * Entidade que representa o Plano de Curso do sistema.
  */
-public class PlanoDeCurso {
+@Entity
+public class PlanoDeCurso extends Model{
 
 	// TODO PADRÃO DE PROJETO: ALTA COESÃO - so haverá informações coerentes com
 	// a classe
+	
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Long id;
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "plano_periodo", 
+    joinColumns = {@JoinColumn (name = "fk_plano_id")}, inverseJoinColumns = {@JoinColumn(name = "fk_periodo_id")})
 	private List<Periodo> periodos;
-	public Map<String, Cadeira> mapaDeCadeiras;
+	
+	private Map<String, Cadeira> mapaDeCadeiras;
+	
 	public static final int PRIMEIRO_PERIODO = 1;
 	public static final int MAXIMO_CREDITOS = 28;
 
@@ -26,13 +48,33 @@ public class PlanoDeCurso {
 		// TODO Responsabilidade Atribuita seguindo o padrão Creator
 		// O plano de curso ficou responsável por criar os períodos.
 		this.periodos = new ArrayList<Periodo>();
-		this.periodos.add(new Periodo(PRIMEIRO_PERIODO));
-		this.mapaDeCadeiras = GerenciadorDeCadeiras.getMapaDeCadeiras();
-		for (int i = 2; i <= 10; i++){
-			periodos.add(new Periodo(i));
+		for (int i = 1; i<= 10; i++ ){
+			periodos.add(new Periodo(i, this));
 		}
+		// seta o mapa de cadeiras com as cadeiras do xml
+		this.mapaDeCadeiras = GerenciadorDeCadeiras.getMapaDeCadeiras();
+		
+		//irá distribuir as cadeiras entre os periodos
+		distribuiCadeiras();  
 	}
 
+	public static Finder<Long,PlanoDeCurso> find = new Finder<Long,PlanoDeCurso>(
+		    Long.class, PlanoDeCurso.class
+	);
+	
+	public static void create(PlanoDeCurso p) {
+		p.save();
+	}
+
+	public static void delete(Long id) {
+		find.ref(id).delete();
+	}
+	
+	public static void atualizar(Long id) {
+		PlanoDeCurso p = find.ref(id);
+		p.update();
+	}
+	
 	/**
 	 * Adiciona um periodo à lista de períodos, de acordo com o tamanho da
 	 * lista.
@@ -40,7 +82,11 @@ public class PlanoDeCurso {
 	 * Seguindo o padrão creator.
 	 */
 	public void addPeriodo() {
-		this.periodos.add(new Periodo(this.periodos.size() + 1));
+		this.periodos.add(new Periodo(this.periodos.size() + 1, this));
+	}
+	
+	public void addPeriodo(int num_periodo) {
+		this.periodos.add(new Periodo(num_periodo, this));
 	}
 
 	/**
@@ -56,14 +102,34 @@ public class PlanoDeCurso {
 	public List<Periodo> getPeriodos() {
 		return this.periodos;
 	}
+	
+	public void distribuiCadeiras(){
+		for(Cadeira c: mapaDeCadeiras.values()){
+			Periodo p = getPeriodo(c.getPeriodo().getNumero());
+			p.addCadeira(c);
+			c.setPeriodo(p);
+		}
+	}
+	
+	public void setPeriodos(List<Periodo> periodos){
+		this.periodos = periodos;
+	}
 
+	public void setMapaDeCadeiras(Map<String, Cadeira> mapa){
+		this.mapaDeCadeiras = mapa;
+	}
+	
+	public Long getId(){
+		return id;
+	}
+	
 	/**
 	 * Retorna o Map de cadeiras já alocadas no plano de curso.
 	 */
 	public Map<String, Cadeira> getMapCadeirasAlocadas() {
 		Map<String, Cadeira> alocadas = new HashMap<String, Cadeira>();
 		for (Periodo periodo : periodos) {
-			alocadas.putAll(periodo.getMapCadeiras());
+			alocadas.putAll(periodo.getCadeiras());
 		}
 		return alocadas;
 	}
@@ -102,13 +168,10 @@ public class PlanoDeCurso {
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
 		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
-		if (periodo == PRIMEIRO_PERIODO) {
-			throw new IllegalArgumentException(
-					"você não pode adicionar cadeiras ao 1º periodo!");
-		} else if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
+		if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
 			throw new NotSupportedException("limite de créditos ultrapassado!");
 		}
-		for (Cadeira cadeiraDoPeriodo : getPeriodo(periodo).getCadeiras()) {
+		for (Cadeira cadeiraDoPeriodo : getPeriodo(periodo).getListaCadeiras()) {
 			if (cadeira.isPreRequisito(cadeiraDoPeriodo)) {
 				throw new NotSupportedException(
 						"Você não pode adicionar essa cadeira junto com seu(s) pré-requisitos");
@@ -133,7 +196,7 @@ public class PlanoDeCurso {
 		// verifica se a cadeira tem algum pre-requisito em um periodo posterior
 		// ao que está sendo adicionado
 		for (int i = periodo; i < periodos.size(); i++) {
-			for (Cadeira c : periodos.get(i).getCadeiras()) {
+			for (Cadeira c : periodos.get(i).getListaCadeiras()) {
 				if (cadeira.getPreRequisitos().contains(c)) {
 					throw new NotSupportedException("Pre Requisito: "
 							+ c.getNome() + " não concluido");
@@ -154,19 +217,17 @@ public class PlanoDeCurso {
 		// essa classe vai ser a responsável por remover uma cadeira ao periodo
 		if (getMapCadeirasAlocadas().get(cadeira) == null) {
 			throw new Exception("Essa Cadeira não está alocada!");
-		} else if (GerenciadorDeCadeiras.getCadeirasPrimeiro().get(cadeira) != null) {
-			throw new Exception("Você não pode remover cadeiras do 1º período!");
 		}
 		Cadeira removida = getMapCadeirasAlocadas().get(cadeira);
 		// procura pela cadeira entre os periodos.
 		for (Periodo periodo : periodos) {
 			// remove a cadeira
-			if (periodo.getMapCadeiras().get(cadeira) != null) {
+			if (periodo.getCadeiras().get(cadeira) != null) {
 				periodo.removerCadeira(removida);
 			}
 			// verifica as cadeiras que tem a cadeira a ser removida como
 			// pre-requisito e remove
-			for (Cadeira c : periodo.getCadeiras()) {
+			for (Cadeira c : periodo.getListaCadeiras()) {
 				if (c.getPreRequisitos().contains(removida)) {
 					removeCadeira(c.getNome());
 				}
@@ -184,7 +245,7 @@ public class PlanoDeCurso {
 		for (Periodo periodo : periodos) {
 			// verifica as cadeiras que tem a cadeira a ser removida como
 			// pre-requisito
-			for (Cadeira cadeiraDoPeriodo : periodo.getCadeiras()) {
+			for (Cadeira cadeiraDoPeriodo : periodo.getListaCadeiras()) {
 				if (cadeiraDoPeriodo.getPreRequisitos().contains(cadeira)) {
 					return true;
 				}

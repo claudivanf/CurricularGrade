@@ -10,7 +10,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import models.Cadeira;
-import models.PlanoDeCurso;
+import models.Periodo;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -25,8 +25,7 @@ public class GerenciadorDeCadeiras {
 
 	// TODO PADRÃO DE PROJETO: CREATOR - Um gerenciador de cadeiras precisa do
 	// mapas de cadeiras contendo todas as cadeiras do curso
-	private static Map<String, Cadeira> listaDeCadeiras = new HashMap<String, Cadeira>();
-	private static Map<String, Cadeira> cadeiraPrimeiro = new HashMap<String, Cadeira>();
+	private static Map<String, Cadeira> mapaDeCadeiras = new HashMap<String, Cadeira>();
 
 	// TODO PADRÃO DE PROJETO: CONTROLLER - essa classe é responsável por
 	// controlar a adição de cadeiras no mapa.
@@ -56,26 +55,29 @@ public class GerenciadorDeCadeiras {
 		Element cadeiraXml = (Element) nNode;
 		String idCadeira = cadeiraXml.getAttribute("id");
 		String nomeCadeira = cadeiraXml.getAttribute("nome");
-		criandoCadeira.setNome(nomeCadeira);
+		
 		int dificuldade = Integer.parseInt(cadeiraXml
 				.getElementsByTagName("dificuldade").item(0).getTextContent());
-		criandoCadeira.setDificuldade(dificuldade);
 		int creditos = Integer.parseInt(cadeiraXml
 				.getElementsByTagName("creditos").item(0).getTextContent());
-		criandoCadeira.setCreditos(creditos);
 		int periodo = Integer.parseInt(cadeiraXml
 				.getElementsByTagName("periodo").item(0).getTextContent());
 		NodeList requisitos = cadeiraXml.getElementsByTagName("id");
-		for (int i = 0; i < requisitos.getLength(); i++) {
+		
+		criandoCadeira.setNome(nomeCadeira); //seta nome
+		criandoCadeira.setDificuldade(dificuldade); //seta dificuldade
+		criandoCadeira.setCreditos(creditos); //seta creditos
+		// pega o periodo relativo ao id no BD
+		criandoCadeira.setPeriodo(new Periodo(periodo)); //seta o periodo
+		
+		for (int i = 0; i < requisitos.getLength(); i++) {  //seta requisitos
 			criandoCadeira.addPreRequisito(cadeirasPorId.get(requisitos.item(i)
 					.getTextContent()));
 		}
+		//criandoCadeira.save(); //salva a cadeira no BD
 		cadeirasPorId.put(idCadeira, criandoCadeira);
-		if (periodo == PlanoDeCurso.PRIMEIRO_PERIODO) {
-			cadeiraPrimeiro.put(criandoCadeira.getNome(), criandoCadeira);
-		} else {
-			listaDeCadeiras.put(criandoCadeira.getNome(), criandoCadeira);
-		}
+			
+		mapaDeCadeiras.put(criandoCadeira.getNome(), criandoCadeira);
 	}
 
 	/**
@@ -91,17 +93,23 @@ public class GerenciadorDeCadeiras {
 		return doc;
 	}
 
-	public static Map<String, Cadeira> getCadeirasPrimeiro() {
-		if (listaDeCadeiras.isEmpty()) {
+	public static void populaCadeirasBD() {
+		if (mapaDeCadeiras.isEmpty()) {
 			populaMapas();
 		}
-		return cadeiraPrimeiro;
+	}
+	
+	public static Map<String, Cadeira> getCadeirasPorPeriodo(int periodo){
+		Map<String, Cadeira> mapa = new HashMap<String, Cadeira>();
+		for (Cadeira c : getMapaDeCadeiras().values()){
+			if(c.getNumeroPeriodo() == periodo)
+				mapa.put(c.getNome(), c);
+		}
+		return mapa;
 	}
 
 	public static Map<String, Cadeira> getMapaDeCadeiras() {
-		if (listaDeCadeiras.isEmpty()) {
-			populaMapas();
-		}
-		return listaDeCadeiras;
+		populaCadeirasBD();
+		return mapaDeCadeiras;
 	}
 }

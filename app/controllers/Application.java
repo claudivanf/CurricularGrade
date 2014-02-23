@@ -8,9 +8,10 @@ public class Application extends Controller {
 
 	static PlanoDeCurso plano;
 
-	public static Result index() {
+	public static Result index() throws Exception {
 		if (plano == null) {
 			plano = new PlanoDeCurso();
+			plano.save();
 		}
 		return ok(views.html.index.render(plano));
 	}

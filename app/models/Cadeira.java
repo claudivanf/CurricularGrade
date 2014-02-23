@@ -3,28 +3,59 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
+import play.data.validation.Constraints;
+import play.db.ebean.Model;
+
+import com.google.common.base.Objects;
 /**
  * Entidade que representa uma Cadeira.
  */
-public class Cadeira implements Comparable<Cadeira>{
+@Entity
+public class Cadeira extends Model implements Comparable<Cadeira>{
+
+	private static final long serialVersionUID = 1L;
 
 	// TODO PADRÃO DE PROJETO: ALTA COESÃO - so haverá informações coerentes com
 	// a classe
-	private int id;
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	Long id;
+	
+	@Constraints.Required
+	@Column(unique = true, nullable=false)
 	private String nome;
+	
 	private int creditos;
-	private List<Cadeira> preRequisitos;
-	private int dificuldade; // dificuldade de 1 - 10
 
-	// Construtor Default
+	@ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "cadeira_requisito", 
+    joinColumns = {@JoinColumn (name = "fk_cadeira")}, inverseJoinColumns = {@JoinColumn(name = "fk_requisito")})
+	private List<Cadeira> preRequisitos;
+	
+	private int dificuldade; // dificuldade de 1 - 10
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	@Column(name="fk_periodo")
+	private Periodo periodo;
+
 	public Cadeira() {
 		setPreRequisitos(new ArrayList<Cadeira>());
 	}
 
 	public Cadeira(String nome, int dificuldade) {
-		this.setNome(nome);
+		this.setNome(nome);	
 		this.creditos = 4;
 		this.dificuldade = dificuldade;
 		setPreRequisitos(new ArrayList<Cadeira>());
@@ -34,7 +65,25 @@ public class Cadeira implements Comparable<Cadeira>{
 		this(nome, dificuldade);
 		this.creditos = creditos;
 	}
+	
+	/**
+	 * Retorna verdadeiro caso a cadeira {@code c} seja pre-requisito, Seguindo
+	 * o padrão Information Expert, quem deve saber se uma cadeira é
+	 * pre-requisito é a mesma.
+	 */
+	public boolean isPreRequisito(Cadeira c) {
+		return this.getPreRequisitos().contains(c);
+	}
 
+	// TODO PADRÃO DE PROJETO: INFORMATION EXPERT - a classe cadeira é a
+	// responsável por guardar e adicionar pre-requisitos
+	public void addPreRequisito(Cadeira... c) {
+		Cadeira[] lista = c;
+		for (Cadeira cadeira : lista) {
+			getPreRequisitos().add(cadeira);
+		}
+	}
+	
 	public void setCreditos(int creditos) {
 		this.creditos = creditos;
 	}
@@ -59,27 +108,51 @@ public class Cadeira implements Comparable<Cadeira>{
 		return preRequisitos;
 	}
 
-	// TODO PADRÃO DE PROJETO: INFORMATION EXPERT - a classe cadeira é a
-	// responsável por guardar e adicionar pre-requisitos
-	public void addPreRequisito(Cadeira... c) {
-		Cadeira[] lista = c;
-		for (Cadeira cadeira : lista) {
-			getPreRequisitos().add(cadeira);
-		}
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
-	/**
-	 * Retorna verdadeiro caso a cadeira {@code c} seja pre-requisito, Seguindo
-	 * o padrão Information Expert, quem deve saber se uma cadeira é
-	 * pre-requisito é a mesma.
-	 */
-	public boolean isPreRequisito(Cadeira c) {
-		return this.getPreRequisitos().contains(c);
+	public void setPreRequisitos(List<Cadeira> preRequisitos) {
+		this.preRequisitos = preRequisitos;
+	}
+
+	public Periodo getPeriodo() {
+		return periodo;
+	}
+
+	public void setPeriodo(Periodo periodo) {
+		this.periodo = periodo;
+	}
+
+	public int getNumeroPeriodo(){
+		return periodo.getNumero();
+	}
+	
+	public static Finder<Long,Cadeira> find = new Finder<Long,Cadeira>(
+		    Long.class, Cadeira.class
+	); 
+	
+	public static void create(Cadeira c) {
+		c.save();
+	}
+
+	public static void delete(Long id) {
+		find.ref(id).delete();
+	}
+	
+	public static void atualizar(Long id) {
+		Cadeira p = find.ref(id);
+		p.update();
+	}
+	
+	@Override
+	public int compareTo(Cadeira c) {
+		return getNome().compareTo(c.getNome());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(getId(), getNome(), creditos,
+		return Objects.hashCode(getNome(), creditos,
 				getPreRequisitos());
 	}
 
@@ -98,24 +171,4 @@ public class Cadeira implements Comparable<Cadeira>{
 						other.getPreRequisitos());
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public void setPreRequisitos(List<Cadeira> preRequisitos) {
-		this.preRequisitos = preRequisitos;
-	}
-
-	@Override
-	public int compareTo(Cadeira c) {
-		return getNome().compareTo(c.getNome());
-	}
 }
