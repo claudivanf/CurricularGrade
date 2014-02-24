@@ -85,9 +85,11 @@ public class PlanoDeCurso extends Model{
 	 */
 	public void distribuiCadeiras(){
 		for(Cadeira c: mapaDeCadeiras.values()){
-			Periodo p = getPeriodo(c.getPeriodo());
-			p.addCadeira(c);
-			c.setPlano(this);
+			if(c.getPeriodo() != 0) {
+				Periodo p = getPeriodo(c.getPeriodo());
+				p.addCadeira(c);
+				c.setPlano(this);
+			}
 		}
 	}
 	
@@ -246,23 +248,29 @@ public class PlanoDeCurso extends Model{
 	public void removeCadeira(String cadeira) throws Exception {
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por remover uma cadeira ao periodo
-		if (getMapCadeirasAlocadas().get(cadeira) == null) {
-			throw new Exception("Essa Cadeira não está alocada!");
-		}
-		Cadeira removida = getMapCadeirasAlocadas().get(cadeira);
+		//if (getMapCadeirasAlocadas().get(cadeira) == null) {
+		//	throw new Exception("Essa Cadeira não está alocada!");
+		//}
+		Cadeira removida = mapaDeCadeiras.get(cadeira);
 		// procura pela cadeira entre os periodos.
-		for (Periodo periodo : periodos) {
-			// remove a cadeira
-			if (periodo.getCadeiras().get(cadeira) != null) {
-				periodo.removerCadeira(removida);
-			}
-			// verifica as cadeiras que tem a cadeira a ser removida como
-			// pre-requisito e remove
-			for (Cadeira c : periodo.getListaCadeiras()) {
-				if (c.getPreRequisitos().contains(removida)) {
+		System.out.println("BBBB");
+		System.out.println(removida);
+		System.out.println(removida.getPeriodo());
+		System.out.println(getPeriodo(removida.getPeriodo()));
+		getPeriodo(removida.getPeriodo()).removerCadeira(removida);
+		removida.setPeriodo(0);
+		try{
+		for (Periodo p: periodos){
+			for (Cadeira c: p.getListaCadeiras()){
+				if(c.isPreRequisito(removida)){
+					System.out.println("C: " + c.getNome());
 					removeCadeira(c.getNome());
 				}
 			}
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+			
 		}
 	}
 }

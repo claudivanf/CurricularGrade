@@ -158,8 +158,7 @@ public class Cadeira extends Model implements Comparable<Cadeira>{
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(getNome(), creditos,
-				getPreRequisitos());
+		return Objects.hashCode(getNome(), creditos);
 	}
 
 	@Override
@@ -172,9 +171,7 @@ public class Cadeira extends Model implements Comparable<Cadeira>{
 			return false;
 		Cadeira other = (Cadeira) obj;
 		return Objects.equal(this.getCreditos(), other.getCreditos())
-				&& Objects.equal(this.getNome(), other.getNome())
-				&& Objects.equal(this.getPreRequisitos(),
-						other.getPreRequisitos());
+				&& Objects.equal(this.getNome(), other.getNome());
 	}
 
 }

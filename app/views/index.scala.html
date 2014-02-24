@@ -27,7 +27,6 @@
 		}
 		 -->
 		
-		
 		<ul style="list-style:none;">
 			<span class="label label-info" style="width:190px;height:30px;font-size:20px;margin-bottom:10px;margin-left:-40px;">@periodo.getNumero() @Messages("nPeriodo") </span>
 			@for(cadeira <- periodo.getListaCadeiras()) {
@@ -45,7 +44,8 @@
 		  		<center><label class="nome"> <span>@cadeira.getNome()</span></label></center>
 		  		<label class="creditos">@cadeira.getCreditos() @Messages("creditos")</label>
 		  		<label class="dificuldade"> dificuldade: @cadeira.getDificuldade()</label>
-		  		<span style="margin-top: 5px;margin-left:150px;" ></span>	
+		  		<span style="margin-top: 5px;margin-left:150px;" 
+		  		onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')"></span>	
 		  	</div>
 		} 
 		</ul>

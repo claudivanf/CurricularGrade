@@ -45,7 +45,11 @@ public class Application extends Controller {
 	}
 
 	public static Result remCadeira(String cadeira) throws Exception {
+		System.out.println("UP0");
 		plano.removeCadeira(cadeira);
+		System.out.println("UP1");
+		plano.update();
+		System.out.println("UP2");
 		return redirect(routes.Application.index());
 	}
 }
