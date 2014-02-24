@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.transaction.NotSupportedException;
 
 import managers.GerenciadorDeCadeiras;
@@ -35,6 +36,10 @@ public class PlanoDeCurso extends Model{
 	
 	private List<Periodo> periodos;
 	
+	
+	//@OneToOne
+	private Usuario usuario;
+
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinTable
 	private Map<String, Cadeira> mapaDeCadeiras;
@@ -250,6 +255,15 @@ public class PlanoDeCurso extends Model{
 			}
 		}
 		return false;
+	}
+	
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }

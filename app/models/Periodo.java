@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import play.db.ebean.Model;
+import play.db.ebean.Model.Finder;
 
 /**
  * Entidade que representa um período
  */
-public class Periodo extends Model{
+public class Periodo{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -73,18 +74,5 @@ public class Periodo extends Model{
 
 	public Cadeira getCadeira(String cadeira) {
 		return cadeiras.get(cadeira);
-	}
-	
-	public static void create(Periodo p) {
-		p.save();
-	}
-
-	public static void delete(Long id) {
-		find.ref(id).delete();
-	}
-	
-	public static void atualizar(Long id) {
-		Periodo p = find.ref(id);
-		p.update();
 	}
 }
