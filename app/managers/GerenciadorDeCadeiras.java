@@ -10,7 +10,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import models.Cadeira;
-import models.Periodo;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -53,9 +52,9 @@ public class GerenciadorDeCadeiras {
 			Node nNode) {
 		Cadeira criandoCadeira = new Cadeira();
 		Element cadeiraXml = (Element) nNode;
+		
 		String idCadeira = cadeiraXml.getAttribute("id");
 		String nomeCadeira = cadeiraXml.getAttribute("nome");
-		
 		int dificuldade = Integer.parseInt(cadeiraXml
 				.getElementsByTagName("dificuldade").item(0).getTextContent());
 		int creditos = Integer.parseInt(cadeiraXml
@@ -67,16 +66,13 @@ public class GerenciadorDeCadeiras {
 		criandoCadeira.setNome(nomeCadeira); //seta nome
 		criandoCadeira.setDificuldade(dificuldade); //seta dificuldade
 		criandoCadeira.setCreditos(creditos); //seta creditos
-		// pega o periodo relativo ao id no BD
-		criandoCadeira.setPeriodo(new Periodo(periodo)); //seta o periodo
-		
+		criandoCadeira. setPeriodo(periodo); //seta o periodo
 		for (int i = 0; i < requisitos.getLength(); i++) {  //seta requisitos
 			criandoCadeira.addPreRequisito(cadeirasPorId.get(requisitos.item(i)
 					.getTextContent()));
 		}
-		//criandoCadeira.save(); //salva a cadeira no BD
-		cadeirasPorId.put(idCadeira, criandoCadeira);
-			
+		
+		cadeirasPorId.put(idCadeira, criandoCadeira);	
 		mapaDeCadeiras.put(criandoCadeira.getNome(), criandoCadeira);
 	}
 
@@ -97,15 +93,6 @@ public class GerenciadorDeCadeiras {
 		if (mapaDeCadeiras.isEmpty()) {
 			populaMapas();
 		}
-	}
-	
-	public static Map<String, Cadeira> getCadeirasPorPeriodo(int periodo){
-		Map<String, Cadeira> mapa = new HashMap<String, Cadeira>();
-		for (Cadeira c : getMapaDeCadeiras().values()){
-			if(c.getNumeroPeriodo() == periodo)
-				mapa.put(c.getNome(), c);
-		}
-		return mapa;
 	}
 
 	public static Map<String, Cadeira> getMapaDeCadeiras() {

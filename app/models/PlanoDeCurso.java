@@ -11,9 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.transaction.NotSupportedException;
 
 import managers.GerenciadorDeCadeiras;
@@ -34,11 +33,10 @@ public class PlanoDeCurso extends Model{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 	
-	@ManyToMany(cascade=CascadeType.ALL)
-    @JoinTable(name = "plano_periodo", 
-    joinColumns = {@JoinColumn (name = "fk_plano_id")}, inverseJoinColumns = {@JoinColumn(name = "fk_periodo_id")})
 	private List<Periodo> periodos;
 	
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinTable
 	private Map<String, Cadeira> mapaDeCadeiras;
 	
 	public static final int PRIMEIRO_PERIODO = 1;
@@ -49,7 +47,7 @@ public class PlanoDeCurso extends Model{
 		// O plano de curso ficou responsável por criar os períodos.
 		this.periodos = new ArrayList<Periodo>();
 		for (int i = 1; i<= 10; i++ ){
-			periodos.add(new Periodo(i, this));
+			periodos.add(new Periodo(i));
 		}
 		// seta o mapa de cadeiras com as cadeiras do xml
 		this.mapaDeCadeiras = GerenciadorDeCadeiras.getMapaDeCadeiras();
@@ -82,11 +80,11 @@ public class PlanoDeCurso extends Model{
 	 * Seguindo o padrão creator.
 	 */
 	public void addPeriodo() {
-		this.periodos.add(new Periodo(this.periodos.size() + 1, this));
+		this.periodos.add(new Periodo(this.periodos.size() + 1));
 	}
 	
 	public void addPeriodo(int num_periodo) {
-		this.periodos.add(new Periodo(num_periodo, this));
+		this.periodos.add(new Periodo(num_periodo));
 	}
 
 	/**
@@ -105,9 +103,9 @@ public class PlanoDeCurso extends Model{
 	
 	public void distribuiCadeiras(){
 		for(Cadeira c: mapaDeCadeiras.values()){
-			Periodo p = getPeriodo(c.getPeriodo().getNumero());
+			Periodo p = getPeriodo(c.getPeriodo());
 			p.addCadeira(c);
-			c.setPeriodo(p);
+			c.setPlano(this);
 		}
 	}
 	

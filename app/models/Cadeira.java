@@ -46,9 +46,11 @@ public class Cadeira extends Model implements Comparable<Cadeira>{
 	
 	private int dificuldade; // dificuldade de 1 - 10
 	
+	private int periodo;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
-	@Column(name="fk_periodo")
-	private Periodo periodo;
+	@Column(name="fk_plano")
+	private PlanoDeCurso plano;
 
 	public Cadeira() {
 		setPreRequisitos(new ArrayList<Cadeira>());
@@ -116,16 +118,20 @@ public class Cadeira extends Model implements Comparable<Cadeira>{
 		this.preRequisitos = preRequisitos;
 	}
 
-	public Periodo getPeriodo() {
+	public int getPeriodo(){
 		return periodo;
 	}
-
-	public void setPeriodo(Periodo periodo) {
+	
+	public void setPeriodo(int periodo){
 		this.periodo = periodo;
 	}
+	
+	public PlanoDeCurso getPlano() {
+		return plano;
+	}
 
-	public int getNumeroPeriodo(){
-		return periodo.getNumero();
+	public void setPlano(PlanoDeCurso plano) {
+		this.plano = plano;
 	}
 	
 	public static Finder<Long,Cadeira> find = new Finder<Long,Cadeira>(
