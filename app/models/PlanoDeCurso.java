@@ -34,7 +34,6 @@ public class PlanoDeCurso extends Model{
 	
 	private List<Periodo> periodos;
 	
-	
 	//@OneToOne
 	private Usuario usuario;
 
@@ -92,6 +91,15 @@ public class PlanoDeCurso extends Model{
 		}
 	}
 	
+	public void distribuiCaderas(List<Cadeira> cadeiras){
+		Map<String, Cadeira> mapa = new HashMap<String, Cadeira>();
+		for(Cadeira c: cadeiras){
+			mapa.put(c.getNome(), c);
+		}
+		mapaDeCadeiras = mapa;
+		distribuiCadeiras();
+	}
+	
 	/**
 	 * Adiciona um periodo à lista de períodos, de acordo com o tamanho da
 	 * lista.
@@ -126,15 +134,6 @@ public class PlanoDeCurso extends Model{
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
-	
-	public Cadeira getCadeira(String cadeira){
-		for (Periodo p: periodos){
-			if (p.getCadeira(cadeira) != null){
-				return p.getCadeira(cadeira);
-			}
-		}
-		return null;
 	}
 	
 	/**
@@ -181,7 +180,7 @@ public class PlanoDeCurso extends Model{
 	public void addCadeira(String cadeiraNome, int periodo) throws Exception {
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
-		Cadeira cadeira = getCadeira(cadeiraNome);
+		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
 		//if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
 		//	throw new NotSupportedException("limite de créditos ultrapassado!");
 		//}
@@ -192,7 +191,7 @@ public class PlanoDeCurso extends Model{
 		// adiciona essa cadeira no periodo escolhido
 		getPeriodo(periodo).addCadeira(cadeira);
 		//seta o apontador do periodo para o periodo escolhido
-		cadeira.setPeriodo(periodo); 
+		cadeira.setPeriodo(periodo);
 	}
 	
 	/**
@@ -201,7 +200,7 @@ public class PlanoDeCurso extends Model{
 	 * @param cadeira a ser verificada
 	 */
 	public boolean verificaPrerequisito(String cadeira){
-		Cadeira cad = getCadeira(cadeira);
+		Cadeira cad = mapaDeCadeiras.get(cadeira);
 		for (Periodo p: periodos){
 			for (Cadeira c: p.getListaCadeiras()){
 				if (cad.isPreRequisito(c) && c.getPeriodo() >= cad.getPeriodo()){
