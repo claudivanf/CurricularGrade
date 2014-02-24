@@ -11,7 +11,11 @@ public class Application extends Controller {
 	public static Result index() throws Exception {
 		if (plano == null) {
 			plano = new PlanoDeCurso();
-			plano.save();
+			try{
+				plano.save();
+			}catch(Exception e){
+				System.out.println(e.getMessage());
+			}
 		}
 		return ok(views.html.index.render(plano));
 	}

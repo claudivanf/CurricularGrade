@@ -59,6 +59,10 @@ public class PlanoDeCurso extends Model{
 		distribuiCadeiras();  
 	}
 
+	public Long getId(){
+		return id;
+	}	
+
 	public static Finder<Long,PlanoDeCurso> find = new Finder<Long,PlanoDeCurso>(
 		    Long.class, PlanoDeCurso.class
 	);
@@ -131,14 +135,6 @@ public class PlanoDeCurso extends Model{
 			}
 		}
 		return null;
-	}
-
-	public void setMapaDeCadeiras(Map<String, Cadeira> mapa){
-		this.mapaDeCadeiras = mapa;
-	}
-	
-	public Long getId(){
-		return id;
 	}
 	
 	/**
