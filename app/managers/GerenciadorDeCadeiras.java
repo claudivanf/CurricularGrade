@@ -89,14 +89,14 @@ public class GerenciadorDeCadeiras {
 		return doc;
 	}
 
-	public static void populaCadeirasBD() {
+	public static void populaCadeiras() {
 		if (mapaDeCadeiras.isEmpty()) {
 			populaMapas();
 		}
 	}
 
 	public static Map<String, Cadeira> getMapaDeCadeiras() {
-		populaCadeirasBD();
+		populaCadeiras();
 		return mapaDeCadeiras;
 	}
 }

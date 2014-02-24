@@ -4,16 +4,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
-
 /**
  * Entidade que representa um período
  */
 public class Periodo{
 
-	private static final long serialVersionUID = 1L;
-	
 	private int numero;
 
 	private Map<String, Cadeira> cadeiras;
@@ -22,10 +17,6 @@ public class Periodo{
 		this.numero = numeroDoPeriodo;
 		cadeiras = new HashMap<String, Cadeira>();
 	}
-	
-	public static Finder<Long,Periodo> find = new Finder<Long,Periodo>(
-		    Long.class, Periodo.class
-	); 
 
 	public void addCadeira(Cadeira cadeira){
 		cadeiras.put(cadeira.getNome(), cadeira);

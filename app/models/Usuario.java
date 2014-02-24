@@ -8,8 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.google.common.base.Objects;
+
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 
 @Entity
 public class Usuario extends Model {
@@ -87,39 +88,20 @@ public class Usuario extends Model {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + ((plano == null) ? 0 : plano.hashCode());
-		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
-		return result;
+		return Objects.hashCode(this.nome, this.senha);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		if (plano == null) {
-			if (other.plano != null)
-				return false;
-		} else if (!plano.equals(other.plano))
-			return false;
-		if (senha == null) {
-			if (other.senha != null)
-				return false;
-		} else if (!senha.equals(other.senha))
-			return false;
-		return true;
+		return Objects.equal(this.nome, other.getNome()) &&
+				Objects.equal(this.senha, other.getSenha());
 	}
 
 }

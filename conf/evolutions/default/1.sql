@@ -16,7 +16,6 @@ create table cadeira (
 
 create table plano_de_curso (
   id                        bigint not null,
-  usuario_id                bigint,
   constraint pk_plano_de_curso primary key (id))
 ;
 
@@ -42,10 +41,8 @@ create sequence usuario_seq;
 
 alter table cadeira add constraint fk_cadeira_plano_1 foreign key (plano_id) references plano_de_curso (id) on delete restrict on update restrict;
 create index ix_cadeira_plano_1 on cadeira (plano_id);
-alter table plano_de_curso add constraint fk_plano_de_curso_usuario_2 foreign key (usuario_id) references usuario (id) on delete restrict on update restrict;
-create index ix_plano_de_curso_usuario_2 on plano_de_curso (usuario_id);
-alter table usuario add constraint fk_usuario_plano_3 foreign key (plano_id) references plano_de_curso (id) on delete restrict on update restrict;
-create index ix_usuario_plano_3 on usuario (plano_id);
+alter table usuario add constraint fk_usuario_plano_2 foreign key (plano_id) references plano_de_curso (id) on delete restrict on update restrict;
+create index ix_usuario_plano_2 on usuario (plano_id);
 
 
 
