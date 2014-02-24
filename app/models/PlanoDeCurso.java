@@ -37,7 +37,7 @@ public class PlanoDeCurso extends Model{
 	private List<Periodo> periodos;
 	
 	
-	//@OneToOne
+	@OneToOne
 	private Usuario usuario;
 
 	@OneToMany(cascade=CascadeType.ALL)
@@ -171,18 +171,32 @@ public class PlanoDeCurso extends Model{
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
 		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
-		if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
-			throw new NotSupportedException("limite de créditos ultrapassado!");
-		}
-		for (Cadeira cadeiraDoPeriodo : getPeriodo(periodo).getListaCadeiras()) {
-			if (cadeira.isPreRequisito(cadeiraDoPeriodo)) {
-				throw new NotSupportedException(
-						"Você não pode adicionar essa cadeira junto com seu(s) pré-requisitos");
+		//if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
+		//	throw new NotSupportedException("limite de créditos ultrapassado!");
+		//}
+		//for (Cadeira cadeiraDoPeriodo : getPeriodo(periodo).getListaCadeiras()) {
+		//	if (cadeira.isPreRequisito(cadeiraDoPeriodo)) {
+		//		throw new NotSupportedException(
+		//				"Você não pode adicionar essa cadeira junto com seu(s) pré-requisitos");
+		//	}
+		//}
+		//verificaPreRequisitos(cadeira, periodo);
+		periodos.get(periodo - 1).addCadeira(cadeira);
+		cadeira.setPeriodo(periodo);
+	}
+	
+	public boolean verificaPrerequisito(String cadeira){
+		Cadeira cad = mapaDeCadeiras.get(cadeira);
+		for (Periodo p: periodos){
+			for (Cadeira c: p.getListaCadeiras()){
+				if (c.isPreRequisito(cad) && c.getPeriodo() < cad.getPeriodo()){
+					return true;
+				}
 			}
 		}
-		verificaPreRequisitos(cadeira, periodo);
-		periodos.get(periodo - 1).addCadeira(cadeira);
+		return false;
 	}
+	
 
 	/**
 	 * Verifica se os pre-requisitos de uma certa cadeira já foram concluídos.

@@ -16,7 +16,16 @@ create table cadeira (
 
 create table plano_de_curso (
   id                        bigint not null,
+  usuario_id                bigint,
   constraint pk_plano_de_curso primary key (id))
+;
+
+create table usuario (
+  id                        bigint not null,
+  nome                      varchar(255),
+  senha                     varchar(255),
+  plano_id                  bigint,
+  constraint pk_usuario primary key (id))
 ;
 
 
@@ -29,8 +38,14 @@ create sequence cadeira_seq;
 
 create sequence plano_de_curso_seq;
 
+create sequence usuario_seq;
+
 alter table cadeira add constraint fk_cadeira_plano_1 foreign key (plano_id) references plano_de_curso (id) on delete restrict on update restrict;
 create index ix_cadeira_plano_1 on cadeira (plano_id);
+alter table plano_de_curso add constraint fk_plano_de_curso_usuario_2 foreign key (usuario_id) references usuario (id) on delete restrict on update restrict;
+create index ix_plano_de_curso_usuario_2 on plano_de_curso (usuario_id);
+alter table usuario add constraint fk_usuario_plano_3 foreign key (plano_id) references plano_de_curso (id) on delete restrict on update restrict;
+create index ix_usuario_plano_3 on usuario (plano_id);
 
 
 
@@ -48,9 +63,13 @@ drop table if exists cadeira_requisito;
 
 drop table if exists plano_de_curso;
 
+drop table if exists usuario;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists cadeira_seq;
 
 drop sequence if exists plano_de_curso_seq;
+
+drop sequence if exists usuario_seq;
 
