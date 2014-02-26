@@ -6,13 +6,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
@@ -30,7 +28,6 @@ public class Cadeira extends Model implements Comparable<Cadeira>{
 	// a classe
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 	
 	@Constraints.Required
@@ -39,18 +36,15 @@ public class Cadeira extends Model implements Comparable<Cadeira>{
 	
 	private int creditos;
 
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinTable(name = "cadeira_requisito", 
     joinColumns = {@JoinColumn (name = "fk_cadeira")}, inverseJoinColumns = {@JoinColumn(name = "fk_requisito")})
 	private List<Cadeira> preRequisitos;
 	
 	private int dificuldade; // dificuldade de 1 - 10
 	
+	@Column(name="periodo_original")
 	private int periodo;
-	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@Column(name="fk_plano")
-	private PlanoDeCurso plano;
 
 	public Cadeira() {
 		setPreRequisitos(new ArrayList<Cadeira>());
@@ -124,14 +118,6 @@ public class Cadeira extends Model implements Comparable<Cadeira>{
 	
 	public void setPeriodo(int periodo){
 		this.periodo = periodo;
-	}
-	
-	public PlanoDeCurso getPlano() {
-		return plano;
-	}
-
-	public void setPlano(PlanoDeCurso plano) {
-		this.plano = plano;
 	}
 	
 	public static Finder<Long,Cadeira> find = new Finder<Long,Cadeira>(

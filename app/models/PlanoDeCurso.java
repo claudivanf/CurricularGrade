@@ -8,13 +8,14 @@ import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
-import managers.GerenciadorDeCadeiras;
 import play.db.ebean.Model;
 
 /**
@@ -32,13 +33,14 @@ public class PlanoDeCurso extends Model{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 	
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinTable(name = "plano_periodo", 
+    joinColumns = {@JoinColumn (name = "fk_plano")}, inverseJoinColumns = {@JoinColumn(name = "fk_periodo")})
 	private List<Periodo> periodos;
 	
 	//@OneToOne
 	private Usuario usuario;
 
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinTable
 	private Map<String, Cadeira> mapaDeCadeiras;
 	
 	public static final int PRIMEIRO_PERIODO = 1;
@@ -52,7 +54,7 @@ public class PlanoDeCurso extends Model{
 			periodos.add(new Periodo(i));
 		}
 		// seta o mapa de cadeiras com as cadeiras do xml
-		this.mapaDeCadeiras = GerenciadorDeCadeiras.getMapaDeCadeiras();
+		this.mapaDeCadeiras = new HashMap<String, Cadeira>();
 		
 		//irá distribuir as cadeiras entre os periodos
 		distribuiCadeiras();  
@@ -88,7 +90,6 @@ public class PlanoDeCurso extends Model{
 			if(c.getPeriodo() != 0) {
 				Periodo p = getPeriodo(c.getPeriodo());
 				p.addCadeira(c);
-				c.setPlano(this);
 			}
 		}
 	}
@@ -253,24 +254,18 @@ public class PlanoDeCurso extends Model{
 		//}
 		Cadeira removida = mapaDeCadeiras.get(cadeira);
 		// procura pela cadeira entre os periodos.
-		System.out.println("BBBB");
-		System.out.println(removida);
-		System.out.println(removida.getPeriodo());
-		System.out.println(getPeriodo(removida.getPeriodo()));
 		getPeriodo(removida.getPeriodo()).removerCadeira(removida);
-		removida.setPeriodo(0);
+		//removida.setPeriodo(0);
 		try{
 		for (Periodo p: periodos){
 			for (Cadeira c: p.getListaCadeiras()){
 				if(c.isPreRequisito(removida)){
-					System.out.println("C: " + c.getNome());
 					removeCadeira(c.getNome());
 				}
 			}
 		}
 		}catch(Exception e){
 			e.printStackTrace();
-			
 		}
 	}
 }
