@@ -1,7 +1,9 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,8 +53,12 @@ public class Periodo{
 		return cadeiras;
 	}
 	
-	public Collection<Cadeira> getListaCadeiras(){
-		return getCadeiras().values();
+	public List<Cadeira> getListaCadeiras(){
+		List<Cadeira> cadeiras = new ArrayList<Cadeira>();
+		for(Cadeira c: getCadeiras().values()){
+			cadeiras.add(c);
+		}
+		return cadeiras;
 	}
 	
 	public int getNumero() {

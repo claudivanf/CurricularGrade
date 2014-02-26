@@ -42,6 +42,7 @@ public class Application extends Controller {
 
 	public static Result remCadeira(String cadeira) throws Exception {
 		plano.removeCadeira(cadeira);
+		plano.update();
 		return redirect(routes.Application.index());
 	}
 }
