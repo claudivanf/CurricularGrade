@@ -17,11 +17,7 @@ public class Application extends Controller {
 				plano.distribuiCaderas(Cadeira.find.where().eq("plano_id", plano.getId()).findList());
 			} else {
 				plano = new PlanoDeCurso();
-				try{
-					plano.save();
-				}catch(Exception e){
-					System.out.println(e.getMessage());
-				}
+				plano.save();
 			}
 		}
 		return ok(views.html.index.render(plano));
