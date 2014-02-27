@@ -1,4 +1,4 @@
-name := "helloword"
+name := "helloworld"
 
 version := "1.0-SNAPSHOT"
 
