@@ -1,1 +1,0 @@
-web: target/universal/stage/bin/lab3 -Dhttp.port=${PORT} -DapplyEvolutions.default=false -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL}
