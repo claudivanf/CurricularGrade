@@ -160,4 +160,10 @@ public class Cadeira extends Model implements Comparable<Cadeira>{
 				&& Objects.equal(this.getNome(), other.getNome());
 	}
 
+	@Override
+	public String toString() {
+		return "Cadeira [id=" + id + ", nome=" + nome + ", periodo=" + periodo
+				+ "]";
+	}
+
 }

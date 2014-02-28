@@ -85,7 +85,7 @@ public class PlanoDeCurso extends Model{
 	 * Distribui as cadeiras recém-retiradas do xml e adiciona em seus
 	 * respectivos períodos
 	 */
-	public void distribuiCadeiras(){
+	private void distribuiCadeiras(){
 		for(Cadeira c: mapaDeCadeiras.values()){
 			if(c.getPeriodo() != 0) {
 				Periodo p = getPeriodo(c.getPeriodo());
@@ -95,12 +95,16 @@ public class PlanoDeCurso extends Model{
 	}
 	
 	public void distribuiCaderas(List<Cadeira> cadeiras){
+		atualizaMapaCadeira(cadeiras);
+		distribuiCadeiras();
+	}
+
+	public void atualizaMapaCadeira(List<Cadeira> cadeiras){
 		Map<String, Cadeira> mapa = new HashMap<String, Cadeira>();
 		for(Cadeira c: cadeiras){
 			mapa.put(c.getNome(), c);
 		}
 		mapaDeCadeiras = mapa;
-		distribuiCadeiras();
 	}
 	
 	/**
@@ -142,10 +146,10 @@ public class PlanoDeCurso extends Model{
 	/**
 	 * Retorna o Map de cadeiras já alocadas no plano de curso.
 	 */
-	public Map<String, Cadeira> getMapCadeirasAlocadas() {
-		Map<String, Cadeira> alocadas = new HashMap<String, Cadeira>();
+	public List<Cadeira> getCadeirasAlocadas() {
+		List<Cadeira> alocadas = new ArrayList<Cadeira>();
 		for (Periodo periodo : periodos) {
-			alocadas.putAll(periodo.getCadeiras());
+			alocadas.addAll(periodo.getCadeiras());
 		}
 		return alocadas;
 	}
@@ -155,10 +159,10 @@ public class PlanoDeCurso extends Model{
 	 */
 	public Map<String, Cadeira> getMapCadeirasDisponiveis() {
 		Map<String, Cadeira> disponiveis = new HashMap<String, Cadeira>();
-		Map<String, Cadeira> alocadas = getMapCadeirasAlocadas();
-		for (String nomeCadeira : mapaDeCadeiras.keySet()) {
-			if (!alocadas.containsKey(nomeCadeira)) {
-				disponiveis.put(nomeCadeira, mapaDeCadeiras.get(nomeCadeira));
+		List<Cadeira> alocadas = getCadeirasAlocadas();
+		for (Cadeira c: mapaDeCadeiras.values()) {
+			if (!alocadas.contains(c)) {
+				disponiveis.put(c.getNome(), c);
 			}
 		}
 		return disponiveis;
@@ -190,11 +194,13 @@ public class PlanoDeCurso extends Model{
 		//verificaPreRequisitos(cadeira, periodo);
 		
 		//remove cadeira do periodo
-		getPeriodo(cadeira.getPeriodo()).removerCadeira(cadeira);
+		for(Periodo p: periodos){
+			if(p.getCadeiras().contains(cadeira)){
+				p.removerCadeira(cadeira);
+			}
+		}
 		// adiciona essa cadeira no periodo escolhido
 		getPeriodo(periodo).addCadeira(cadeira);
-		//seta o apontador do periodo para o periodo escolhido
-		cadeira.setPeriodo(periodo);
 	}
 	
 	/**
@@ -203,10 +209,16 @@ public class PlanoDeCurso extends Model{
 	 * @param cadeira a ser verificada
 	 */
 	public boolean verificaPrerequisito(String cadeira){
-		Cadeira cad = mapaDeCadeiras.get(cadeira);
+		Cadeira cad = mapaDeCadeiras.get(cadeira);  //cadeira a ser verificada
+		int periodo_cad = 0;  //periodo da cadeira a ser verificada
+		for(Periodo p: periodos){
+			if(p.getCadeiras().contains(cad)){
+				periodo_cad = p.getNumero();
+			}
+		}
 		for (Periodo p: periodos){
-			for (Cadeira c: p.getListaCadeiras()){
-				if (cad.isPreRequisito(c) && c.getPeriodo() >= cad.getPeriodo()){
+			for (Cadeira c: p.getCadeiras()){
+				if (cad.isPreRequisito(c) && p.getNumero() >= periodo_cad){
 					return true;
 				}
 			}
@@ -230,7 +242,7 @@ public class PlanoDeCurso extends Model{
 		for (Periodo periodo : periodos) {
 			// verifica as cadeiras que tem a cadeira a ser removida como
 			// pre-requisito
-			for (Cadeira cadeiraDoPeriodo : periodo.getListaCadeiras()) {
+			for (Cadeira cadeiraDoPeriodo : periodo.getCadeiras()) {
 				if (cadeiraDoPeriodo.getPreRequisitos().contains(cadeira)) {
 					return true;
 				}
@@ -257,7 +269,7 @@ public class PlanoDeCurso extends Model{
 		getPeriodo(removida.getPeriodo()).removerCadeira(removida);
 		//removida.setPeriodo(0);
 		for (Periodo p: periodos){
-			for (Cadeira c: p.getListaCadeiras()){
+			for (Cadeira c: p.getCadeiras()){
 				if(c.isPreRequisito(removida)){
 					removeCadeira(c.getNome());
 				}

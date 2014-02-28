@@ -17,7 +17,4 @@ public class GerenciadorDeCadeiras {
 		return cadeiras;
 	}
 	
-	public static void atualizaRelacionamento(Cadeira c, int periodo){
-		
-	}
 }

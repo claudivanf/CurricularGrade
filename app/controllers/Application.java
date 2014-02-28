@@ -1,7 +1,6 @@
 package controllers;
 
 import managers.GerenciadorDeCadeiras;
-import models.Cadeira;
 import models.PlanoDeCurso;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -10,17 +9,18 @@ public class Application extends Controller {
 
 	static PlanoDeCurso plano;
 
+	
 	public static Result index(){
 		if (plano == null) {
 			if (!PlanoDeCurso.find.all().isEmpty()){
 				// se ja houver uma entidade salva no BD carrega ela
+				//junto com periodos e cadeira dos periodos
 				plano = PlanoDeCurso.find.all().get(0);
-				plano.distribuiCaderas(Cadeira.find.all());
+				plano.atualizaMapaCadeira(plano.getCadeirasAlocadas());
 			} else {
 				plano = new PlanoDeCurso();
-				plano.save();
 				plano.distribuiCaderas(GerenciadorDeCadeiras.getMapaDeCadeiras());
-				plano.update();
+				plano.save();
 			}
 		}
 		return ok(views.html.index.render(plano));

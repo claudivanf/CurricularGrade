@@ -56,10 +56,10 @@ public class PlanoDeCursoTest {
 		plano.addCadeira("Probabilidade e Est.", 3);
 
 		Assert.assertEquals(true, plano.isPreRequisito("Cálculo II"));
-		Assert.assertEquals(8, plano.getMapCadeirasAlocadas().size());
+		Assert.assertEquals(8, plano.getCadeirasAlocadas().size());
 		plano.removeCadeira("Cálculo II");
 
-		Assert.assertEquals(6, plano.getMapCadeirasAlocadas().size());
+		Assert.assertEquals(6, plano.getCadeirasAlocadas().size());
 	}
 
 	@Test
@@ -127,11 +127,11 @@ public class PlanoDeCursoTest {
 		} catch (Exception e) {
 			Assert.fail("Não devia ter falhado");
 		}
-		Assert.assertEquals(plano.getMapCadeirasAlocadas().size(), 7);
+		Assert.assertEquals(plano.getCadeirasAlocadas().size(), 7);
 		Assert.assertEquals(plano.getMapCadeirasDisponiveis().size(), 48);
 		plano.removePeriodo(2);
 
-		Assert.assertEquals(plano.getMapCadeirasAlocadas().size(), 6);
+		Assert.assertEquals(plano.getCadeirasAlocadas().size(), 6);
 		Assert.assertEquals(plano.getMapCadeirasDisponiveis().size(), 49);
 	}
 
