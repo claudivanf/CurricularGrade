@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import models.exceptions.LimiteUltrapassadoException;
+
 import play.db.ebean.Model;
 
 /**
@@ -43,7 +45,6 @@ public class PlanoDeCurso extends Model{
 
 	private Map<String, Cadeira> mapaDeCadeiras;
 	
-	public static final int PRIMEIRO_PERIODO = 1;
 	public static final int MAXIMO_CREDITOS = 28;
 
 	public PlanoDeCurso() {
@@ -82,8 +83,7 @@ public class PlanoDeCurso extends Model{
 	}
 	
 	/**
-	 * Distribui as cadeiras recém-retiradas do xml e adiciona em seus
-	 * respectivos períodos
+	 * Distribui as cadeiras em seus respectivos períodos.
 	 */
 	private void distribuiCadeiras(){
 		for(Cadeira c: mapaDeCadeiras.values()){
@@ -94,11 +94,19 @@ public class PlanoDeCurso extends Model{
 		}
 	}
 	
+	/**
+	 * Distribui Cadeiras entre os periodos quando o plano é iniciado pela
+	 * primeira vez.
+	 */
 	public void distribuiCaderas(List<Cadeira> cadeiras){
 		atualizaMapaCadeira(cadeiras);
 		distribuiCadeiras();
 	}
 
+	/**
+	 * Atualiza o mapadecadeiras das disciplinas com base em uma lista de todas
+	 * as cadeiras existentes.
+	 */
 	public void atualizaMapaCadeira(List<Cadeira> cadeiras){
 		Map<String, Cadeira> mapa = new HashMap<String, Cadeira>();
 		for(Cadeira c: cadeiras){
@@ -181,16 +189,17 @@ public class PlanoDeCurso extends Model{
 
 	/**
 	 * Adiciona uma {@code cadeira} ao {@code periodo}
+	 * @throws LimiteUltrapassadoException 
 	 * 
 	 * @throws Exception
 	 */
-	public void addCadeira(String cadeiraNome, int periodo) {
+	public void addCadeira(String cadeiraNome, int periodo) throws LimiteUltrapassadoException {
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
 		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
-		//if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
-		//	throw new NotSupportedException("limite de créditos ultrapassado!");
-		//}
+		if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
+			throw new LimiteUltrapassadoException("Limite de Créditos Ultrapassado!");
+		}
 		//verificaPreRequisitos(cadeira, periodo);
 		
 		//remove cadeira do periodo
@@ -249,13 +258,6 @@ public class PlanoDeCurso extends Model{
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Remove o período e todos os posteriores
-	 */
-	public void removePeriodo(int periodo) {
-		this.periodos = periodos.subList(0, periodo - 1);
 	}
 
 	public void removeCadeira(String cadeira){

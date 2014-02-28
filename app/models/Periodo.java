@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -94,6 +95,7 @@ public class Periodo extends Model{
 	}
 
 	public List<Cadeira> getCadeiras() {
+		Collections.sort(cadeiras);
 		return cadeiras;
 	}
 	

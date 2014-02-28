@@ -1,7 +1,8 @@
 package controllers;
 
-import managers.GerenciadorDeCadeiras;
+import models.Cadeira;
 import models.PlanoDeCurso;
+import models.exceptions.LimiteUltrapassadoException;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -19,26 +20,16 @@ public class Application extends Controller {
 				plano.atualizaMapaCadeira(plano.getCadeirasAlocadas());
 			} else {
 				plano = new PlanoDeCurso();
-				plano.distribuiCaderas(GerenciadorDeCadeiras.getMapaDeCadeiras());
+				plano.distribuiCaderas(Cadeira.find.all());
 				plano.save();
 			}
 		}
 		return ok(views.html.index.render(plano));
 	}
 
-	public static Result addPeriodo() {
-		plano.addPeriodo();
-		return ok(views.html.index.render(plano));
-	}
-
-	public static Result addCadeira(String cadeira, int periodo){
+	public static Result addCadeira(String cadeira, int periodo) throws LimiteUltrapassadoException{
 		plano.addCadeira(cadeira, periodo);
 		plano.update();
-		return redirect(routes.Application.index());
-	}
-
-	public static Result remPeriodo(int periodo) {
-		plano.removePeriodo(periodo);
 		return redirect(routes.Application.index());
 	}
 
