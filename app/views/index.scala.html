@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
-<body style='background-image:url(@routes.Assets.at("images/bg-1.jpg"));'>
+<body style='background-image:url(@routes.Assets.at("images/Light-Blue-3.png"));'>
 @main("Plano de Curso") {
 	<center><h2>@Messages("planoDeCurso")</h2></center>
 	
@@ -16,7 +16,7 @@
 		<a href="/addPeriodo">@Messages("addPeriodo")</a>
 	</span>
 	 -->
-	<h3 style="position:absolute;left:60%;top:50px;">Períodos Do Curso</h3>
+	<center><h3 style="position:absolute;left:43%;top:50px;color:#fff;text-shadow:2px 2px #000;">Períodos Do Curso</h3></center>
 	<div id="periodos">
 	@for(periodo <- plano.getPeriodos()) {
 		<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"
@@ -55,18 +55,22 @@
 		</div>
 	}
 	</div>
+	<!-- 
 	<h5 style="float:right;position:absolute;top:630px;left:760px;margin:0;color:#600;">
 		Clique sobre uma cadeira para removê-la.
 	</h5>
+	 -->
 	
 	<br/>
 	<center><div class="separator"> </div> </center>
 	
+	<!-- 
 	<h3 style="float:left;position:relative;left:50px;">@Messages("cadeirasDisponiveis")</h3>
-	<h5 style="float:right;position:absolute;top:630px;left:60px;margin:0;color:#600;">
+	 -->
+	<h5 style="float:right;position:absolute;top:660px;left:90px;margin:0;color:#600;font-size:20px;">
 		Arraste a cadeira para o período que você quer alocá-la
 	</h5>
-	<div style="width:35%;height:500px;overflow-y:auto;margin-top:20px;margin-left:30px;">
+	<div style="width:0%;height:500px;overflow-y:auto;margin-top:20px;margin-left:30px;">
 	<ul style="list-style:none;overflow-y:auto;margin-top:20px;"> 
 		@for(cadeira <- plano.getCadeiraDispniveisOrdenadas()) {
 		<div class="disponiveis" id="@cadeira.getNome()"	draggable="true" 
