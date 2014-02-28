@@ -46,11 +46,11 @@ function drop(ev, e){
 
 $(document).ready(function(){
 	$(".alocadas").hover(function(){
-		  $(this).css("opacity", "0.7")
+		  $(this).css("opacity", "0.5")
 		  //$(this).children("span").addClass("glyphicon glyphicon-remove");
 		  //$(this).children("span").css("visibility", "visible")
 		  },function(){
-		  //$(this).css("opacity", "1")
+		  $(this).css("opacity", "1")
 		  //$(this).children("span").removeClass("glyphicon glyphicon-remove");
 		  $(this).children("span").css("visibility", "hidden")
 		});
