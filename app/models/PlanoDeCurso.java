@@ -180,7 +180,7 @@ public class PlanoDeCurso extends Model{
 	 * 
 	 * @throws Exception
 	 */
-	public void addCadeira(String cadeiraNome, int periodo) throws Exception {
+	public void addCadeira(String cadeiraNome, int periodo) {
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
 		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
@@ -246,7 +246,7 @@ public class PlanoDeCurso extends Model{
 		this.periodos = periodos.subList(0, periodo - 1);
 	}
 
-	public void removeCadeira(String cadeira) throws Exception {
+	public void removeCadeira(String cadeira){
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por remover uma cadeira ao periodo
 		//if (getMapCadeirasAlocadas().get(cadeira) == null) {
@@ -256,16 +256,12 @@ public class PlanoDeCurso extends Model{
 		// procura pela cadeira entre os periodos.
 		getPeriodo(removida.getPeriodo()).removerCadeira(removida);
 		//removida.setPeriodo(0);
-		try{
 		for (Periodo p: periodos){
 			for (Cadeira c: p.getListaCadeiras()){
 				if(c.isPreRequisito(removida)){
 					removeCadeira(c.getNome());
 				}
 			}
-		}
-		}catch(Exception e){
-			e.printStackTrace();
 		}
 	}
 }

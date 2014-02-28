@@ -10,7 +10,7 @@ public class Application extends Controller {
 
 	static PlanoDeCurso plano;
 
-	public static Result index() throws Exception {
+	public static Result index(){
 		if (plano == null) {
 			if (!PlanoDeCurso.find.all().isEmpty()){
 				// se ja houver uma entidade salva no BD carrega ela
@@ -31,8 +31,7 @@ public class Application extends Controller {
 		return ok(views.html.index.render(plano));
 	}
 
-	public static Result addCadeira(String cadeira, int periodo)
-			throws NumberFormatException, Exception {
+	public static Result addCadeira(String cadeira, int periodo){
 		plano.addCadeira(cadeira, periodo);
 		plano.update();
 		return redirect(routes.Application.index());
@@ -43,7 +42,7 @@ public class Application extends Controller {
 		return redirect(routes.Application.index());
 	}
 
-	public static Result remCadeira(String cadeira) throws Exception {
+	public static Result remCadeira(String cadeira){
 		plano.removeCadeira(cadeira);
 		plano.update();
 		return redirect(routes.Application.index());
