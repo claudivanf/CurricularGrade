@@ -36,10 +36,10 @@ function drop(ev, e){
 		  error: function(XMLHttpRequest, textStatus, errorThrown) {
 			  //parser pra achar a Excecao lancada
 			  var ind = XMLHttpRequest.responseText.indexOf("LimiteUltrapassadoException:")
-			  var res = XMLHttpRequest.responseText.substring(ind +29 , ind + 900);
+			 /* var res = XMLHttpRequest.responseText.substring(ind +29 , ind + 900);
 			  var ind2 = res.indexOf("]");
-			  var res2 = res.substring(0, ind2);
-		      alert(res2);
+			  var res2 = res.substring(0, ind2);*/
+		      alert("sim");
 		  }
 		});
 }
