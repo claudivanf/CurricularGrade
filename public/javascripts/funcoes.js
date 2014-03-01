@@ -39,7 +39,7 @@ function drop(ev, e){
 			  var res = XMLHttpRequest.responseText.substring(ind +29 , ind + 900);
 			  var ind2 = res.indexOf("]");
 			  var res2 = res.substring(0, ind2);
-		      alert(res2);
+		      alert(res);
 		  }
 		});
 }
