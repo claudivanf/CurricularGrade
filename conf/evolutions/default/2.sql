@@ -41,12 +41,12 @@ insert into cadeira values(29,'Redes de Computadores',4,5,5);
 insert into cadeira values(30,'Compiladores',4,9,5);
 insert into cadeira values(31,'Banco de Dados I',4,5,5);
 insert into cadeira values(32,'Sistemas de Informação II',4,5,5);
-insert into cadeira values(33,'Laboratório de Engenharia de Software',4,5,5);
+insert into cadeira values(33,'Laboratório de Engenharia de Software',2,5,5);
 insert into cadeira values(34,'Informática e Sociedade',2,5,5);
 -- periodo 6
 insert into cadeira values(35,'Sistemas Operacionais',4,5,6);
-insert into cadeira values(36,'Interconexão de Redes de Computadores',4,5,6);
-insert into cadeira values(37,'Lab. de Interconexão de Redes de Computadores',4,5,6);
+insert into cadeira values(36,'Interconexão de Redes de Computadores',2,5,6);
+insert into cadeira values(37,'Lab. de Interconexão de Redes de Computadores',2,5,6);
 insert into cadeira values(38,'Inteligência Artificial I',4,5,6);
 insert into cadeira values(39,'Banco de Dados II',4,5,6);
 insert into cadeira values(40,'Direito e Cidadania',4,5,6);

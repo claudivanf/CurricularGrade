@@ -308,7 +308,7 @@
 
 	<cadeira nome="Laboratório de Engenharia de Software" id="33">
 		<dificuldade>5</dificuldade>
-		<creditos>4</creditos>
+		<creditos>2</creditos>
 		<periodo>5</periodo>
 		<requisitos quantidade="1">
 			<id>27</id>
@@ -335,7 +335,7 @@
 
 	<cadeira nome="Interconexão de Redes de Computadores" id="36">
 		<dificuldade>5</dificuldade>
-		<creditos>4</creditos>
+		<creditos>2</creditos>
 		<periodo>6</periodo>
 		<requisitos quantidade="1">
 			<id>29</id>
@@ -344,7 +344,7 @@
 
 	<cadeira nome="Lab. de Interconexão de Redes de Computadores" id="37">
 		<dificuldade>5</dificuldade>
-		<creditos>4</creditos>
+		<creditos>2</creditos>
 		<periodo>6</periodo>
 		<requisitos quantidade="1">
 			<id>29</id>

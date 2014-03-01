@@ -1,6 +1,6 @@
 import models.Cadeira;
-import models.Periodo;
 import models.PlanoDeCurso;
+import models.exceptions.LimiteUltrapassadoException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,100 +26,113 @@ public class PlanoDeCursoTest {
 	}
 
 	@Test
+	public void testaDadosPlano(){
+		// TODO
+		// testa quantidade de periodos
+		// testa quantidade de cadeiras alocadas
+		// testa quantidade de cadeiras disponiveis
+		// testa creditos total
+		
+	}
+	
+	@Test
+	public void testaCadeirasESeusRequisitos(){
+		// TODO
+		// testa requisitos das cadeiras
+		// testa cadeiras sem requisitos
+	}
+	
+	@Test
 	public void testaListarPrimeiroPeriodo() {
-		Periodo periodo = new Periodo(1);
-		Assert.assertEquals(6, periodo.getCadeiras().size());
-		// testar cadeiras
+		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
+		
+		Assert.assertEquals(6, plano.getPeriodo(1).getCadeiras().size());
+		Assert.assertEquals(p1, plano.getPeriodo(1).getCadeira(p1.getNome()));
+		
+		//TODO
+		// testar mais cadeiras
 		// testar creditos
 	}
 	
 	@Test
 	public void testaAdicionarCadeira() {
-		PlanoDeCurso plano = new PlanoDeCurso();
-		plano.addPeriodo();
+		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
 
 		try {
-			plano.addCadeira("Programação II", 2);
-		} catch (Exception e) {
-			Assert.fail(e.getMessage());
+			plano.addCadeira("Programação I", 2);
+		} catch (LimiteUltrapassadoException e) {
+			Assert.assertEquals("Limite de Créditos Ultrapassado!", e.getMessage());
+		}
+		try {
+			plano.addCadeira("Programação I", 10);
+			Assert.assertEquals(p1, plano.getPeriodo(10).getCadeira(p1.getNome()));
+		} catch (LimiteUltrapassadoException e) {
+			Assert.fail("nao devia ter lançado exceptio");
 		}
 
-		Assert.assertEquals(1, plano.getPeriodo(2).getCadeiras().size());
+		Assert.assertEquals(5, plano.getPeriodo(1).getCadeiras().size());
+		Assert.assertEquals(1, plano.getPeriodo(10).getCadeiras().size());
+		
 	}
 
 	@Test
 	public void testaCreditosDoPeriodo() throws Exception {
-		PlanoDeCurso plano = new PlanoDeCurso();
 
-		plano.addPeriodo(); // add periodo (2º periodo)
-		plano.addCadeira("Programação II", 2);
+		Assert.assertEquals(24, plano.getPeriodo(1).getCreditos());
+		Assert.assertEquals(26, plano.getPeriodo(2).getCreditos());
+		Assert.assertEquals(28, plano.getPeriodo(3).getCreditos());
+		Assert.assertEquals(26, plano.getPeriodo(4).getCreditos());
+		Assert.assertEquals(24, plano.getPeriodo(5).getCreditos());
+		Assert.assertEquals(28, plano.getPeriodo(6).getCreditos());
+		Assert.assertEquals(28, plano.getPeriodo(7).getCreditos());
+		Assert.assertEquals(24, plano.getPeriodo(8).getCreditos());
+		Assert.assertEquals(0, plano.getPeriodo(9).getCreditos());
+		Assert.assertEquals(0, plano.getPeriodo(10).getCreditos());
 
-		Assert.assertEquals(4, plano.getPeriodo(2).getCreditos());
+		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
+
+		try {
+			plano.addCadeira("Programação I", 10);
+			Assert.assertEquals(p1, plano.getPeriodo(10).getCadeira(p1.getNome()));
+		} catch (LimiteUltrapassadoException e) {
+			Assert.fail("nao devia ter lançado exceptio");
+		}
+		
+		Assert.assertEquals(20, plano.getPeriodo(1).getCreditos());
+		Assert.assertEquals(4, plano.getPeriodo(10).getCreditos());
+		
 	}
 
 	@Test
 	public void testaUltrapassarLimiteDeCreditos() throws Exception {
-		PlanoDeCurso plano = new PlanoDeCurso();
-		Cadeira cadeira = new Cadeira("Programação 2", 5);
-		Cadeira cadeira2 = new Cadeira("Calculo 2", 5);
-		Cadeira cadeira3 = new Cadeira("Linear", 5);
-		Periodo periodo = new Periodo(2);
-
-		plano.addPeriodo(); // add periodo (2º periodo)
-		cadeira.setCreditos(10);
-		cadeira2.setCreditos(10);
-
-		periodo.addCadeira(cadeira);
-		periodo.addCadeira(cadeira2);
-
-		Assert.assertEquals(20, periodo.getCreditos());
-
-		cadeira3.setCreditos(10);
-		try {
-			periodo.addCadeira(cadeira3);
-		} catch (Exception e) {
-			Assert.assertEquals("Limite de Créditos Ultrapassado",
-					e.getMessage());
-		}
+		// TODO
+		//testar ultrapassar o limite
 	}
 
 	@Test
 	public void testaDificuldade() {
-		PlanoDeCurso plano = new PlanoDeCurso();
-
-		plano.addPeriodo();
-		try {
-			plano.addCadeira("Algebra Linear", 2); // dificuldade 9
-			Assert.assertEquals(9, plano.getPeriodo(2).getDificuldadeTotal());
-
-			plano.addCadeira("Cálculo II", 2); // dificuldade 7
-			Assert.assertEquals(16, plano.getPeriodo(2).getDificuldadeTotal());
-		} catch (Exception e) {
-
-			Assert.fail(e.getMessage());
-		}
-
+		Assert.assertEquals(37, plano.getPeriodo(2).getDificuldadeTotal());
+		//TODO
+		// testar os outros periodos
 	}
 
 	@Test
 	public void testaAddCadeiraComPreRequisitoEmPeriodoPosterior() {
-		PlanoDeCurso plano = new PlanoDeCurso();
-		plano.addPeriodo(); // periodo 2
-		plano.addPeriodo(); // periodo 3
-
+		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
+		Cadeira p2 = plano.getMapaCadeira().get("Programação II");
+		
 		try {
-			plano.addCadeira("Cálculo II", 3);
+			plano.addCadeira(p1.getNome(), 10);
 		} catch (Exception e) {
-			Assert.fail(e.getMessage());
+			Assert.fail("Nao devia ter falhado.");
 		}
-
-		try {
-			plano.addCadeira("Probabilidade e Est.", 2);
-			Assert.fail("Devia ter falhado");
-			// cálculo 2 é seu pre-requisito
-		} catch (Exception e) {
-			Assert.assertEquals("Pre Requisito: Cálculo II não concluido",
-					e.getMessage());
-		}
+		//testa se eh pre-requisito de alguma cadeira alocadad.
+		Assert.assertEquals(true, plano.isPreRequisito(p1.getNome()));
+		//verifica se tem pre-requisito alocados erroneamente
+		//metodo que fara a cadeira ficar vermelha
+		Assert.assertEquals(true, plano.verificaPrerequisito(p2.getNome()));
+		
+		//TODO
+		//testar cadeira que nao tem pre-requisitos
 	}
 }

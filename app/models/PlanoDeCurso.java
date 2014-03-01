@@ -128,6 +128,10 @@ public class PlanoDeCurso extends Model{
 	public void addPeriodo(int num_periodo) {
 		this.periodos.add(new Periodo(num_periodo));
 	}
+	
+	public Map<String, Cadeira> getMapaCadeira(){
+		return mapaDeCadeiras;
+	}
 
 	/**
 	 * Retorna o período passado como argumento.
