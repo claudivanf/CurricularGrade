@@ -30,17 +30,17 @@ function drop(ev, e){
 		  url: "/addCadeira/"+data+"/"+e.id,
 		  data: "",
 		  success: function(){
-		        alert( "Cadeira Adicionada");
+		        alert("Cadeira Adicionada");
 		        window.location = "/";
 		  },
 		  error: function(XMLHttpRequest, textStatus, errorThrown) {
 			  //parser pra achar a Excecao lancada
-			  var htmlPage = XMLHttpRequest.responseText;
-			  var ind = htmlPage.indexOf("LimiteUltrapassadoException:");
-			  var res = htmlPage.substring(ind +29 , ind + 900);
+
+			  var ind = XMLHttpRequest.responseText.indexOf("Exception:")
+			  var res = XMLHttpRequest.responseText.substring(ind +11 , ind + 900);
 			  var ind2 = res.indexOf("]");
 			  var res2 = res.substring(0, ind2);
-			  alert(res2);
+		      alert(res);
 		  }
 		});
 }
