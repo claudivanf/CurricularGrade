@@ -54,7 +54,17 @@ $(document).ready(function(){
 		  //$(this).children("span").removeClass("glyphicon glyphicon-remove");
 		  $(this).children("span").css("visibility", "hidden")
 		});
+	$(".alocadas-vermelho").hover(function(){
+		  $(this).css("opacity", "0.8")
+		  //$(this).children("span").addClass("glyphicon glyphicon-remove");
+		  //$(this).children("span").css("visibility", "visible")
+		  },function(){
+		  $(this).css("opacity", "1")
+		  //$(this).children("span").removeClass("glyphicon glyphicon-remove");
+		  $(this).children("span").css("visibility", "hidden")
+		});
 
+	
 	});
 
 function remCadeira(cadeira, flagRequisitos){
