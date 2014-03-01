@@ -3,8 +3,10 @@ import models.Periodo;
 import models.PlanoDeCurso;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
+import MOCK.GerenciadorDeCadeiras;
 /**
  * 
  * Simple (JUnit) tests that can call all parts of a play app. If you are
@@ -12,6 +14,16 @@ import org.junit.Test;
  * 
  */
 public class PlanoDeCursoTest {
+	
+	PlanoDeCurso plano;
+	
+	@Before
+	public void setUp(){
+		// cria e popula o plano a cada @Test
+		// com os parâmetros originais da grade de CC.
+		plano = new PlanoDeCurso();
+		plano.distribuiCaderas(GerenciadorDeCadeiras.getListaDeCadeiras());
+	}
 
 	@Test
 	public void testaListarPrimeiroPeriodo() {
@@ -20,7 +32,7 @@ public class PlanoDeCursoTest {
 		// testar cadeiras
 		// testar creditos
 	}
-
+	
 	@Test
 	public void testaAdicionarCadeira() {
 		PlanoDeCurso plano = new PlanoDeCurso();
@@ -33,40 +45,6 @@ public class PlanoDeCursoTest {
 		}
 
 		Assert.assertEquals(1, plano.getPeriodo(2).getCadeiras().size());
-	}
-
-	@Test
-	public void testaRemoverCadeira() throws Exception {
-
-		// teste simples
-		Cadeira cadeira = new Cadeira("Programação 2", 5);
-		Periodo periodo = new Periodo(2);
-
-		periodo.addCadeira(cadeira);
-		Assert.assertEquals(1, periodo.getCadeiras().size());
-
-		periodo.removerCadeira(cadeira);
-		Assert.assertEquals(0, periodo.getCadeiras().size());
-
-		// teste real
-		PlanoDeCurso plano = new PlanoDeCurso();
-		plano.addPeriodo(); // periodo 11
-		plano.addPeriodo(); // periodo 12
-		plano.addCadeira("Cálculo II", 2);
-		plano.addCadeira("Probabilidade e Est.", 3);
-
-		Assert.assertEquals(true, plano.isPreRequisito("Cálculo II"));
-		Assert.assertEquals(8, plano.getCadeirasAlocadas().size());
-		plano.removeCadeira("Cálculo II");
-
-		Assert.assertEquals(6, plano.getCadeirasAlocadas().size());
-	}
-
-	@Test
-	public void testaAdicionarPeriodo() {
-		PlanoDeCurso plano = new PlanoDeCurso(); //são add 10 por default
-		plano.addPeriodo(); // add periodo (11º periodo)
-		Assert.assertEquals(11, plano.getPeriodos().size());
 	}
 
 	@Test
@@ -103,36 +81,6 @@ public class PlanoDeCursoTest {
 			Assert.assertEquals("Limite de Créditos Ultrapassado",
 					e.getMessage());
 		}
-	}
-
-	@Test
-	public void testaAddCadeiraSemPreRequisitoConcluido() {
-		PlanoDeCurso plano = new PlanoDeCurso();
-
-		plano.addPeriodo(); // add periodo (2º periodo)
-		try {
-			plano.addCadeira("Estrutura de Dados", 2); // cadeira e periodo
-		} catch (Exception e) {
-			Assert.assertEquals("Pre Requisito: Programação II não concluido",
-					e.getMessage());
-		}
-	}
-
-	@Test
-	public void testaRemoverPeriodo() {
-		PlanoDeCurso plano = new PlanoDeCurso();
-		plano.addPeriodo();
-		try {
-			plano.addCadeira("Algebra Linear", 2);
-		} catch (Exception e) {
-			Assert.fail("Não devia ter falhado");
-		}
-		Assert.assertEquals(plano.getCadeirasAlocadas().size(), 7);
-		Assert.assertEquals(plano.getMapCadeirasDisponiveis().size(), 48);
-		plano.removePeriodo(2);
-
-		Assert.assertEquals(plano.getCadeirasAlocadas().size(), 6);
-		Assert.assertEquals(plano.getMapCadeirasDisponiveis().size(), 49);
 	}
 
 	@Test

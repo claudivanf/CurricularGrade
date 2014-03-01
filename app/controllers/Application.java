@@ -10,7 +10,6 @@ public class Application extends Controller {
 
 	static PlanoDeCurso plano;
 
-	
 	public static Result index(){
 		if (plano == null) {
 			if (!PlanoDeCurso.find.all().isEmpty()){
@@ -19,6 +18,8 @@ public class Application extends Controller {
 				plano = PlanoDeCurso.find.all().get(0);
 				plano.atualizaMapaCadeira(plano.getCadeirasAlocadas());
 			} else {
+				// se não houver cria um novo plano, distribui as cadeiras
+				// de modo igual à grade original de CC e salva tudo no BD. 
 				plano = new PlanoDeCurso();
 				plano.distribuiCaderas(Cadeira.find.all());
 				plano.save();
