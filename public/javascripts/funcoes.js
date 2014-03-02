@@ -33,8 +33,10 @@ function drop(ev, e){
 		        alert("Cadeira Adicionada");
 		        window.location = "/";
 		  },
-		  error: function(result) {
-			  alert(result.responseText);
+		  error: function(result, exception, v, r) {
+			  if (v == "Bad Request"){
+				  alert("Limite de Créditos Ultrapassados!");
+			  }
 			  //parser pra achar a Excecao lancada
 			  /*var ind = XMLHttpRequest.responseText.indexOf("Exception:")
 			  var res = XMLHttpRequest.responseText.substring(ind +11 , ind + 900);
