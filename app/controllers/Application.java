@@ -32,7 +32,7 @@ public class Application extends Controller {
 		try {
 			plano.addCadeira(cadeira, periodo);
 		} catch (LimiteUltrapassadoException e) {
-			return notFound(e.getMessage());
+			return badRequest(e.getMessage());
 		}
 		plano.update();
 		return redirect(routes.Application.index());
