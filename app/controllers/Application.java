@@ -28,8 +28,12 @@ public class Application extends Controller {
 		return ok(views.html.index.render(plano));
 	}
 
-	public static Result addCadeira(String cadeira, int periodo) throws LimiteUltrapassadoException{
-		plano.addCadeira(cadeira, periodo);
+	public static Result addCadeira(String cadeira, int periodo){
+		try {
+			plano.addCadeira(cadeira, periodo);
+		} catch (LimiteUltrapassadoException e) {
+			return notFound(e.getMessage());
+		}
 		plano.update();
 		return redirect(routes.Application.index());
 	}

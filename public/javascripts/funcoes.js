@@ -33,13 +33,14 @@ function drop(ev, e){
 		        alert("Cadeira Adicionada");
 		        window.location = "/";
 		  },
-		  error: function(XMLHttpRequest, textStatus, errorThrown) {
+		  error: function(result) {
+			  alert(result.responseText);
 			  //parser pra achar a Excecao lancada
-			  var ind = XMLHttpRequest.responseText.indexOf("Exception:")
+			  /*var ind = XMLHttpRequest.responseText.indexOf("Exception:")
 			  var res = XMLHttpRequest.responseText.substring(ind +11 , ind + 900);
 			  var ind2 = res.indexOf("]");
 			  var res2 = res.substring(0, ind2);
-		      alert(res2);
+		      alert(res2);*/
 		  }
 		});
 }
