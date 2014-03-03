@@ -27,31 +27,42 @@ public class PlanoDeCursoTest {
 
 	@Test
 	public void testaDadosPlano(){
-		// TODO
-		// testa quantidade de periodos
-		// testa quantidade de cadeiras alocadas
-		// testa quantidade de cadeiras disponiveis
-		// testa creditos total
-		
+		Assert.assertEquals(10, plano.getPeriodos().size());
+		Assert.assertEquals(55, plano.getCadeirasAlocadas().size());
+		Assert.assertEquals(0, plano.getCadeiraDispniveisOrdenadas().size());	
 	}
 	
 	@Test
 	public void testaCadeirasESeusRequisitos(){
-		// TODO
-		// testa requisitos das cadeiras
-		// testa cadeiras sem requisitos
+		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
+		Cadeira p2 = plano.getMapaCadeira().get("Programação II");
+		Cadeira c1 = plano.getMapaCadeira().get("Cálculo I");
+		Cadeira c2 = plano.getMapaCadeira().get("Cálculo II");
+		
+		Assert.assertEquals(true, c2.isPreRequisito(c1));
+		Assert.assertEquals(true, p2.isPreRequisito(p1));
+		Assert.assertEquals(false, p2.isPreRequisito(c1));
 	}
 	
 	@Test
 	public void testaListarPrimeiroPeriodo() {
 		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
+		Cadeira lp1 = plano.getMapaCadeira().get("Lab. de Programação I");
+		Cadeira ic = plano.getMapaCadeira().get("Int. à Computacação");
+		Cadeira lpt = plano.getMapaCadeira().get("Leitura e Prod. de Textos");
+		Cadeira c1 = plano.getMapaCadeira().get("Cálculo I");
+		Cadeira vet = plano.getMapaCadeira().get("Algebra Vetorial");
+		
 		
 		Assert.assertEquals(6, plano.getPeriodo(1).getCadeiras().size());
 		Assert.assertEquals(p1, plano.getPeriodo(1).getCadeira(p1.getNome()));
+		Assert.assertEquals(lp1, plano.getPeriodo(1).getCadeira(lp1.getNome()));
+		Assert.assertEquals(ic, plano.getPeriodo(1).getCadeira(ic.getNome()));
+		Assert.assertEquals(lpt, plano.getPeriodo(1).getCadeira(lpt.getNome()));
+		Assert.assertEquals(c1, plano.getPeriodo(1).getCadeira(c1.getNome()));
+		Assert.assertEquals(vet, plano.getPeriodo(1).getCadeira(vet.getNome()));
 		
-		//TODO
-		// testar mais cadeiras
-		// testar creditos
+		Assert.assertEquals(24, plano.getPeriodo(1).getCreditos());
 	}
 	
 	@Test
@@ -105,15 +116,27 @@ public class PlanoDeCursoTest {
 
 	@Test
 	public void testaUltrapassarLimiteDeCreditos() throws Exception {
-		// TODO
-		//testar ultrapassar o limite
+		//Cadeira p1 = plano.getMapaCadeira().get("Programação I");
+
+		try {
+			plano.addCadeira("Programação I", 2);
+			Assert.fail("nao devia ter passado");
+		} catch (LimiteUltrapassadoException e) {
+			Assert.assertEquals("Limite de Créditos Ultrapassado!", 
+					e.getMessage());
+		}
 	}
 
 	@Test
 	public void testaDificuldade() {
+		Assert.assertEquals(25, plano.getPeriodo(1).getDificuldadeTotal());
 		Assert.assertEquals(37, plano.getPeriodo(2).getDificuldadeTotal());
-		//TODO
-		// testar os outros periodos
+		Assert.assertEquals(50, plano.getPeriodo(3).getDificuldadeTotal());
+		Assert.assertEquals(35, plano.getPeriodo(4).getDificuldadeTotal());
+		Assert.assertEquals(43, plano.getPeriodo(5).getDificuldadeTotal());
+		Assert.assertEquals(36, plano.getPeriodo(6).getDificuldadeTotal());
+		Assert.assertEquals(27, plano.getPeriodo(7).getDificuldadeTotal());
+		Assert.assertEquals(20, plano.getPeriodo(8).getDificuldadeTotal());
 	}
 
 	@Test
@@ -121,6 +144,7 @@ public class PlanoDeCursoTest {
 		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
 		Cadeira p2 = plano.getMapaCadeira().get("Programação II");
 		
+		Cadeira lpt = plano.getMapaCadeira().get("Leitura e Prod. de Textos");
 		try {
 			plano.addCadeira(p1.getNome(), 10);
 		} catch (Exception e) {
@@ -132,7 +156,7 @@ public class PlanoDeCursoTest {
 		//metodo que fara a cadeira ficar vermelha
 		Assert.assertEquals(true, plano.verificaPrerequisito(p2.getNome()));
 		
-		//TODO
-		//testar cadeira que nao tem pre-requisitos
+		Assert.assertEquals(false, plano.verificaPrerequisito(p1.getNome()));
+		Assert.assertEquals(false, plano.verificaPrerequisito(lpt.getNome()));
 	}
 }
