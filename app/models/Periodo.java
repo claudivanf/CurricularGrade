@@ -68,8 +68,8 @@ public class Periodo extends Model{
 		cadeiras.add(cadeira);
 	}
 
-	public void removerCadeira(Cadeira cadeira) {
-		cadeiras.remove(cadeira);
+	public boolean removerCadeira(Cadeira cadeira) {
+		return cadeiras.remove(cadeira);
 	}
 
 	public int getDificuldadeTotal() {
@@ -94,7 +94,9 @@ public class Periodo extends Model{
 	}
 
 	public List<Cadeira> getCadeiras() {
-		return cadeiras;
+		List<Cadeira> cads = new ArrayList<Cadeira>();
+		cads.addAll(cadeiras);
+		return cads;
 	}
 	
 	public void setCadeiras(List<Cadeira> cadeiras){

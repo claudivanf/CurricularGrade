@@ -8,7 +8,7 @@ public class GeradorDeUsuario {
 	private static String[] nomes = {"joao", "jose", "maria", "joana", "bruno"};
 	
 	public static void geraUsuarios(){
-		for(int i=0; i<= 30; i++){
+		for(int i=0; i<= 1; i++){
 			String nome = nomes[i%5] + i/5;
 			String email = nome + i/5 + "@gmail.com";
 			String senha = "123";

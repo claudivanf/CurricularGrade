@@ -15,25 +15,13 @@ import play.mvc.Result;
 
 public class Application extends Controller {
 
-	static Long idUsuario;
 	static PlanoDeCurso plano;
 
 	public static Result index(){
-		plano = PlanoDeCurso.find.byId(Long.parseLong(session("user")));
-		if (plano == null) {
-			if (!PlanoDeCurso.find.all().isEmpty()){
-				// se ja houver uma entidade salva no BD carrega ela
-				//junto com periodos e cadeira dos periodos
-				plano = PlanoDeCurso.find.all().get(0);
-				plano.atualizaMapaCadeira(Cadeira.find.all());
-			} else {
-				// se não houver cria um novo plano, distribui as cadeiras
-				// de modo igual à grade original de CC e salva tudo no BD. 
-				plano = new PlanoDeCurso();
-				plano.distribuiCaderas(Cadeira.find.all());
-				plano.save();
-			}
-		} else{
+		// carrega o plano referente ao usuario logado
+		// através da sessão.
+		if (plano == null){
+			plano = PlanoDeCurso.find.byId(Long.parseLong(session("user")));
 			plano.atualizaMapaCadeira(Cadeira.find.all());
 		}
 		return ok(views.html.index.render(plano));
@@ -50,6 +38,7 @@ public class Application extends Controller {
 	}
 	
 	public static Result logout() {
+		// apaga todas as sessoes e retorna para a pagina de login
 		session().clear();
 	    return ok(
 	    	views.html.login.render(form(Login.class))
@@ -81,8 +70,8 @@ public class Application extends Controller {
 		if(u == null || u.isEmpty()){
 			return "Invalid user or password";
 		} 
-		idUsuario = u.get(0).getPlano().getId();
-		session("user", String.valueOf(idUsuario));
+		// estabelece uma sessão para guardar o id do usuario
+		session("user", String.valueOf(u.get(0).getPlano().getId()));
 	    return null;
 	}
 

@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,7 +160,7 @@ public class PlanoDeCurso extends Model{
 	public List<Cadeira> getCadeiraDispniveisOrdenadas(){
 		List<Cadeira> cadeirasOrdenadas = new ArrayList<Cadeira>();
 		cadeirasOrdenadas.addAll(getMapCadeirasDisponiveis().values());
-		//Collections.sort(cadeirasOrdenadas);
+		Collections.sort(cadeirasOrdenadas);
 		return cadeirasOrdenadas;
 	}
 
@@ -244,6 +245,7 @@ public class PlanoDeCurso extends Model{
 		//}
 		Cadeira removida = mapaDeCadeiras.get(cadeira);
 		// procura pela cadeira entre os periodos.
+		
 		for(Periodo p : periodos){
 			if(p.getCadeiras().contains(removida)){
 				p.removerCadeira(removida);
