@@ -26,6 +26,7 @@ create table plano_de_curso (
 
 create table usuario (
   id                        bigint not null,
+  email                     varchar(255),
   nome                      varchar(255),
   senha                     varchar(255),
   plano_id                  bigint,

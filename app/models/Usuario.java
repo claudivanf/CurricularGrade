@@ -3,6 +3,7 @@ package models;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,27 +16,32 @@ import play.db.ebean.Model;
 @Entity
 public class Usuario extends Model {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 
+	private String email;
 	private String nome;
 	private String senha;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@Column(name="fk_plano")
 	private PlanoDeCurso plano;
 
-	public Usuario(String nome, String senha) {
+	public static Finder<Long, Usuario> find = new Finder<Long, Usuario>(
+			Long.class, Usuario.class);
+
+	public Usuario(){
+		plano = new PlanoDeCurso();
+	}
+	
+	public Usuario(String email, String nome, String senha) {
+		this.email = email;
 		this.nome = nome;
 		this.senha = senha;
 		plano = new PlanoDeCurso();
-
 	}
 
 	public Long getId() {
@@ -44,6 +50,14 @@ public class Usuario extends Model {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getNome() {
@@ -69,9 +83,6 @@ public class Usuario extends Model {
 	public void setPlano(PlanoDeCurso plano) {
 		this.plano = plano;
 	}
-
-	public static Finder<Long, Usuario> find = new Finder<Long, Usuario>(
-			Long.class, Usuario.class);
 
 	public static void create(Usuario u) {
 		u.save();
@@ -103,5 +114,4 @@ public class Usuario extends Model {
 		return Objects.equal(this.nome, other.getNome()) &&
 				Objects.equal(this.senha, other.getSenha());
 	}
-
 }

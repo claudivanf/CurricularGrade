@@ -1,5 +1,19 @@
 @(plano: PlanoDeCurso)
 
+@if(session.get("connected")) {
+	<nav class="navbar navbar-inverse" role="navigation">
+		<div class="navbar-brand">
+			Bem Vindo! @session.get("connected")
+		</div>
+		<div style="float:right;color:#fff;font-size:20px;margin-right:20px;margin-top:10px;">
+			<a href="/logout" class="glyphicon glyphicon-log-out" style="text-decoration:none;">
+				Logout
+			</a>
+		</div>
+		
+	</nav>
+}
+
 @import helper._
 
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -7,16 +21,25 @@
 <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
-<body style='background-image:url(@routes.Assets.at("images/Light-Blue-3.png"));'>
+<!-- <body style="background-color:rgba(120,120,120,0.9);"> -->
+<body style="background-color:rgba(70,70,70,0.2);"> 
 @main("Plano de Curso") {
+	<!-- 
 	<center><h2>@Messages("planoDeCurso")</h2></center>
-	
+	 -->
 	<!-- BOTAO ADD PERIODO 
     <span id="addPeriodo">
 		<a href="/addPeriodo">@Messages("addPeriodo")</a>
 	</span>
 	 -->
-	<center><h3 style="position:absolute;left:43%;top:50px;color:#fff;text-shadow:2px 2px #000;">Períodos Do Curso</h3></center>
+	<center><h3 style="position:absolute;top:32px;width:100%;background-color:rgba(0,0,200,0.5); color:#fff;">
+	Plano De Curso
+	</h3></center>
+	
+	<h5 style="float:right;width:40%;position:relative;top:25px; margin:0;color:#600;font-size:14px;">
+		- Arraste a cadeira para o período que você quer alocá-la
+	</h5>
+	
 	<div id="periodos">
 	@for(periodo <- plano.getPeriodos()) {
 		<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"
@@ -28,7 +51,10 @@
 		 -->
 		
 		<ul style="list-style:none;">
-			<span class="label label-info" style="width:190px;height:30px;font-size:20px;margin-bottom:10px;margin-left:-40px;">@periodo.getNumero() @Messages("nPeriodo") </span>
+			<li style="width:190px;height:30px;font-size:20px;margin-bottom:10px;margin-left:-40px;
+			background-color:rgba(0,0,200,0.5); color:#fff;">
+				@periodo.getNumero() @Messages("nPeriodo") 
+			</li>
 			@for(cadeira <- periodo.getCadeiras()) {
 			
 		  	<!--  <div class="alocadas" id="@cadeira.getNome()" title="remover" 
@@ -38,14 +64,14 @@
 		  			<div class="alocadas-vermelho" id="@cadeira.getNome()" title="remover" draggable="true" 
 		ondragstart="drag(event)" ondragend="dragEnd()">
 		  	}else{
-		  		<div class="alocadas" id="@cadeira.getNome()" title="remover" draggable="true" 
+		  		<div class="alocadas" id="@cadeira.getNome()" draggable="true" 
 		ondragstart="drag(event)" ondragend="dragEnd()">
 		  	}		  	
 		  		<center><label class="nome"> <span>@cadeira.getNome()</span></label></center>
 		  		<label class="creditos">@cadeira.getCreditos() @Messages("creditos")</label>
 		  		<label class="dificuldade"> dificuldade: @cadeira.getDificuldade()</label>
 		  		
-		  		<span style="margin-top: 5px;margin-left:150px;" 
+		  		<span class="remove" style="margin-top: 5px;margin-left:140px;" title="remover"  
 		  		onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')"></span>	
 		  	</div>
 		} 
@@ -62,17 +88,17 @@
 	 -->
 	
 	<br/>
-	<center><div class="separator"> </div> </center>
 	
 	<!-- 
 	<h3 style="float:left;position:relative;left:50px;">@Messages("cadeirasDisponiveis")</h3>
 	 -->
-	<h5 style="float:right;width:70%;position:absolute;top:620px;left:90px;margin:0;color:#600;font-size:18px;
-	background-color:#fff;">
-		- Arraste a cadeira para o período que você quer alocá-la
-	</h5>
-	<div style="width:0%;height:500px;overflow-y:auto;margin-top:20px;margin-left:30px;">
-	<ul style="list-style:none;overflow-y:auto;margin-top:20px;"> 
+	
+	<div style="width:220px%;height:500px;overflow-y:auto;margin-top:13px;margin-left:30px;">
+	<ul style="list-style:none;margin-top:20px;">
+		<li style="width:220px;height:30px;font-size:20px;margin-bottom:10px;margin-left:-50px;
+			background-color:rgba(0,200,100,0.5); color:#fff;border-radius:0px;">
+			@Messages("cadeirasDisponiveis") 
+		</li> 
 		@for(cadeira <- plano.getCadeiraDispniveisOrdenadas()) {
 		<div class="disponiveis" id="@cadeira.getNome()"	draggable="true" 
 		ondragstart="drag(event)" ondragend="dragEnd()">

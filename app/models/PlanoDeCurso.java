@@ -1,7 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import models.exceptions.LimiteUltrapassadoException;
-
 import play.db.ebean.Model;
 
 /**
@@ -39,9 +37,6 @@ public class PlanoDeCurso extends Model{
     @JoinTable(name = "plano_periodo", 
     joinColumns = {@JoinColumn (name = "fk_plano")}, inverseJoinColumns = {@JoinColumn(name = "fk_periodo")})
 	private List<Periodo> periodos;
-	
-	//@OneToOne
-	private Usuario usuario;
 
 	private Map<String, Cadeira> mapaDeCadeiras;
 	
@@ -54,20 +49,20 @@ public class PlanoDeCurso extends Model{
 		for (int i = 1; i<= 10; i++ ){
 			periodos.add(new Periodo(i));
 		}
-		// seta o mapa de cadeiras com as cadeiras do xml
 		this.mapaDeCadeiras = new HashMap<String, Cadeira>();
-		
-		//irá distribuir as cadeiras entre os periodos
-		distribuiCadeiras();  
 	}
-
-	public Long getId(){
-		return id;
-	}	
 
 	public static Finder<Long,PlanoDeCurso> find = new Finder<Long,PlanoDeCurso>(
 		    Long.class, PlanoDeCurso.class
 	);
+
+	public Long getId(){
+		return id;
+	}	
+	
+	public void setId(Long id){
+		this.id = id;	
+	}
 	
 	public static void create(PlanoDeCurso p) {
 		p.save();
@@ -108,28 +103,13 @@ public class PlanoDeCurso extends Model{
 	 * as cadeiras existentes.
 	 */
 	public void atualizaMapaCadeira(List<Cadeira> cadeiras){
-		Map<String, Cadeira> mapa = new HashMap<String, Cadeira>();
+		this.mapaDeCadeiras = new HashMap<String, Cadeira>();
 		for(Cadeira c: cadeiras){
-			mapa.put(c.getNome(), c);
+			mapaDeCadeiras.put(c.getNome(), c);
 		}
-		mapaDeCadeiras = mapa;
 	}
 	
-	/**
-	 * Adiciona um periodo à lista de períodos, de acordo com o tamanho da
-	 * lista.
-	 * 
-	 * Seguindo o padrão creator.
-	 */
-	public void addPeriodo() {
-		this.periodos.add(new Periodo(this.periodos.size() + 1));
-	}
-	
-	public void addPeriodo(int num_periodo) {
-		this.periodos.add(new Periodo(num_periodo));
-	}
-	
-	public Map<String, Cadeira> getMapaCadeira(){
+	public Map<String, Cadeira> getMapaDeCadeiras(){
 		return mapaDeCadeiras;
 	}
 
@@ -145,14 +125,6 @@ public class PlanoDeCurso extends Model{
 
 	public List<Periodo> getPeriodos() {
 		return this.periodos;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 	
 	/**
@@ -187,7 +159,7 @@ public class PlanoDeCurso extends Model{
 	public List<Cadeira> getCadeiraDispniveisOrdenadas(){
 		List<Cadeira> cadeirasOrdenadas = new ArrayList<Cadeira>();
 		cadeirasOrdenadas.addAll(getMapCadeirasDisponiveis().values());
-		Collections.sort(cadeirasOrdenadas);
+		//Collections.sort(cadeirasOrdenadas);
 		return cadeirasOrdenadas;
 	}
 
@@ -272,8 +244,11 @@ public class PlanoDeCurso extends Model{
 		//}
 		Cadeira removida = mapaDeCadeiras.get(cadeira);
 		// procura pela cadeira entre os periodos.
-		getPeriodo(removida.getPeriodo()).removerCadeira(removida);
-		//removida.setPeriodo(0);
+		for(Periodo p : periodos){
+			if(p.getCadeiras().contains(removida)){
+				p.removerCadeira(removida);
+			}
+		}
 		for (Periodo p: periodos){
 			for (Cadeira c: p.getCadeiras()){
 				if(c.isPreRequisito(removida)){
