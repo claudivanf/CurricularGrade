@@ -30,23 +30,21 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 	private int creditos;
 	// TODO changed BD structure
 	@ManyToMany
-	@JoinTable(name = "cadeira_dependentes", joinColumns = @JoinColumn(name = "cadeira_codigo", referencedColumnName = "codigo"), inverseJoinColumns = @JoinColumn(name = "dependente_id", referencedColumnName = "codigo"))
-	private List<Cadeira> dependentes;
-	@ManyToMany
-	@JoinTable(name = "disciplinas_requisitos", joinColumns = @JoinColumn(name = "disciplina_codigo", referencedColumnName = "codigo"), inverseJoinColumns = @JoinColumn(name = "requisito_codigo", referencedColumnName = "codigo"))
+	@JoinTable(name = "cadeira_requisito", joinColumns = @JoinColumn(name = "id_disciplina"), inverseJoinColumns = @JoinColumn(name = "id_requisito"))
 	private List<Cadeira> requisitos;
-	@ManyToMany
+	
 	private int dificuldade; // dificuldade de 1 - 10
+	private int periodoOriginal; //Periodo original da disciplina segundo a grade curricular
 
 	public Cadeira() {
-		setDependentes(new ArrayList<Cadeira>());
+		setRequisitos(new ArrayList<Cadeira>());
 	}
 
 	public Cadeira(String nome, int dificuldade) {
 		this.setNome(nome);
 		this.creditos = 4;
 		this.dificuldade = dificuldade;
-		setDependentes(new ArrayList<Cadeira>());
+		setRequisitos(new ArrayList<Cadeira>());
 	}
 
 	public Cadeira(String nome, int dificuldade, int creditos) {
@@ -60,7 +58,7 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 	 * pre-requisito é a mesma.
 	 */
 	public boolean isPreRequisito(Cadeira c) {
-		return this.getDependentes().contains(c);
+		return this.getRequisitos().contains(c);
 	}
 
 	// TODO PADRÃO DE PROJETO: INFORMATION EXPERT - a classe cadeira é a
@@ -68,7 +66,7 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 	public void addDependentes(Cadeira... c) {
 		Cadeira[] lista = c;
 		for (Cadeira cadeira : lista) {
-			getDependentes().add(cadeira);
+			getRequisitos().add(cadeira);
 		}
 	}
 
@@ -96,14 +94,21 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		this.dificuldade = dificuldade;
 	}
 
-	public List<Cadeira> getDependentes() {
-		return dependentes;
+	public List<Cadeira> getRequisitos() {
+		return requisitos;
 	}
 
-	public void setDependentes(List<Cadeira> preRequisitos) {
-		this.dependentes = preRequisitos;
+	public void setRequisitos(List<Cadeira> preRequisitos) {
+		this.requisitos = preRequisitos;
 	}
-
+	
+	public int getPeriodoOriginal(){
+ 		return periodoOriginal;
+ 	}
+ 	
+ 	public void setPeriodoOriginal(int periodo){
+ 		this.periodoOriginal = periodo;
+ 	}
 	// TODO Removed get and set Periodo, Cadeira Shouldn't know in what periodo
 	// it is
 

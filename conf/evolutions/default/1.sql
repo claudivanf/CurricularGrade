@@ -5,11 +5,10 @@
 
 create table cadeira (
   id                        bigint not null,
-  nome                      varchar(255) not null,
+  nome                      varchar(255),
   creditos                  integer,
   dificuldade               integer,
   periodo_original          integer,
-  constraint uq_cadeira_nome unique (nome),
   constraint pk_cadeira primary key (id))
 ;
 
@@ -21,24 +20,24 @@ create table periodo (
 
 create table plano_de_curso (
   id                        bigint not null,
+  periodo_cursando          integer,
   constraint pk_plano_de_curso primary key (id))
 ;
 
 create table usuario (
-  id                        bigint not null,
-  email                     varchar(255),
+  email                     varchar(255) not null,
   nome                      varchar(255),
   senha                     varchar(255),
-  periodo_cursando          integer,
   plano_id                  bigint,
-  constraint pk_usuario primary key (id))
+  periodo_atual             integer,
+  constraint pk_usuario primary key (email))
 ;
 
 
 create table cadeira_requisito (
-  fk_cadeira                     bigint not null,
-  fk_requisito                   bigint not null,
-  constraint pk_cadeira_requisito primary key (fk_cadeira, fk_requisito))
+  id_disciplina                  bigint not null,
+  id_requisito                   bigint not null,
+  constraint pk_cadeira_requisito primary key (id_disciplina, id_requisito))
 ;
 
 create table periodo_cadeira (
@@ -65,9 +64,9 @@ create index ix_usuario_plano_1 on usuario (plano_id);
 
 
 
-alter table cadeira_requisito add constraint fk_cadeira_requisito_cadeira_01 foreign key (fk_cadeira) references cadeira (id) on delete restrict on update restrict;
+alter table cadeira_requisito add constraint fk_cadeira_requisito_cadeira_01 foreign key (id_disciplina) references cadeira (id) on delete restrict on update restrict;
 
-alter table cadeira_requisito add constraint fk_cadeira_requisito_cadeira_02 foreign key (fk_requisito) references cadeira (id) on delete restrict on update restrict;
+alter table cadeira_requisito add constraint fk_cadeira_requisito_cadeira_02 foreign key (id_requisito) references cadeira (id) on delete restrict on update restrict;
 
 alter table periodo_cadeira add constraint fk_periodo_cadeira_periodo_01 foreign key (fk_periodo) references periodo (id) on delete restrict on update restrict;
 

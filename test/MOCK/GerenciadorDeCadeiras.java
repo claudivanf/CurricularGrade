@@ -69,7 +69,7 @@ public class GerenciadorDeCadeiras {
 			criandoCadeira.addDependentes(cadeirasPorId.get(requisitos.item(i)
 					.getTextContent()));
 		}
-		criandoCadeira.setPeriodo(periodo);
+		criandoCadeira.setPeriodoOriginal(periodo);
 		cadeirasPorId.put(idCadeira, criandoCadeira);
 
 		listaDeCadeiras.put(criandoCadeira.getNome(), criandoCadeira);

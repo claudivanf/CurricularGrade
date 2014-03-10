@@ -32,11 +32,11 @@ public class Usuario extends Model {
 	public static Finder<String, Usuario> find = new Finder<String, Usuario>(
 			String.class, Usuario.class);
 
-	public Usuario(String email, String nome, String senha, PlanoDeCurso plano) {
-		setEmail(email);
-		setNome(nome);
-		setSenha(senha);
-		setPlano(plano);
+	public Usuario(String email, String nome, String senha) {
+		this.email = email;
+		this.nome = nome;
+		this.senha = senha;
+		plano = new PlanoDeCurso();
 		setPeriodoAtual(1);
 	}
 

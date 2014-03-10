@@ -75,6 +75,25 @@ public class Application extends Controller {
 	}
 	
 	public static Result verificaUsuario(){
+		Form<Cadastrar> cadastroForm = form(Cadastrar.class).bindFromRequest();
+		String nome = cadastroForm.get().nome;
+	    String email = cadastroForm.get().email;
+	    String senha = cadastroForm.get().password;
+	    int periodo = cadastroForm.get().periodo;
+	    List<Usuario> u = Usuario.find.where().eq("email", email).findList();
+	    if(!u.isEmpty()){
+	    	flash("fail", "Email Já Cadastrado");
+	    	return cadastrar();
+	    }
+	    if(periodo < 1 || periodo > 10){
+	    	flash("fail", "Periodo Invalido");
+    		return cadastrar();
+		}	
+	    Usuario usuario = new Usuario(email,nome,senha);
+	    usuario.getPlano().distribuiCaderas(Cadeira.find.all());
+		usuario.getPlano().setPeriodoCursando(periodo);
+		usuario.save();
+		flash("sucesso", "Usuario Cadastrado Com Sucesso");
 		return cadastrar();
 	}
 	

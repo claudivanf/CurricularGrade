@@ -19,7 +19,6 @@ import javax.persistence.ManyToMany;
 import models.exceptions.LimiteDeCreditosException;
 import models.validators.ValidadorDePeriodo;
 import models.validators.ValidadorMax;
-import models.validators.ValidadorMaxMin;
 import models.validators.ValidadorMin;
 import play.db.ebean.Model;
 
@@ -89,8 +88,8 @@ public class PlanoDeCurso extends Model{
 	 */
 	private void distribuiCadeiras(){
 		for(Cadeira c: mapaDeCadeiras.values()){
-			if(c.getPeriodo() != 0) {
-				Periodo p = getPeriodo(c.getPeriodo());
+			if(c.getPeriodoOriginal() != 0) {
+				Periodo p = getPeriodo(c.getPeriodoOriginal());
 				p.addCadeira(c);
 			}
 		}
@@ -176,13 +175,13 @@ public class PlanoDeCurso extends Model{
 	 * 
 	 * @throws Exception
 	 */
-	public void addCadeira(String cadeiraNome, int periodo) throws LimiteUltrapassadoException {
+	public void addCadeira(String cadeiraNome, int periodo) throws LimiteDeCreditosException {
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
 		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
-		if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
-			throw new LimiteUltrapassadoException("Limite de Créditos Ultrapassado!");
-		}
+//		if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
+//			throw new LimiteUltrapassadoException("Limite de Créditos Ultrapassado!");
+//		}
 		//verificaPreRequisitos(cadeira, periodo);
 		
 		//remove cadeira do periodo
@@ -216,7 +215,7 @@ public class PlanoDeCurso extends Model{
 			}
 		}
 		// verifica também recursivamente em seus pre-requisitos
-		for (Cadeira c : cad.getDependentes()) {
+		for (Cadeira c : cad.getRequisitos()) {
 			if (verificaPrerequisito(c.getNome())) {
 				return true;
 			}
@@ -235,7 +234,7 @@ public class PlanoDeCurso extends Model{
 			// verifica as cadeiras que tem a cadeira a ser removida como
 			// pre-requisito
 			for (Cadeira cadeiraDoPeriodo : periodo.getCadeiras()) {
-				if (cadeiraDoPeriodo.getDependentes().contains(cadeira)) {
+				if (cadeiraDoPeriodo.getRequisitos().contains(cadeira)) {
 					return true;
 				}
 			}

@@ -1,8 +1,15 @@
 @(form: Form[Application.Cadastrar])
+@if(flash.contains("sucesso")) {
+	<script>
+	alert('@flash.get("sucesso")');
+	window.location.href = "/login" 
+	</script>
+}
+
 
 <html>
 <head>
-<title>Login Plano De Curso</title>
+<title>Cadastramento</title>
 <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/login.css")">    
 <link rel="stylesheet" href="@routes.Assets.at("stylesheets/login.css")">
@@ -12,7 +19,7 @@
 <div class="container">
 	<section id="content">
 		@helper.form(routes.Application.verificaUsuario) {
-			<h1>Login</h1>
+			<h1>Cadastramento</h1>
 			@if(flash.contains("fail")) {
     		<p class="fail" style="">
         		@flash.get("fail")
@@ -31,7 +38,7 @@
 				<input type="number" name="periodo" placeholder="Periodo" id="periodo"/>
 			</div>
 			<div>
-				<input type="submit" value="Entrar" />
+				<input type="submit" value="Finalizar" />
 			</div>
 		}<!-- form -->
 		</section><!-- content -->
