@@ -16,7 +16,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import models.exceptions.LimiteUltrapassadoException;
+import models.exceptions.LimiteDeCreditosException;
+import models.validators.ValidadorDePeriodo;
+import models.validators.ValidadorMax;
+import models.validators.ValidadorMaxMin;
+import models.validators.ValidadorMin;
 import play.db.ebean.Model;
 
 /**
@@ -40,8 +44,7 @@ public class PlanoDeCurso extends Model{
 	private List<Periodo> periodos;
 
 	private Map<String, Cadeira> mapaDeCadeiras;
-	
-	public static final int MAXIMO_CREDITOS = 28;
+	private int periodoCursando;
 
 	public PlanoDeCurso() {
 		// TODO Responsabilidade Atribuita seguindo o padrão Creator
@@ -65,17 +68,20 @@ public class PlanoDeCurso extends Model{
 		this.id = id;	
 	}
 	
-	public static void create(PlanoDeCurso p) {
-		p.save();
+	public int getPeriodoCursando() {
+		return periodoCursando;
 	}
 
-	public static void delete(Long id) {
-		find.ref(id).delete();
-	}
-	
-	public static void atualizar(Long id) {
-		PlanoDeCurso p = find.ref(id);
-		p.update();
+	public void setPeriodoCursando(int periodoCursando) {
+		for(int i=1; i <= 10; i++){
+			if(i< periodoCursando){
+				getPeriodo(i).addValidador(new ValidadorMax());
+			} else if(i != 10){
+				getPeriodo(i).addValidador(new ValidadorMax());
+				getPeriodo(i).addValidador(new ValidadorMin());
+			}
+		}
+		this.periodoCursando = periodoCursando;
 	}
 	
 	/**
@@ -166,17 +172,18 @@ public class PlanoDeCurso extends Model{
 
 	/**
 	 * Adiciona uma {@code cadeira} ao {@code periodo}
-	 * @throws LimiteUltrapassadoException 
+	 * @throws LimiteDeCreditosException 
 	 * 
 	 * @throws Exception
 	 */
-	public void addCadeira(String cadeiraNome, int periodo) throws LimiteUltrapassadoException {
+	public void addCadeira(String cadeiraNome, int periodo) throws LimiteDeCreditosException {
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
 		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
-		if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
-			throw new LimiteUltrapassadoException("Limite de Créditos Ultrapassado!");
-		}
+		//if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
+		//	throw new LimiteDeCreditosException("Limite de Créditos Ultrapassado!");
+		//}
+		//TODO FAZER OS VALIDADORES VERIFICAREM OS PERIODOS
 		//verificaPreRequisitos(cadeira, periodo);
 		
 		//remove cadeira do periodo

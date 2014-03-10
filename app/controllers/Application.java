@@ -8,7 +8,7 @@ import models.Cadeira;
 import models.Usuario;
 import static play.data.Form.*; 
 import models.PlanoDeCurso;
-import models.exceptions.LimiteUltrapassadoException;
+import models.exceptions.LimiteDeCreditosException;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -78,7 +78,7 @@ public class Application extends Controller {
 	public static Result addCadeira(String cadeira, int periodo){
 		try {
 			plano.addCadeira(cadeira, periodo);
-		} catch (LimiteUltrapassadoException e) {
+		} catch (LimiteDeCreditosException e) {
 			return badRequest(e.getMessage());
 		}
 		plano.update();

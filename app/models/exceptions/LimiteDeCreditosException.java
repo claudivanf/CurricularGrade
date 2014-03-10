@@ -1,10 +1,10 @@
 package models.exceptions;
 
-public class LimiteUltrapassadoException extends Exception {
+public class LimiteDeCreditosException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	
-	public LimiteUltrapassadoException(String message){
+	public LimiteDeCreditosException(String message){
 		super(message);
 	}
 

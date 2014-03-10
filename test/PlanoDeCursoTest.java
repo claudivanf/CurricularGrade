@@ -1,6 +1,6 @@
 import models.Cadeira;
 import models.PlanoDeCurso;
-import models.exceptions.LimiteUltrapassadoException;
+import models.exceptions.LimiteDeCreditosException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -71,7 +71,7 @@ public class PlanoDeCursoTest {
 
 		try {
 			plano.addCadeira("Programação I", 2);
-		} catch (LimiteUltrapassadoException e) {
+		} catch (LimiteDeCreditosException e) {
 			Assert.assertEquals("Limite de Créditos Ultrapassado!",
 					e.getMessage());
 		}
@@ -79,7 +79,7 @@ public class PlanoDeCursoTest {
 			plano.addCadeira("Programação I", 10);
 			Assert.assertEquals(p1,
 					plano.getPeriodo(10).getCadeira(p1.getNome()));
-		} catch (LimiteUltrapassadoException e) {
+		} catch (LimiteDeCreditosException e) {
 			Assert.fail("nao devia ter lançado exceptio");
 		}
 
@@ -108,7 +108,7 @@ public class PlanoDeCursoTest {
 			plano.addCadeira("Programação I", 10);
 			Assert.assertEquals(p1,
 					plano.getPeriodo(10).getCadeira(p1.getNome()));
-		} catch (LimiteUltrapassadoException e) {
+		} catch (LimiteDeCreditosException e) {
 			Assert.fail("nao devia ter lançado exceptio");
 		}
 
@@ -124,7 +124,7 @@ public class PlanoDeCursoTest {
 		try {
 			plano.addCadeira("Programação I", 2);
 			Assert.fail("nao devia ter passado");
-		} catch (LimiteUltrapassadoException e) {
+		} catch (LimiteDeCreditosException e) {
 			Assert.assertEquals("Limite de Créditos Ultrapassado!",
 					e.getMessage());
 		}

@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import models.validators.ValidadorDePeriodo;
 import play.db.ebean.Model;
 
 /**
@@ -33,14 +34,17 @@ public class Periodo extends Model{
     @JoinTable(name = "periodo_cadeira", 
     joinColumns = {@JoinColumn (name = "fk_periodo")}, inverseJoinColumns = {@JoinColumn(name = "fk_cadeira")})
 	private List<Cadeira> cadeiras;
+	
+	private List<ValidadorDePeriodo> validadores;
 
 	public Periodo(){
 		cadeiras = new ArrayList<Cadeira>();
+		validadores = new ArrayList<ValidadorDePeriodo>();
 	}
 	
 	public Periodo(int numeroDoPeriodo) {
+		this();
 		this.numero = numeroDoPeriodo;
-		cadeiras = new ArrayList<Cadeira>();
 	}
 	
 	public Long getId(){
@@ -111,6 +115,18 @@ public class Periodo extends Model{
 		this.numero = numero;
 	}
 	
+	public List<ValidadorDePeriodo> getValidador() {
+		return validadores;
+	}
+
+	public void setValidador(List<ValidadorDePeriodo> validadores) {
+		this.validadores = validadores;
+	}
+	
+	public void addValidador(ValidadorDePeriodo validador){
+		this.validadores.add(validador);
+	}
+
 	public List<Cadeira> getListaCadeiras(){
 		return cadeiras;
 	}
