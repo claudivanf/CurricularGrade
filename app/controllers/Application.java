@@ -37,6 +37,15 @@ public class Application extends Controller {
 	    );
 	}
 	
+	public static Result cadastrar(){
+		if(Usuario.find.all().isEmpty()){
+			GeradorDeUsuario.geraUsuarios();
+		}
+	    return ok(
+	    	views.html.cadastrar.render(form(Cadastrar.class))
+	    );
+	}
+	
 	public static Result logout() {
 		// apaga todas as sessoes e retorna para a pagina de login
 		session().clear();
@@ -63,6 +72,10 @@ public class Application extends Controller {
 	            routes.Application.index()
 	        );
 	    }
+	}
+	
+	public static Result verificaUsuario(){
+		return cadastrar();
 	}
 	
 	public static String validate(String email, String senha) {
@@ -94,5 +107,12 @@ public class Application extends Controller {
 	public static class Login {
 	    public String email;
 	    public String password;
+	}
+	
+	public static class Cadastrar {
+		public String nome;
+	    public String email;
+	    public String password;
+	    public int periodo;
 	}
 }
