@@ -29,6 +29,7 @@ create table usuario (
   email                     varchar(255),
   nome                      varchar(255),
   senha                     varchar(255),
+  periodo_cursando          integer,
   plano_id                  bigint,
   constraint pk_usuario primary key (id))
 ;
