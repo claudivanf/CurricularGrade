@@ -66,7 +66,7 @@ public class GerenciadorDeCadeiras {
 				.getElementsByTagName("periodo").item(0).getTextContent());
 		NodeList requisitos = cadeiraXml.getElementsByTagName("id");
 		for (int i = 0; i < requisitos.getLength(); i++) {
-			criandoCadeira.addPreRequisito(cadeirasPorId.get(requisitos.item(i)
+			criandoCadeira.addDependentes(cadeirasPorId.get(requisitos.item(i)
 					.getTextContent()));
 		}
 		criandoCadeira.setPeriodo(periodo);

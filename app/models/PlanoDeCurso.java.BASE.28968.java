@@ -16,11 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import models.exceptions.LimiteDeCreditosException;
-import models.validators.ValidadorDePeriodo;
-import models.validators.ValidadorMax;
-import models.validators.ValidadorMaxMin;
-import models.validators.ValidadorMin;
+import models.exceptions.LimiteUltrapassadoException;
 import play.db.ebean.Model;
 
 /**
@@ -44,7 +40,8 @@ public class PlanoDeCurso extends Model{
 	private List<Periodo> periodos;
 
 	private Map<String, Cadeira> mapaDeCadeiras;
-	private int periodoCursando;
+	
+	public static final int MAXIMO_CREDITOS = 28;
 
 	public PlanoDeCurso() {
 		// TODO Responsabilidade Atribuita seguindo o padrão Creator
@@ -72,16 +69,13 @@ public class PlanoDeCurso extends Model{
 		p.save();
 	}
 
-	public void setPeriodoCursando(int periodoCursando) {
-		for(int i=1; i <= 10; i++){
-			if(i< periodoCursando){
-				getPeriodo(i).addValidador(new ValidadorMax());
-			} else if(i != 10){
-				getPeriodo(i).addValidador(new ValidadorMax());
-				getPeriodo(i).addValidador(new ValidadorMin());
-			}
-		}
-		this.periodoCursando = periodoCursando;
+	public static void delete(Long id) {
+		find.ref(id).delete();
+	}
+	
+	public static void atualizar(Long id) {
+		PlanoDeCurso p = find.ref(id);
+		p.update();
 	}
 	
 	/**
@@ -216,8 +210,8 @@ public class PlanoDeCurso extends Model{
 			}
 		}
 		// verifica também recursivamente em seus pre-requisitos
-		for (Cadeira c : cad.getDependentes()) {
-			if (verificaPrerequisito(c.getNome())) {
+		for(Cadeira c: cad.getPreRequisitos()){
+			if(verificaPrerequisito(c.getNome())){
 				return true;
 			}
 		}
@@ -235,7 +229,7 @@ public class PlanoDeCurso extends Model{
 			// verifica as cadeiras que tem a cadeira a ser removida como
 			// pre-requisito
 			for (Cadeira cadeiraDoPeriodo : periodo.getCadeiras()) {
-				if (cadeiraDoPeriodo.getDependentes().contains(cadeira)) {
+				if (cadeiraDoPeriodo.getPreRequisitos().contains(cadeira)) {
 					return true;
 				}
 			}

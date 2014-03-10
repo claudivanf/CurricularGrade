@@ -68,8 +68,8 @@ public class PlanoDeCurso extends Model{
 		this.id = id;	
 	}
 	
-	public static void create(PlanoDeCurso p) {
-		p.save();
+	public int getPeriodoCursando() {
+		return periodoCursando;
 	}
 
 	public void setPeriodoCursando(int periodoCursando) {
@@ -172,17 +172,18 @@ public class PlanoDeCurso extends Model{
 
 	/**
 	 * Adiciona uma {@code cadeira} ao {@code periodo}
-	 * @throws LimiteUltrapassadoException 
+	 * @throws LimiteDeCreditosException 
 	 * 
 	 * @throws Exception
 	 */
-	public void addCadeira(String cadeiraNome, int periodo) throws LimiteUltrapassadoException {
+	public void addCadeira(String cadeiraNome, int periodo) throws LimiteDeCreditosException {
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
 		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
-		if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
-			throw new LimiteUltrapassadoException("Limite de Créditos Ultrapassado!");
-		}
+		//if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
+		//	throw new LimiteDeCreditosException("Limite de Créditos Ultrapassado!");
+		//}
+		//TODO FAZER OS VALIDADORES VERIFICAREM OS PERIODOS
 		//verificaPreRequisitos(cadeira, periodo);
 		
 		//remove cadeira do periodo
@@ -216,8 +217,8 @@ public class PlanoDeCurso extends Model{
 			}
 		}
 		// verifica também recursivamente em seus pre-requisitos
-		for (Cadeira c : cad.getDependentes()) {
-			if (verificaPrerequisito(c.getNome())) {
+		for(Cadeira c: cad.getPreRequisitos()){
+			if(verificaPrerequisito(c.getNome())){
 				return true;
 			}
 		}
@@ -235,7 +236,7 @@ public class PlanoDeCurso extends Model{
 			// verifica as cadeiras que tem a cadeira a ser removida como
 			// pre-requisito
 			for (Cadeira cadeiraDoPeriodo : periodo.getCadeiras()) {
-				if (cadeiraDoPeriodo.getDependentes().contains(cadeira)) {
+				if (cadeiraDoPeriodo.getPreRequisitos().contains(cadeira)) {
 					return true;
 				}
 			}
