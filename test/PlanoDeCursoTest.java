@@ -1,12 +1,12 @@
 import models.Cadeira;
+import models.CarregadorDeCadeiras;
 import models.PlanoDeCurso;
-import models.exceptions.LimiteUltrapassadoException;
+import models.exceptions.LimiteDeCreditosException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import MOCK.GerenciadorDeCadeiras;
 /**
  * 
  * Simple (JUnit) tests that can call all parts of a play app. If you are
@@ -14,46 +14,45 @@ import MOCK.GerenciadorDeCadeiras;
  * 
  */
 public class PlanoDeCursoTest {
-	
+
 	PlanoDeCurso plano;
-	
+
 	@Before
-	public void setUp(){
+	public void setUp() {
 		// cria e popula o plano a cada @Test
 		// com os parâmetros originais da grade de CC.
 		plano = new PlanoDeCurso();
-		plano.distribuiCaderas(GerenciadorDeCadeiras.getListaDeCadeiras());
+		plano.distribuiCaderas(CarregadorDeCadeiras.getListaDeCadeiras());
 	}
 
 	@Test
-	public void testaDadosPlano(){
+	public void testaDadosPlano() {
 		Assert.assertEquals(10, plano.getPeriodos().size());
 		Assert.assertEquals(55, plano.getCadeirasAlocadas().size());
-		Assert.assertEquals(0, plano.getCadeiraDispniveisOrdenadas().size());	
+		Assert.assertEquals(0, plano.getCadeiraDisponiveisOrdenadas().size());
 	}
-	
+
 	@Test
-	public void testaCadeirasESeusRequisitos(){
-		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
-		Cadeira p2 = plano.getMapaCadeira().get("Programação II");
-		Cadeira c1 = plano.getMapaCadeira().get("Cálculo I");
-		Cadeira c2 = plano.getMapaCadeira().get("Cálculo II");
-		
-		Assert.assertEquals(true, c2.isPreRequisito(c1));
-		Assert.assertEquals(true, p2.isPreRequisito(p1));
-		Assert.assertEquals(false, p2.isPreRequisito(c1));
+	public void testaCadeirasESeusRequisitos() {
+		Cadeira p1 = plano.getMapaDeCadeiras().get("Programação I");
+		Cadeira p2 = plano.getMapaDeCadeiras().get("Programação II");
+		Cadeira c1 = plano.getMapaDeCadeiras().get("Cálculo I");
+		Cadeira c2 = plano.getMapaDeCadeiras().get("Cálculo II");
+
+		Assert.assertEquals(true, c2.isDependente(c1));
+		Assert.assertEquals(true, p2.isDependente(p1));
+		Assert.assertEquals(false, p2.isDependente(c1));
 	}
-	
+
 	@Test
 	public void testaListarPrimeiroPeriodo() {
-		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
-		Cadeira lp1 = plano.getMapaCadeira().get("Lab. de Programação I");
-		Cadeira ic = plano.getMapaCadeira().get("Int. à Computacação");
-		Cadeira lpt = plano.getMapaCadeira().get("Leitura e Prod. de Textos");
-		Cadeira c1 = plano.getMapaCadeira().get("Cálculo I");
-		Cadeira vet = plano.getMapaCadeira().get("Algebra Vetorial");
-		
-		
+		Cadeira p1 = plano.getMapaDeCadeiras().get("Programação I");
+		Cadeira lp1 = plano.getMapaDeCadeiras().get("Lab. de Programação I");
+		Cadeira ic = plano.getMapaDeCadeiras().get("Int. à Computacação");
+		Cadeira lpt = plano.getMapaDeCadeiras().get("Leitura e Prod. de Textos");
+		Cadeira c1 = plano.getMapaDeCadeiras().get("Cálculo I");
+		Cadeira vet = plano.getMapaDeCadeiras().get("Algebra Vetorial");
+
 		Assert.assertEquals(6, plano.getPeriodo(1).getCadeiras().size());
 		Assert.assertEquals(p1, plano.getPeriodo(1).getCadeira(p1.getNome()));
 		Assert.assertEquals(lp1, plano.getPeriodo(1).getCadeira(lp1.getNome()));
@@ -61,29 +60,31 @@ public class PlanoDeCursoTest {
 		Assert.assertEquals(lpt, plano.getPeriodo(1).getCadeira(lpt.getNome()));
 		Assert.assertEquals(c1, plano.getPeriodo(1).getCadeira(c1.getNome()));
 		Assert.assertEquals(vet, plano.getPeriodo(1).getCadeira(vet.getNome()));
-		
+
 		Assert.assertEquals(24, plano.getPeriodo(1).getCreditos());
 	}
-	
+
 	@Test
 	public void testaAdicionarCadeira() {
-		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
+		Cadeira p1 = plano.getMapaDeCadeiras().get("Programação I");
 
 		try {
 			plano.addCadeira("Programação I", 2);
-		} catch (LimiteUltrapassadoException e) {
-			Assert.assertEquals("Limite de Créditos Ultrapassado!", e.getMessage());
+		} catch (LimiteDeCreditosException e) {
+			Assert.assertEquals("Limite de Créditos Ultrapassado!",
+					e.getMessage());
 		}
 		try {
 			plano.addCadeira("Programação I", 10);
-			Assert.assertEquals(p1, plano.getPeriodo(10).getCadeira(p1.getNome()));
-		} catch (LimiteUltrapassadoException e) {
+			Assert.assertEquals(p1,
+					plano.getPeriodo(10).getCadeira(p1.getNome()));
+		} catch (LimiteDeCreditosException e) {
 			Assert.fail("nao devia ter lançado exceptio");
 		}
 
 		Assert.assertEquals(5, plano.getPeriodo(1).getCadeiras().size());
 		Assert.assertEquals(1, plano.getPeriodo(10).getCadeiras().size());
-		
+
 	}
 
 	@Test
@@ -100,29 +101,30 @@ public class PlanoDeCursoTest {
 		Assert.assertEquals(0, plano.getPeriodo(9).getCreditos());
 		Assert.assertEquals(0, plano.getPeriodo(10).getCreditos());
 
-		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
+		Cadeira p1 = plano.getMapaDeCadeiras().get("Programação I");
 
 		try {
 			plano.addCadeira("Programação I", 10);
-			Assert.assertEquals(p1, plano.getPeriodo(10).getCadeira(p1.getNome()));
-		} catch (LimiteUltrapassadoException e) {
+			Assert.assertEquals(p1,
+					plano.getPeriodo(10).getCadeira(p1.getNome()));
+		} catch (LimiteDeCreditosException e) {
 			Assert.fail("nao devia ter lançado exceptio");
 		}
-		
+
 		Assert.assertEquals(20, plano.getPeriodo(1).getCreditos());
 		Assert.assertEquals(4, plano.getPeriodo(10).getCreditos());
-		
+
 	}
 
 	@Test
 	public void testaUltrapassarLimiteDeCreditos() throws Exception {
-		//Cadeira p1 = plano.getMapaCadeira().get("Programação I");
+		// Cadeira p1 = plano.getMapaDeCadeiras().get("Programação I");
 
 		try {
 			plano.addCadeira("Programação I", 2);
 			Assert.fail("nao devia ter passado");
-		} catch (LimiteUltrapassadoException e) {
-			Assert.assertEquals("Limite de Créditos Ultrapassado!", 
+		} catch (LimiteDeCreditosException e) {
+			Assert.assertEquals("Limite de Créditos Ultrapassado!",
 					e.getMessage());
 		}
 	}
@@ -141,21 +143,21 @@ public class PlanoDeCursoTest {
 
 	@Test
 	public void testaAddCadeiraComPreRequisitoEmPeriodoPosterior() {
-		Cadeira p1 = plano.getMapaCadeira().get("Programação I");
-		Cadeira p2 = plano.getMapaCadeira().get("Programação II");
-		
-		Cadeira lpt = plano.getMapaCadeira().get("Leitura e Prod. de Textos");
+		Cadeira p1 = plano.getMapaDeCadeiras().get("Programação I");
+		Cadeira p2 = plano.getMapaDeCadeiras().get("Programação II");
+
+		Cadeira lpt = plano.getMapaDeCadeiras().get("Leitura e Prod. de Textos");
 		try {
 			plano.addCadeira(p1.getNome(), 10);
 		} catch (Exception e) {
 			Assert.fail("Nao devia ter falhado.");
 		}
-		//testa se eh pre-requisito de alguma cadeira alocadad.
-		Assert.assertEquals(true, plano.isPreRequisito(p1.getNome()));
-		//verifica se tem pre-requisito alocados erroneamente
-		//metodo que fara a cadeira ficar vermelha
+		// testa se eh pre-requisito de alguma cadeira alocadad.
+		Assert.assertEquals(true, plano.isRequisito(p1.getNome()));
+		// verifica se tem pre-requisito alocados erroneamente
+		// metodo que fara a cadeira ficar vermelha
 		Assert.assertEquals(true, plano.verificaPrerequisito(p2.getNome()));
-		
+
 		Assert.assertEquals(false, plano.verificaPrerequisito(p1.getNome()));
 		Assert.assertEquals(false, plano.verificaPrerequisito(lpt.getNome()));
 	}

@@ -1,49 +1,59 @@
 package models;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import com.google.common.base.Objects;
-
+import play.data.validation.Constraints.Email;
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+
+import com.google.common.base.Objects;
 
 @Entity
 public class Usuario extends Model {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
+	// TODO User Id should be the email
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
-
+	@Required
+	@Email
+	private String email;
+	@Required
 	private String nome;
+	@Required
 	private String senha;
-	
-	@OneToOne(cascade=CascadeType.ALL)
-	@Column(name="fk_plano")
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PlanoDeCurso plano;
+	private int periodoAtual;
 
-	public Usuario(String nome, String senha) {
-		this.nome = nome;
-		this.senha = senha;
-		plano = new PlanoDeCurso();
+	public static Finder<String, Usuario> find = new Finder<String, Usuario>(
+			String.class, Usuario.class);
 
+	public Usuario(String email, String nome, String senha, PlanoDeCurso plano) {
+		setEmail(email);
+		setNome(nome);
+		setSenha(senha);
+		setPlano(plano);
+		setPeriodoAtual(1);
 	}
 
-	public Long getId() {
-		return id;
+	public int getPeriodoAtual() {
+		return this.periodoAtual;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setPeriodoAtual(int numPeriodo) {
+		this.periodoAtual = numPeriodo;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getNome() {
@@ -54,6 +64,7 @@ public class Usuario extends Model {
 		this.nome = nome;
 	}
 
+	// TODO criar classe de hash para senha, aumentar seguranca :p
 	public String getSenha() {
 		return senha;
 	}
@@ -70,20 +81,12 @@ public class Usuario extends Model {
 		this.plano = plano;
 	}
 
-	public static Finder<Long, Usuario> find = new Finder<Long, Usuario>(
-			Long.class, Usuario.class);
-
-	public static void create(Usuario u) {
-		u.save();
-	}
-
-	public static void delete(Long id) {
-		find.ref(id).delete();
-	}
-
-	public static void atualizar(Long id) {
-		Usuario p = find.ref(id);
-		p.update();
+	public boolean autenticar(String senha) {
+		boolean autenticado = false;
+		if (getSenha().equals(senha)) {
+			autenticado = true;
+		}
+		return autenticado;
 	}
 
 	@Override
@@ -100,8 +103,7 @@ public class Usuario extends Model {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equal(this.nome, other.getNome()) &&
-				Objects.equal(this.senha, other.getSenha());
+		return Objects.equal(this.nome, other.getNome())
+				&& Objects.equal(this.senha, other.getSenha());
 	}
-
 }

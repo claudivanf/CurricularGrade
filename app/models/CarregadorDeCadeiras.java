@@ -1,4 +1,4 @@
-package MOCK;
+package models;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,24 +11,16 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import models.Cadeira;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-/**
- * Gerenciador criado seguindo o padrão Pure Fabrication.
- */
-public class GerenciadorDeCadeiras {
 
-	// TODO PADRÃO DE PROJETO: CREATOR - Um gerenciador de cadeiras precisa do
-	// mapas de cadeiras contendo todas as cadeiras do curso
+public class CarregadorDeCadeiras {
+
 	private static Map<String, Cadeira> listaDeCadeiras = new HashMap<String, Cadeira>();
 
-	// TODO PADRÃO DE PROJETO: CONTROLLER - essa classe é responsável por
-	// controlar a adição de cadeiras no mapa.
 	private static void populaMapas() {
 		Map<String, Cadeira> cadeirasPorId = new HashMap<String, Cadeira>();
 		try {
@@ -49,30 +41,28 @@ public class GerenciadorDeCadeiras {
 	 * Cria a cadeira e insere no mapa de acordo com seus atributos descritos no
 	 * xml de {@code nNode}.
 	 */
-	private static void criaCadeiras(Map<String, Cadeira> cadeirasPorId,
-			Node nNode) {
-		Cadeira criandoCadeira = new Cadeira();
+	private static void criaCadeiras(Node nNode) {
 		Element cadeiraXml = (Element) nNode;
-		String idCadeira = cadeiraXml.getAttribute("id");
+
+		long idCadeira = Long.parseLong(cadeiraXml.getAttribute("id"));
 		String nomeCadeira = cadeiraXml.getAttribute("nome");
-		criandoCadeira.setNome(nomeCadeira);
-		int dificuldade = Integer.parseInt(cadeiraXml
-				.getElementsByTagName("dificuldade").item(0).getTextContent());
-		criandoCadeira.setDificuldade(dificuldade);
 		int creditos = Integer.parseInt(cadeiraXml
 				.getElementsByTagName("creditos").item(0).getTextContent());
-		criandoCadeira.setCreditos(creditos);
 		int periodo = Integer.parseInt(cadeiraXml
 				.getElementsByTagName("periodo").item(0).getTextContent());
+		int dificuldade = Integer.parseInt(cadeiraXml
+				.getElementsByTagName("dificuldade").item(0).getTextContent());
+
+		Cadeira novaCadeira = new Cadeira(idCadeira, nomeCadeira, creditos,
+				periodo, dificuldade);
+
 		NodeList requisitos = cadeiraXml.getElementsByTagName("id");
 		for (int i = 0; i < requisitos.getLength(); i++) {
-			criandoCadeira.addPreRequisito(cadeirasPorId.get(requisitos.item(i)
+			novaCadeira.addDependentes(cadeirasPorId.get(requisitos.item(i)
 					.getTextContent()));
 		}
-		criandoCadeira.setPeriodo(periodo);
-		cadeirasPorId.put(idCadeira, criandoCadeira);
 
-		listaDeCadeiras.put(criandoCadeira.getNome(), criandoCadeira);
+		listaDeCadeiras.put(novaCadeira.getNome(), novaCadeira);
 
 	}
 
@@ -89,12 +79,12 @@ public class GerenciadorDeCadeiras {
 		return doc;
 	}
 
-	public static List<Cadeira> getListaDeCadeiras() {
+	public List<Cadeira> getListaDeCadeiras() {
 		if (listaDeCadeiras.isEmpty()) {
 			populaMapas();
 		}
 		List<Cadeira> lista = new ArrayList<Cadeira>();
-		for(Cadeira c: listaDeCadeiras.values()){
+		for (Cadeira c : listaDeCadeiras.values()) {
 			lista.add(c);
 		}
 		return lista;

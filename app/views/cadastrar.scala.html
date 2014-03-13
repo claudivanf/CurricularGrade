@@ -1,0 +1,46 @@
+@(form: Form[Application.Cadastrar])
+
+<html>
+<head>
+<title>Login Plano De Curso</title>
+<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/login.css")">    
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/login.css")">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+	<section id="content">
+		@helper.form(routes.Application.verificaUsuario) {
+			<h1>Login</h1>
+			@if(flash.contains("fail")) {
+    		<p class="fail" style="">
+        		@flash.get("fail")
+    		</p>
+			}
+			<div>
+				<input type="text" name="nome" placeholder="Nome" id="nome"/>
+			</div>
+			<div>
+				<input type="email" name="email" placeholder="Email" id="username"/>
+			</div>
+			<div>
+				<input type="password" placeholder="Password" required="" id="password" name="password"/>
+			</div>
+			<div>
+				<input type="number" name="periodo" placeholder="Periodo" id="periodo"/>
+			</div>
+			<div>
+				<input type="submit" value="Entrar" />
+			</div>
+		}<!-- form -->
+		</section><!-- content -->
+	</div><!-- container -->
+	
+	@if(form.hasGlobalErrors) {
+	    <p class="error">
+	        @form.globalError.message
+	    </p>
+	}
+	</body>
+	</html>

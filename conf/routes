@@ -3,7 +3,14 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index()
+GET     /home                       controllers.Application.index()
+GET     /                           controllers.Application.login()
+
+# Login page
+GET     /login                  controllers.Application.login()
+GET     /cadastrar              controllers.Application.cadastrar()
+POST    /auth                   controllers.Application.authenticate() 
+POST    /verify                 controllers.Application.verificaUsuario() 
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
@@ -11,3 +18,5 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 POST    /addCadeira/:cadeira/:periodo  controllers.Application.addCadeira(cadeira:String,periodo:Int)
 POST    /remCadeira/:cadeira           controllers.Application.remCadeira(cadeira:String)
 GET     /remCadeira/:cadeira           controllers.Application.remCadeira(cadeira:String)
+
+GET     /logout                  controllers.Application.logout()

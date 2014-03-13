@@ -31,7 +31,7 @@ function drop(ev, e){
 		  data: "",
 		  success: function(){
 		        alert("Cadeira Adicionada");
-		        window.location = "/";
+		        window.location = "/home";
 		  },
 		  error: function(result, exception, v, r) {
 			  if (v == "Bad Request"){
@@ -50,20 +50,26 @@ function drop(ev, e){
 $(document).ready(function(){
 	$(".alocadas").hover(function(){
 		  $(this).css("opacity", "0.5")
-		  //$(this).children("span").addClass("glyphicon glyphicon-remove");
-		  //$(this).children("span").css("visibility", "visible")
+		  $(this).children("span").addClass("glyphicon glyphicon-remove");
+		  $(this).children("span").css("visibility", "visible")
 		  },function(){
 		  $(this).css("opacity", "1")
-		  //$(this).children("span").removeClass("glyphicon glyphicon-remove");
+		  $(this).children("span").removeClass("glyphicon glyphicon-remove");
+		  $(this).children("span").css("visibility", "hidden")
+		});
+	$(".disponiveis").hover(function(){
+		  $(this).css("opacity", "0.5")
+		  },function(){
+		  $(this).css("opacity", "1")
 		  $(this).children("span").css("visibility", "hidden")
 		});
 	$(".alocadas-vermelho").hover(function(){
 		  $(this).css("opacity", "0.8")
-		  //$(this).children("span").addClass("glyphicon glyphicon-remove");
-		  //$(this).children("span").css("visibility", "visible")
+		  $(this).children("span").addClass("glyphicon glyphicon-remove");
+		  $(this).children("span").css("visibility", "visible")
 		  },function(){
 		  $(this).css("opacity", "1")
-		  //$(this).children("span").removeClass("glyphicon glyphicon-remove");
+		  $(this).children("span").removeClass("glyphicon glyphicon-remove");
 		  $(this).children("span").css("visibility", "hidden")
 		});
 
@@ -82,7 +88,7 @@ function remCadeira(cadeira, flagRequisitos){
 		  data: "",
 		  success: function(){
 		        alert( "Cadeira Removida");
-		        window.location = "/";
+		        window.location = "/home";
 		  },
 		  error: function(XMLHttpRequest, textStatus, errorThrown) {
 			  //parser pra achar a Excecao lancada
