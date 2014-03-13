@@ -32,7 +32,7 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 	private List<Cadeira> dependentes;
 	@ManyToMany
 	@JoinTable(name = "disciplinas_requisitos", joinColumns = @JoinColumn(name = "disciplina_codigo", referencedColumnName = "codigo"), inverseJoinColumns = @JoinColumn(name = "requisito_codigo", referencedColumnName = "codigo"))
-	private List<Cadeira> requisitos;
+	private final List<Cadeira> requisitos;
 	@ManyToMany
 	private int dificuldade; // dificuldade de 1 - 10
 
@@ -46,6 +46,7 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 
 	public Cadeira(Long id, String nome, int creditos, int periodoEsperado,
 			int dificuldade) {
+		this(); // chamada ao construtor padrao.
 		this.id = id;
 		this.nome = nome;
 		this.creditos = creditos;
