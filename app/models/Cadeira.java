@@ -32,7 +32,7 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 	private List<Cadeira> dependentes;
 	@ManyToMany
 	@JoinTable(name = "disciplinas_requisitos", joinColumns = @JoinColumn(name = "disciplina_codigo", referencedColumnName = "codigo"), inverseJoinColumns = @JoinColumn(name = "requisito_codigo", referencedColumnName = "codigo"))
-	private final List<Cadeira> requisitos;
+	private List<Cadeira> requisitos;
 	@ManyToMany
 	private int dificuldade; // dificuldade de 1 - 10
 
@@ -52,18 +52,6 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		this.creditos = creditos;
 		this.periodoEsperado = periodoEsperado;
 		setDificuldade(dificuldade);
-	}
-
-	/**
-	 * Retorna verdadeiro caso a cadeira {@code cadeira} seja pre-requisito
-	 * 
-	 */
-	public boolean isDependente(Cadeira cadeira) {
-		return this.getDependentes().contains(cadeira);
-	}
-
-	public void addDependente(Cadeira cadeira) {
-		this.dependentes.add(cadeira);
 	}
 
 	public Long getID() {
@@ -94,12 +82,32 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		return Collections.unmodifiableList(this.requisitos);
 	}
 
+	public void setRequisitos(List<Cadeira> requisitos) {
+		this.requisitos = requisitos;
+	}
+
+	public void addRequisito(Cadeira requisito) {
+		this.requisitos.add(requisito);
+	}
+
 	public List<Cadeira> getDependentes() {
 		return Collections.unmodifiableList(this.dependentes);
 	}
 
 	public void setDependentes(List<Cadeira> dependentes) {
 		this.dependentes = dependentes;
+	}
+
+	public void addDependente(Cadeira dependente) {
+		this.dependentes.add(dependente);
+	}
+
+	/**
+	 * Retorna verdadeiro caso a cadeira {@code cadeira} seja pre-requisito
+	 * 
+	 */
+	public boolean isDependente(Cadeira cadeira) {
+		return this.getDependentes().contains(cadeira);
 	}
 
 	public static void create(Cadeira c) {
