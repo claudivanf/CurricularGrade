@@ -20,41 +20,46 @@ import play.db.ebean.Model;
  * Entidade que representa um período
  */
 @Entity
-public class Periodo extends Model{
+public class Periodo extends Model {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
-	
-	private int numero;
 
-	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinTable(name = "periodo_cadeira", 
-    joinColumns = {@JoinColumn (name = "fk_periodo")}, inverseJoinColumns = {@JoinColumn(name = "fk_cadeira")})
+	private int numeroDoPeriodo;
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "periodo_cadeira", joinColumns = { @JoinColumn(name = "fk_periodo") }, inverseJoinColumns = { @JoinColumn(name = "fk_cadeira") })
 	private List<Cadeira> cadeiras;
-	
+
 	private List<ValidadorDePeriodo> validadores;
 
-	public Periodo(){
+	public static Finder<Long, Periodo> find = new Finder<Long, Periodo>(
+			Long.class, Periodo.class);
+
+	public Periodo() {
 		cadeiras = new ArrayList<Cadeira>();
 		validadores = new ArrayList<ValidadorDePeriodo>();
 	}
-	
+
 	public Periodo(int numeroDoPeriodo) {
 		this();
-		this.numero = numeroDoPeriodo;
+		this.numeroDoPeriodo = numeroDoPeriodo;
 	}
-	
-	public Long getId(){
-		return id;
-	}	
 
-	public static Finder<Long,Periodo> find = new Finder<Long,Periodo>(
-		    Long.class, Periodo.class
-	);
-	
+	public Periodo(int numeroDoPeriodo, List<Cadeira> listaDisciplinasDoPeriodo) {
+		this(numeroDoPeriodo);
+		for (Cadeira cadeira : listaDisciplinasDoPeriodo) {
+			this.addCadeira(cadeira);
+		}
+	}
+
+	public Long getId() {
+		return id;
+	}
+
 	public static void create(Periodo p) {
 		p.save();
 	}
@@ -62,13 +67,13 @@ public class Periodo extends Model{
 	public static void delete(Long id) {
 		find.ref(id).delete();
 	}
-	
+
 	public static void atualizar(Long id) {
 		Periodo p = find.ref(id);
 		p.update();
 	}
 
-	public void addCadeira(Cadeira cadeira){
+	public void addCadeira(Cadeira cadeira) {
 		cadeiras.add(cadeira);
 	}
 
@@ -102,19 +107,19 @@ public class Periodo extends Model{
 		cads.addAll(cadeiras);
 		return cads;
 	}
-	
-	public void setCadeiras(List<Cadeira> cadeiras){
+
+	public void setCadeiras(List<Cadeira> cadeiras) {
 		this.cadeiras = cadeiras;
 	}
-	
+
 	public int getNumero() {
-		return numero;
+		return numeroDoPeriodo;
 	}
-	
-	public void setNumero(int numero){
-		this.numero = numero;
+
+	public void setNumero(int numero) {
+		this.numeroDoPeriodo = numero;
 	}
-	
+
 	public List<ValidadorDePeriodo> getValidador() {
 		return validadores;
 	}
@@ -122,18 +127,18 @@ public class Periodo extends Model{
 	public void setValidador(List<ValidadorDePeriodo> validadores) {
 		this.validadores = validadores;
 	}
-	
-	public void addValidador(ValidadorDePeriodo validador){
+
+	public void addValidador(ValidadorDePeriodo validador) {
 		this.validadores.add(validador);
 	}
 
-	public List<Cadeira> getListaCadeiras(){
+	public List<Cadeira> getListaCadeiras() {
 		return cadeiras;
 	}
 
 	public Cadeira getCadeira(String cadeira) {
-		for(Cadeira c: cadeiras){
-			if(c.getNome().equals(cadeira)){
+		for (Cadeira c : cadeiras) {
+			if (c.getNome().equals(cadeira)) {
 				return c;
 			}
 		}
@@ -142,8 +147,8 @@ public class Periodo extends Model{
 
 	@Override
 	public String toString() {
-		return "Periodo [id=" + id + ", numero=" + numero + ", cadeiras="
-				+ cadeiras + "]";
+		return "Periodo [id=" + id + ", numero=" + numeroDoPeriodo
+				+ ", cadeiras=" + cadeiras + "]";
 	}
-	
+
 }
