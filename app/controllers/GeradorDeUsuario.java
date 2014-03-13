@@ -14,7 +14,7 @@ public class GeradorDeUsuario {
 			String senha = "123";
 			Usuario u = new Usuario(email, nome, senha);
 			u.getPlano().distribuiCaderas(Cadeira.find.all());
-			u.getPlano().setPeriodoCursando(3);
+			u.getPlano().setPeriodoAtual(3);
 			//salva usuario no BD com plano e tudo
 			u.save();
 		}

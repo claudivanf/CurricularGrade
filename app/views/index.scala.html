@@ -41,7 +41,7 @@
 	</h5>
 	
 	<div id="periodos">
-	@for(periodo <- plano.getPeriodos()) {
+	@for(periodo <- .getPeriodos()) {
 		<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"
 			ondragover="allowDrop(event,this)" ondragleave="leave(event, this)">
 		<!--  BOTAO FECHAR DO PERIODO 
@@ -99,14 +99,14 @@
 			background-color:rgba(0,200,100,0.5); color:#fff;border-radius:0px;">
 			@Messages("cadeirasDisponiveis") 
 		</li> 
-		@for(cadeira <- plano.getCadeiraDispniveisOrdenadas()) {
+		@for(cadeira <- plano.getCadeiraDisponiveisOrdenadas()) {
 		<div class="disponiveis" id="@cadeira.getNome()"	draggable="true" 
 		ondragstart="drag(event)" ondragend="dragEnd()">
 	  		<center><label class="nome">@cadeira.getNome()</label></center>
 		  	<label class="creditos">@cadeira.getCreditos() @Messages("creditos")</label>
 		  	<label class="dificuldade"> dificuldade: @cadeira.getDificuldade()</label>
 	  	</div>
-	} 
+	}
 	</ul>
 	</div>	
 }

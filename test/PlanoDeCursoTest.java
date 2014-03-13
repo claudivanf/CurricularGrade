@@ -1,12 +1,11 @@
 import models.Cadeira;
+import models.CarregadorDeCadeiras;
 import models.PlanoDeCurso;
 import models.exceptions.LimiteDeCreditosException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import MOCK.GerenciadorDeCadeiras;
 
 /**
  * 
@@ -23,14 +22,14 @@ public class PlanoDeCursoTest {
 		// cria e popula o plano a cada @Test
 		// com os parâmetros originais da grade de CC.
 		plano = new PlanoDeCurso();
-		plano.distribuiCaderas(GerenciadorDeCadeiras.getListaDeCadeiras());
+		plano.distribuiCaderas(CarregadorDeCadeiras.getListaDeCadeiras());
 	}
 
 	@Test
 	public void testaDadosPlano() {
 		Assert.assertEquals(10, plano.getPeriodos().size());
 		Assert.assertEquals(55, plano.getCadeirasAlocadas().size());
-		Assert.assertEquals(0, plano.getCadeiraDispniveisOrdenadas().size());
+		Assert.assertEquals(0, plano.getCadeiraDisponiveisOrdenadas().size());
 	}
 
 	@Test
@@ -40,9 +39,9 @@ public class PlanoDeCursoTest {
 		Cadeira c1 = plano.getMapaDeCadeiras().get("Cálculo I");
 		Cadeira c2 = plano.getMapaDeCadeiras().get("Cálculo II");
 
-		Assert.assertEquals(true, c2.isPreRequisito(c1));
-		Assert.assertEquals(true, p2.isPreRequisito(p1));
-		Assert.assertEquals(false, p2.isPreRequisito(c1));
+		Assert.assertEquals(true, c2.isDependente(c1));
+		Assert.assertEquals(true, p2.isDependente(p1));
+		Assert.assertEquals(false, p2.isDependente(c1));
 	}
 
 	@Test
@@ -154,7 +153,7 @@ public class PlanoDeCursoTest {
 			Assert.fail("Nao devia ter falhado.");
 		}
 		// testa se eh pre-requisito de alguma cadeira alocadad.
-		Assert.assertEquals(true, plano.isPreRequisito(p1.getNome()));
+		Assert.assertEquals(true, plano.isRequisito(p1.getNome()));
 		// verifica se tem pre-requisito alocados erroneamente
 		// metodo que fara a cadeira ficar vermelha
 		Assert.assertEquals(true, plano.verificaPrerequisito(p2.getNome()));
