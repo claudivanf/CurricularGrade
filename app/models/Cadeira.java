@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -21,14 +22,11 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 
 	private static final long serialVersionUID = 1L;
 
-	// TODO PADRÃO DE PROJETO: ALTA COESÃO - so haverá informações coerentes com
-	// a classe
-
 	@Id
 	public Long id;
 	private String nome;
 	private int creditos;
-	// TODO changed BD structure
+	private int periodoEsperado;
 	@ManyToMany
 	@JoinTable(name = "cadeira_dependentes", joinColumns = @JoinColumn(name = "cadeira_codigo", referencedColumnName = "codigo"), inverseJoinColumns = @JoinColumn(name = "dependente_id", referencedColumnName = "codigo"))
 	private List<Cadeira> dependentes;
@@ -38,54 +36,49 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 	@ManyToMany
 	private int dificuldade; // dificuldade de 1 - 10
 
+	public static Finder<Long, Cadeira> find = new Finder<Long, Cadeira>(
+			Long.class, Cadeira.class);
+
 	public Cadeira() {
-		setDependentes(new ArrayList<Cadeira>());
+		this.requisitos = new ArrayList<Cadeira>();
+		this.dependentes = new ArrayList<Cadeira>();
 	}
 
-	public Cadeira(String nome, int dificuldade) {
-		this.setNome(nome);
-		this.creditos = 4;
-		this.dificuldade = dificuldade;
-		setDependentes(new ArrayList<Cadeira>());
-	}
-
-	public Cadeira(String nome, int dificuldade, int creditos) {
-		this(nome, dificuldade);
+	public Cadeira(Long id, String nome, int creditos, int periodoEsperado,
+			int dificuldade) {
+		this.id = id;
+		this.nome = nome;
 		this.creditos = creditos;
+		this.periodoEsperado = periodoEsperado;
+		setDificuldade(dificuldade);
 	}
 
 	/**
-	 * Retorna verdadeiro caso a cadeira {@code c} seja pre-requisito, Seguindo
-	 * o padrão Information Expert, quem deve saber se uma cadeira é
-	 * pre-requisito é a mesma.
+	 * Retorna verdadeiro caso a cadeira {@code cadeira} seja pre-requisito
+	 * 
 	 */
-	public boolean isPreRequisito(Cadeira c) {
-		return this.getDependentes().contains(c);
+	public boolean isDependente(Cadeira cadeira) {
+		return this.getDependentes().contains(cadeira);
 	}
 
-	// TODO PADRÃO DE PROJETO: INFORMATION EXPERT - a classe cadeira é a
-	// responsável por guardar e adicionar pre-requisitos
-	public void addDependentes(Cadeira... c) {
-		Cadeira[] lista = c;
-		for (Cadeira cadeira : lista) {
-			getDependentes().add(cadeira);
-		}
+	public void addDependente(Cadeira cadeira) {
+		this.dependentes.add(cadeira);
+	}
+
+	public Long getID() {
+		return this.id;
 	}
 
 	public int getCreditos() {
 		return this.creditos;
 	}
 
-	public void setCreditos(int creditos) {
-		this.creditos = creditos;
+	public int getPeriodoPlanejado() {
+		return this.periodoEsperado;
 	}
 
 	public String getNome() {
 		return this.nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public int getDificuldade() {
@@ -96,19 +89,17 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		this.dificuldade = dificuldade;
 	}
 
+	public List<Cadeira> getRequisitos() {
+		return Collections.unmodifiableList(this.requisitos);
+	}
+
 	public List<Cadeira> getDependentes() {
-		return dependentes;
+		return Collections.unmodifiableList(this.dependentes);
 	}
 
-	public void setDependentes(List<Cadeira> preRequisitos) {
-		this.dependentes = preRequisitos;
+	public void setDependentes(List<Cadeira> dependentes) {
+		this.dependentes = dependentes;
 	}
-
-	// TODO Removed get and set Periodo, Cadeira Shouldn't know in what periodo
-	// it is
-
-	public static Finder<Long, Cadeira> find = new Finder<Long, Cadeira>(
-			Long.class, Cadeira.class);
 
 	public static void create(Cadeira c) {
 		c.save();
