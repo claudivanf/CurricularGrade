@@ -5,6 +5,7 @@
 # Home page
 GET     /home                       controllers.Application.index()
 GET     /                           controllers.Application.login()
+POST     /atualizaPeriodoAtual		controllers.Application.atualizaPeriodo()
 
 # Login page
 GET     /login                  controllers.Application.login()

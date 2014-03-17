@@ -71,7 +71,10 @@ public class PlanoDeCurso extends Model{
 		p.save();
 	}
 
-	public void setPeriodoCursando(int periodoCursando) {
+	public boolean setPeriodoCursando(int periodoCursando) {
+		if (periodoCursando < 1 || periodoCursando > 10){
+			return false;
+		}
 		for(int i=1; i <= 10; i++){
 			if(i< periodoCursando){
 				getPeriodo(i).addValidador(new ValidadorMax());
@@ -81,6 +84,7 @@ public class PlanoDeCurso extends Model{
 			}
 		}
 		this.periodoCursando = periodoCursando;
+		return true;
 	}
 	
 	/**
@@ -133,6 +137,10 @@ public class PlanoDeCurso extends Model{
 		return this.periodos;
 	}
 	
+	public int getPeriodoCursando() {
+		return periodoCursando;
+	}
+	
 	/**
 	 * Retorna o Map de cadeiras já alocadas no plano de curso.
 	 */
@@ -179,10 +187,12 @@ public class PlanoDeCurso extends Model{
 		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
 		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
 		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
-//		if (getPeriodo(periodo).getCreditos() + cadeira.getCreditos() > MAXIMO_CREDITOS) {
-//			throw new LimiteUltrapassadoException("Limite de Créditos Ultrapassado!");
-//		}
-		//verificaPreRequisitos(cadeira, periodo);
+		
+		int novaQtdCreditos = getPeriodo(periodo).getCreditos() + cadeira.getCreditos();
+
+		for (ValidadorDePeriodo validador : getPeriodo(periodo).getValidador()) {
+			validador.valida(novaQtdCreditos);
+		}
 		
 		//remove cadeira do periodo
 		for(Periodo p: periodos){

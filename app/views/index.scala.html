@@ -1,5 +1,11 @@
 @(plano: PlanoDeCurso)
 
+@if(flash.contains("fail")) {
+	<script>
+	alert('@flash.get("fail")'); 
+	</script>
+}
+
 @if(session.get("connected")) {
 	<nav class="navbar navbar-inverse" role="navigation">
 		<div class="navbar-brand">
@@ -39,6 +45,15 @@
 	<h5 style="float:right;width:40%;position:relative;top:25px; margin:0;color:#600;font-size:14px;">
 		- Arraste a cadeira para o período que você quer alocá-la
 	</h5>
+	<form style="float:right;width:40%;position:relative;top:25px; margin:0;color:#600;font-size:14px;left:80px;"
+		action="@routes.Application.atualizaPeriodo" method="post">
+		<div>
+		<label>Periodo Atual:</label>
+		<input type="number" name="periodo" placeholder="Periodo" id="periodo"/>
+		<input type="submit" value="OK" />
+		</div>
+	</form>
+	
 	
 	<div id="periodos">
 	@for(periodo <- plano.getPeriodos()) {
@@ -51,6 +66,13 @@
 		 -->
 		
 		<ul style="list-style:none;">
+			@if(plano.getPeriodoCursando() == periodo.getNumero()){
+			<li style="width:190px;height:30px;font-size:20px;margin-bottom:10px;margin-left:-40px;
+				background-color:rgba(0,200,0,0.5); color:#fff;">
+				Periodo Atual
+			</li>
+			}
+			
 			<li style="width:190px;height:30px;font-size:20px;margin-bottom:10px;margin-left:-40px;
 			background-color:rgba(0,0,200,0.5); color:#fff;">
 				@periodo.getNumero() @Messages("nPeriodo") 

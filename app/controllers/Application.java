@@ -1,13 +1,12 @@
 package controllers;
 
+import static play.data.Form.form;
+
 import java.util.List;
 
-import org.apache.commons.lang3.Validate;
-
 import models.Cadeira;
-import models.Usuario;
-import static play.data.Form.*; 
 import models.PlanoDeCurso;
+import models.Usuario;
 import models.exceptions.LimiteDeCreditosException;
 import play.data.Form;
 import play.mvc.Controller;
@@ -20,10 +19,8 @@ public class Application extends Controller {
 	public static Result index(){
 		// carrega o plano referente ao usuario logado
 		// através da sessão.
-		if (plano == null){
-			plano = PlanoDeCurso.find.byId(Long.parseLong(session("user")));
-			plano.atualizaMapaCadeira(Cadeira.find.all());
-		}
+		plano = PlanoDeCurso.find.byId(Long.parseLong(session("user")));
+		plano.atualizaMapaCadeira(Cadeira.find.all());
 		return ok(views.html.index.render(plano));
 	}
 	
@@ -53,6 +50,20 @@ public class Application extends Controller {
 	    	views.html.login.render(form(Login.class))
 	    );
 	}
+	
+	public static Result atualizaPeriodo() {
+		Form<Cadastrar> cadastroForm = form(Cadastrar.class).bindFromRequest();
+		try{
+			int periodo = cadastroForm.get().periodo;
+			if(!plano.setPeriodoCursando(periodo)){
+				flash("fail", "Periodo Invalido");
+			}
+		}catch(IllegalStateException e){
+			flash("fail", "Periodo Invalido - Não pode ser uma String!");
+		}
+		plano.update();
+	    return index();
+	} 
 	
 	public static Result authenticate() {
 		
@@ -111,9 +122,11 @@ public class Application extends Controller {
 		try {
 			plano.addCadeira(cadeira, periodo);
 		} catch (LimiteDeCreditosException e) {
+			flash("fail", e.getMessage());
 			return badRequest(e.getMessage());
 		}
 		plano.update();
+		
 		return redirect(routes.Application.index());
 	}
 
