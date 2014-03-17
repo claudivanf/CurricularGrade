@@ -30,13 +30,10 @@ function drop(ev, e){
 		  url: "/addCadeira/"+data+"/"+e.id,
 		  data: "",
 		  success: function(){
-		        alert("Cadeira Adicionada");
-		        window.location = "/home";
+			  window.location = "/home";
 		  },
 		  error: function(result, exception, v, r) {
-			  if (v == "Bad Request"){
-				  alert("Limite de Créditos Ultrapassados!");
-			  }
+			  alert("Erro durante a requisição, algum valor fornecido é inválido!");
 			  //parser pra achar a Excecao lancada
 			  /*var ind = XMLHttpRequest.responseText.indexOf("Exception:")
 			  var res = XMLHttpRequest.responseText.substring(ind +11 , ind + 900);

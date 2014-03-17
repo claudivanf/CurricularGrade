@@ -57,8 +57,22 @@
 	
 	<div id="periodos">
 	@for(periodo <- plano.getPeriodos()) {
-		<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"
+		@if(plano.getPeriodoCursando() == periodo.getNumero()){
+		<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"	
+			style="background-color:#cfc "
 			ondragover="allowDrop(event,this)" ondragleave="leave(event, this)">
+		}else{
+			@if(plano.getPeriodoCursando() > periodo.getNumero()){
+			<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"
+				style="background-color:#fcc "	
+				ondragover="allowDrop(event,this)" ondragleave="leave(event, this)">
+			} else {
+			<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"
+				style="background-color:#ccf;"	
+				ondragover="allowDrop(event,this)" ondragleave="leave(event, this)">
+			}
+		}
+		
 		<!--  BOTAO FECHAR DO PERIODO 
 		@if(periodo.getNumero() != 1) {
 			<span><a class="close" href="remPeriodo/@periodo.getNumero()">X</a></span>
@@ -103,6 +117,7 @@
 		</div>
 	}
 	</div>
+
 	<!-- 
 	<h5 style="float:right;position:absolute;top:630px;left:760px;margin:0;color:#600;">
 		Clique sobre uma cadeira para removê-la.
@@ -131,5 +146,39 @@
 	} 
 	</ul>
 	</div>	
+	
+	<div id="legenda" style="position:relative;top:60px;left:200px;width: 300px; height:200px;border-radius:15px;">
+		<ul style="list-style: none;">
+		<h4>LEGENDA</h4>
+		<li>
+			<div style="border-radius:20px;background-color:#fcc;width: 30px;height:30px;border:1px solid;display:inline-block;"></div>
+			<label> Periodos Anteriores</label>
+		</li>
+		<li>
+			<div style="border-radius:20px;background-color:#cfc;width: 30px;height:30px;border:1px solid;display:inline-block;"></div>
+			<label> Periodo Atual</label>
+		</li>
+		<li>
+			<div style="border-radius:20px;background-color:#ccf;width: 30px;height:30px;border:1px solid;display:inline-block;"></div>
+			<label> Periodos Posteriores</label>
+		</li>
+		</ul>
+	</div>
+	
+	<div id="Informacoes" style="position:relative;top:-150px;left:600px;width: 500px; height:150px;border-radius:15px;">
+		<h4>Informações</h4>
+			<div style="border-radius:20px;background-color:#fcc;height:30px;border:1px solid;">
+				<label>CREDITOS JÁ PAGOS:</label>
+			</div>
+			<div style="border-radius:20px;background-color:#cfc;height:30px;border:1px solid;">
+				<label>CREDITOS CURSANDO</label>
+			</div>
+			<div style="border-radius:20px;background-color:#ccf;height:30px;border:1px solid;">
+				<label>CREDITOS PLANEJADOS</label>
+			</div>
+			<div style="border-radius:20px;background-color:#eee;height:30px;border:1px solid;">
+				<label>CREDITOS PARA COMPLETAR O CURSO</label>
+			</div>
+	</div>
 }
 </body>

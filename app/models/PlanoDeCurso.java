@@ -78,9 +78,11 @@ public class PlanoDeCurso extends Model{
 		for(int i=1; i <= 10; i++){
 			if(i< periodoCursando){
 				getPeriodo(i).addValidador(new ValidadorMax());
-			} else if(i != 10){
+			}else if(i == periodoCursando){ 
 				getPeriodo(i).addValidador(new ValidadorMax());
 				getPeriodo(i).addValidador(new ValidadorMin());
+			}else if(i != 10){
+				getPeriodo(i).addValidador(new ValidadorMax());
 			}
 		}
 		this.periodoCursando = periodoCursando;
@@ -184,24 +186,31 @@ public class PlanoDeCurso extends Model{
 	 * @throws Exception
 	 */
 	public void addCadeira(String cadeiraNome, int periodo) throws LimiteDeCreditosException {
-		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
-		// essa classe vai ser a responsável por adicionar um cadeira ao periodo
 		Cadeira cadeira = mapaDeCadeiras.get(cadeiraNome);
+		Periodo periodoAtualDaCadeira = null;
+		Periodo periodoDestinoDaCadeira = getPeriodo(periodo);
 		
-		int novaQtdCreditos = getPeriodo(periodo).getCreditos() + cadeira.getCreditos();
-
-		for (ValidadorDePeriodo validador : getPeriodo(periodo).getValidador()) {
-			validador.valida(novaQtdCreditos);
+		for(Periodo p: periodos){
+			if(p.getCadeiras().contains(cadeira)){
+				periodoAtualDaCadeira = p;
+			}
+		}
+		
+		int qtdCreditosPeriodoAtual = getPeriodo(periodo).getCreditos() - cadeira.getCreditos();
+		int qtdCreditosPeriodoDestino = getPeriodo(periodo).getCreditos() + cadeira.getCreditos();
+		
+		for (ValidadorDePeriodo validador : periodoAtualDaCadeira.getValidador()) {
+			validador.valida(qtdCreditosPeriodoAtual);
+		}
+		for (ValidadorDePeriodo validador : periodoDestinoDaCadeira.getValidador()) {
+			validador.valida(qtdCreditosPeriodoDestino);
 		}
 		
 		//remove cadeira do periodo
-		for(Periodo p: periodos){
-			if(p.getCadeiras().contains(cadeira)){
-				p.removerCadeira(cadeira);
-			}
-		}
+		periodoAtualDaCadeira.removerCadeira(cadeira);		
+		
 		// adiciona essa cadeira no periodo escolhido
-		getPeriodo(periodo).addCadeira(cadeira);
+		periodoDestinoDaCadeira.addCadeira(cadeira);
 	}
 	
 	/**
@@ -273,5 +282,9 @@ public class PlanoDeCurso extends Model{
 				}
 			}
 		}
+	}
+
+	public void atualizaPeriodoAtual() {
+		setPeriodoCursando(periodoCursando);
 	}
 }

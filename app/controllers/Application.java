@@ -21,6 +21,7 @@ public class Application extends Controller {
 		// através da sessão.
 		plano = PlanoDeCurso.find.byId(Long.parseLong(session("user")));
 		plano.atualizaMapaCadeira(Cadeira.find.all());
+		plano.atualizaPeriodoAtual();
 		return ok(views.html.index.render(plano));
 	}
 	
@@ -123,7 +124,7 @@ public class Application extends Controller {
 			plano.addCadeira(cadeira, periodo);
 		} catch (LimiteDeCreditosException e) {
 			flash("fail", e.getMessage());
-			return badRequest(e.getMessage());
+			return index();
 		}
 		plano.update();
 		
