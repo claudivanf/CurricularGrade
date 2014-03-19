@@ -1,5 +1,7 @@
 package models;
 
+import java.rmi.activation.ActivationException;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -70,7 +72,11 @@ public class Usuario extends Model {
 	}
 
 	public void setSenha(String senha) {
-		this.senha = senha;
+		try {
+			this.senha = HashHelper.criarSenha(senha);
+		} catch (ActivationException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public PlanoDeCurso getPlano() {
@@ -81,9 +87,9 @@ public class Usuario extends Model {
 		this.plano = plano;
 	}
 
-	public boolean autenticar(String senha) {
+	public boolean autenticar(String senhaASerAutenticada) {
 		boolean autenticado = false;
-		if (getSenha().equals(senha)) {
+		if (HashHelper.verificaSenha(senhaASerAutenticada, this.getSenha())) {
 			autenticado = true;
 		}
 		return autenticado;
