@@ -56,45 +56,31 @@
 	
 	
 	<div id="periodos">
-	@for(periodo <- plano.getPeriodos()) {
-		@if(plano.getPeriodoCursando() == periodo.getNumero()){
-		<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"	
+	@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
+		@if(plano.getPeriodoCursando() == (index+1)){
+		
+		<div id="@index" class="periodo" ondrop="drop(event, this)"	
 			style="background-color:#cfc "
 			ondragover="allowDrop(event,this)" ondragleave="leave(event, this)">
 		}else{
-			@if(plano.getPeriodoCursando() > periodo.getNumero()){
-			<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"
+			@if(plano.getPeriodoCursando() > (index+1)){
+			<div id="@(index+1)" class="periodo" ondrop="drop(event, this)"
 				style="background-color:#fcc "	
 				ondragover="allowDrop(event,this)" ondragleave="leave(event, this)">
 			} else {
-			<div id="@periodo.getNumero()" class="periodo" ondrop="drop(event, this)"
+			<div id="@(index+1)" class="periodo" ondrop="drop(event, this)"
 				style="background-color:#ccf;"	
 				ondragover="allowDrop(event,this)" ondragleave="leave(event, this)">
 			}
 		}
 		
-		<!--  BOTAO FECHAR DO PERIODO 
-		@if(periodo.getNumero() != 1) {
-			<span><a class="close" href="remPeriodo/@periodo.getNumero()">X</a></span>
-		}
-		 -->
-		
 		<ul style="list-style:none;">
-			@if(plano.getPeriodoCursando() == periodo.getNumero()){
-			<li style="width:190px;height:30px;font-size:20px;margin-bottom:10px;margin-left:-40px;
-				background-color:rgba(0,200,0,0.5); color:#fff;">
-				Periodo Atual
-			</li>
-			}
-			
+		
 			<li style="width:190px;height:30px;font-size:20px;margin-bottom:10px;margin-left:-40px;
 			background-color:rgba(0,0,200,0.5); color:#fff;">
-				@periodo.getNumero() @Messages("nPeriodo") 
+				@(index+1) @Messages("nPeriodo") 
 			</li>
 			@for(cadeira <- periodo.getCadeiras()) {
-			
-		  	<!--  <div class="alocadas" id="@cadeira.getNome()" title="remover" 
-		  	onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')">  -->
 		  	
 		  	@if(plano.verificaPrerequisito(cadeira.getNome())){
 		  			<div class="alocadas-vermelho" id="@cadeira.getNome()" title="remover" draggable="true" 
@@ -146,21 +132,16 @@
 	} 
 	</ul>
 	</div>	
-	<div id="INFOS" style="position:relative;width:800px;height:200px;top:40px;left:500px;background-color:#fff;border-radius:40px;">
+	<center>
+	<div id="INFOS" style="position:relative;width:900px;height:200px;top:40px;background-color:#fff;border-radius:40px;">
 	<div id="legenda" style="position:relative;border-radius:15px;float:left;top:20px;left:20px;">
 		<h4>LEGENDA</h4>
-		<div>
 			<div style="border-radius:20px;background-color:#fcc;width: 30px;height:30px;border:1px solid;display:inline-block;"></div>
 			<label> Periodos Anteriores</label>
-		</div>
-		<div>
 			<div style="border-radius:20px;background-color:#cfc;width: 30px;height:30px;border:1px solid;display:inline-block;"></div>
 			<label> Periodo Atual</label>
-		</div>
-		<div>
 			<div style="border-radius:20px;background-color:#ccf;width: 30px;height:30px;border:1px solid;display:inline-block;"></div>
 			<label> Periodos Posteriores</label>
-		</div>
 	</div>
 	
 	<div id="Informacoes" style="position:relative;border-radius:15px;float:right;right:20px;">
@@ -179,5 +160,6 @@
 			</div>
 	</div>
 	</div>
+	</center>
 }
 </body>

@@ -21,9 +21,6 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 
 	private static final long serialVersionUID = 1L;
 
-	// TODO PADRÃO DE PROJETO: ALTA COESÃO - so haverá informações coerentes com
-	// a classe
-
 	@Id
 	public Long id;
 	private String nome;
@@ -44,7 +41,7 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		this.setNome(nome);
 		this.creditos = 4;
 		this.dificuldade = dificuldade;
-		setRequisitos(new ArrayList<Cadeira>());
+		this.requisitos = new ArrayList<Cadeira>();
 	}
 
 	public Cadeira(String nome, int dificuldade, int creditos) {
@@ -115,19 +112,6 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 	public static Finder<Long, Cadeira> find = new Finder<Long, Cadeira>(
 			Long.class, Cadeira.class);
 
-	public static void create(Cadeira c) {
-		c.save();
-	}
-
-	public static void delete(Long id) {
-		find.ref(id).delete();
-	}
-
-	public static void atualizar(Long id) {
-		Cadeira p = find.ref(id);
-		p.update();
-	}
-
 	public int compareTo(Cadeira cadeira) {
 		return getNome().compareTo(cadeira.getNome());
 	}
@@ -146,13 +130,7 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		if (getClass() != obj.getClass())
 			return false;
 		Cadeira other = (Cadeira) obj;
-		return Objects.equal(this.getCreditos(), other.getCreditos())
-				&& Objects.equal(this.getNome(), other.getNome());
+		return this.creditos == other.getCreditos() &&
+				this.nome.equals(other.getNome());
 	}
-
-	@Override
-	public String toString() {
-		return "Cadeira [id=" + id + ", nome=" + nome + "]";
-	}
-
 }

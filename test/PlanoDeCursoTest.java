@@ -1,6 +1,7 @@
 import models.Cadeira;
 import models.PlanoDeCurso;
 import models.exceptions.LimiteDeCreditosException;
+import models.exceptions.PeriodoCursandoException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,11 +20,12 @@ public class PlanoDeCursoTest {
 	PlanoDeCurso plano;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws LimiteDeCreditosException, PeriodoCursandoException {
 		// cria e popula o plano a cada @Test
 		// com os parâmetros originais da grade de CC.
 		plano = new PlanoDeCurso();
 		plano.distribuiCaderas(GerenciadorDeCadeiras.getListaDeCadeiras());
+		plano.setPeriodoCursando(2);
 	}
 
 	@Test
@@ -68,17 +70,18 @@ public class PlanoDeCursoTest {
 	@Test
 	public void testaAdicionarCadeira() {
 		Cadeira p1 = plano.getMapaDeCadeiras().get("Programação I");
+		Cadeira c1 = plano.getMapaDeCadeiras().get("Cálculo I");
 
 		try {
 			plano.addCadeira("Programação I", 2);
 		} catch (LimiteDeCreditosException e) {
-			Assert.assertEquals("Limite de Créditos Ultrapassado!",
+			Assert.assertEquals("Limite de Créditos Ultrapassado",
 					e.getMessage());
 		}
 		try {
-			plano.addCadeira("Programação I", 10);
-			Assert.assertEquals(p1,
-					plano.getPeriodo(10).getCadeira(p1.getNome()));
+			plano.addCadeira("Cálculo I", 10);
+			Assert.assertEquals(c1,
+					plano.getPeriodo(10).getCadeira(c1.getNome()));
 		} catch (LimiteDeCreditosException e) {
 			Assert.fail("nao devia ter lançado exceptio");
 		}
@@ -125,7 +128,7 @@ public class PlanoDeCursoTest {
 			plano.addCadeira("Programação I", 2);
 			Assert.fail("nao devia ter passado");
 		} catch (LimiteDeCreditosException e) {
-			Assert.assertEquals("Limite de Créditos Ultrapassado!",
+			Assert.assertEquals("Limite de Créditos Ultrapassado",
 					e.getMessage());
 		}
 	}

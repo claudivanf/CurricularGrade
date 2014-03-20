@@ -14,7 +14,6 @@ create table cadeira (
 
 create table periodo (
   id                        bigint not null,
-  numero                    integer,
   constraint pk_periodo primary key (id))
 ;
 

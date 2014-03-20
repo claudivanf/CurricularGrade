@@ -29,8 +29,6 @@ public class Periodo extends Model {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 
-	private int numero;
-
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "periodo_cadeira", joinColumns = { @JoinColumn(name = "fk_periodo") }, inverseJoinColumns = { @JoinColumn(name = "fk_cadeira") })
 	private List<Cadeira> cadeiras;
@@ -42,11 +40,6 @@ public class Periodo extends Model {
 		validadores = new ArrayList<ValidadorDePeriodo>();
 	}
 
-	public Periodo(int numeroDoPeriodo) {
-		this();
-		this.numero = numeroDoPeriodo;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -54,29 +47,16 @@ public class Periodo extends Model {
 	public static Finder<Long, Periodo> find = new Finder<Long, Periodo>(
 			Long.class, Periodo.class);
 
-	public static void create(Periodo p) {
-		p.save();
-	}
-
-	public static void delete(Long id) {
-		find.ref(id).delete();
-	}
-
-	public static void atualizar(Long id) {
-		Periodo p = find.ref(id);
-		p.update();
-	}
-
 	public void addCadeira(Cadeira cadeira) throws LimiteDeCreditosException {
 		int novaQuantidadeCreditos = this.getCreditos() + cadeira.getCreditos();
-		boolean novaQuantidadeCreditosIsValido = validaAdicao(novaQuantidadeCreditos);
+		boolean novaQuantidadeCreditosIsValido = valida(novaQuantidadeCreditos);
 
 		if (novaQuantidadeCreditosIsValido) {
 			cadeiras.add(cadeira);
 		}
 	}
 
-	private boolean validaAdicao(int novaQuantidadeCreditos)
+	private boolean valida(int novaQuantidadeCreditos)
 			throws LimiteDeCreditosException {
 		boolean isValido = true;
 		for (ValidadorDePeriodo validador : validadores) {
@@ -86,8 +66,15 @@ public class Periodo extends Model {
 		return isValido;
 	}
 
-	public boolean removerCadeira(Cadeira cadeira) {
-		return cadeiras.remove(cadeira);
+	public boolean removerCadeira(Cadeira cadeira)
+			throws LimiteDeCreditosException {
+		int novaQuantidadeCreditos = this.getCreditos() - cadeira.getCreditos();
+		boolean novaQuantidadeCreditosIsValido = valida(novaQuantidadeCreditos);
+
+		if (novaQuantidadeCreditosIsValido) {
+			return cadeiras.remove(cadeira);
+		}
+		return false;
 	}
 
 	public int getDificuldadeTotal() {
@@ -117,23 +104,19 @@ public class Periodo extends Model {
 		return cads;
 	}
 
+	public void clearValidadores() {
+		validadores.clear();
+	}
+
 	public void setCadeiras(List<Cadeira> cadeiras) {
 		this.cadeiras = cadeiras;
 	}
 
-	public int getNumero() {
-		return numero;
-	}
-
-	public void setNumero(int numero) {
-		this.numero = numero;
-	}
-
-	public List<ValidadorDePeriodo> getValidador() {
+	public List<ValidadorDePeriodo> getValidadores() {
 		return validadores;
 	}
 
-	public void setValidador(List<ValidadorDePeriodo> validadores) {
+	public void setValidadores(List<ValidadorDePeriodo> validadores) {
 		this.validadores = validadores;
 	}
 
@@ -153,11 +136,4 @@ public class Periodo extends Model {
 		}
 		return null;
 	}
-
-	@Override
-	public String toString() {
-		return "Periodo [id=" + id + ", numero=" + numero + ", cadeiras="
-				+ cadeiras + "]";
-	}
-
 }

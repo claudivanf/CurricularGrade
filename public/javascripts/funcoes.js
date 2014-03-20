@@ -84,16 +84,16 @@ function remCadeira(cadeira, flagRequisitos){
 		  url: "/remCadeira/" + cadeira,
 		  data: "",
 		  success: function(){
-		        alert( "Cadeira Removida");
 		        window.location = "/home";
 		  },
 		  error: function(XMLHttpRequest, textStatus, errorThrown) {
+			  alert("Erro durante a requisição, algum valor fornecido é inválido!");
 			  //parser pra achar a Excecao lancada
-			  var ind = XMLHttpRequest.responseText.indexOf("Exception:");
-			  var res = XMLHttpRequest.responseText.substring(ind +11 , ind + 500);
-			  var ind2 = res.indexOf("]");
-			  var res2 = res.substring(0, ind2);
-		      alert(res2);
+			  //var ind = XMLHttpRequest.responseText.indexOf("Exception:");
+			  //var res = XMLHttpRequest.responseText.substring(ind +11 , ind + 500);
+			  //var ind2 = res.indexOf("]");
+			  //var res2 = res.substring(0, ind2);
+		      //alert(res2);
 		  }
 		});
 	}

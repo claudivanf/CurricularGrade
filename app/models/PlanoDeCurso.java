@@ -17,7 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import models.exceptions.LimiteDeCreditosException;
-import models.validators.ValidadorDePeriodo;
+import models.exceptions.PeriodoCursandoException;
 import models.validators.ValidadorMax;
 import models.validators.ValidadorMin;
 import play.db.ebean.Model;
@@ -27,9 +27,6 @@ import play.db.ebean.Model;
  */
 @Entity
 public class PlanoDeCurso extends Model {
-
-	// TODO PADRÃO DE PROJETO: ALTA COESÃO - so haverá informações coerentes com
-	// a classe
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,11 +42,9 @@ public class PlanoDeCurso extends Model {
 	private int periodoCursando;
 
 	public PlanoDeCurso() {
-		// TODO Responsabilidade Atribuita seguindo o padrão Creator
-		// O plano de curso ficou responsável por criar os períodos.
 		this.periodos = new ArrayList<Periodo>();
 		for (int i = 1; i <= 10; i++) {
-			periodos.add(new Periodo(i));
+			periodos.add(new Periodo());
 		}
 		this.mapaDeCadeiras = new HashMap<String, Cadeira>();
 	}
@@ -65,22 +60,26 @@ public class PlanoDeCurso extends Model {
 		this.id = id;
 	}
 
-	public static void create(PlanoDeCurso p) {
-		p.save();
-	}
-
-	public boolean setPeriodoCursando(int periodoCursando) {
+	public boolean setPeriodoCursando(int periodoCursando)
+			throws PeriodoCursandoException {
 		if (periodoCursando < 1 || periodoCursando > 10) {
-			return false;
+			throw new PeriodoCursandoException("Periodo Inválido!");
+		}
+		//verifica se o periodo a ser setado atual esta com limite minimo insuficiente.
+		if (getPeriodo(periodoCursando).getCreditos() < 12){
+			throw new PeriodoCursandoException(
+					"Esse período não pode ser o atual pois tem o limite mínimo de créditos insuficiente!");
 		}
 		for (int i = 1; i <= 10; i++) {
+			Periodo p = getPeriodo(i);
+			p.clearValidadores();
 			if (i < periodoCursando) {
-				getPeriodo(i).addValidador(new ValidadorMax());
+				p.addValidador(new ValidadorMax());
 			} else if (i == periodoCursando) {
-				getPeriodo(i).addValidador(new ValidadorMax());
-				getPeriodo(i).addValidador(new ValidadorMin());
+				p.addValidador(new ValidadorMax());
+				p.addValidador(new ValidadorMin());
 			} else if (i != 10) {
-				getPeriodo(i).addValidador(new ValidadorMax());
+				p.addValidador(new ValidadorMax());
 			}
 		}
 		this.periodoCursando = periodoCursando;
@@ -94,10 +93,8 @@ public class PlanoDeCurso extends Model {
 	 */
 	private void distribuiCadeiras() throws LimiteDeCreditosException {
 		for (Cadeira c : mapaDeCadeiras.values()) {
-			if (c.getPeriodoOriginal() != 0) {
-				Periodo p = getPeriodo(c.getPeriodoOriginal());
-				p.addCadeira(c);
-			}
+			Periodo p = getPeriodo(c.getPeriodoOriginal());
+			p.addCadeira(c);
 		}
 	}
 
@@ -122,10 +119,6 @@ public class PlanoDeCurso extends Model {
 		for (Cadeira c : cadeiras) {
 			mapaDeCadeiras.put(c.getNome(), c);
 		}
-	}
-
-	public Map<String, Cadeira> getMapaDeCadeiras() {
-		return mapaDeCadeiras;
 	}
 
 	/**
@@ -196,30 +189,18 @@ public class PlanoDeCurso extends Model {
 		Periodo periodoDestinoDaCadeira = getPeriodo(periodo);
 
 		for (Periodo p : periodos) {
-			if (p.getCadeiras().contains(cadeira)) {
-				periodoAtualDaCadeira = p;
+			for (Cadeira c: p.getCadeiras()){
+				if (c.getNome().equals(cadeira.getNome())){
+					periodoAtualDaCadeira = p;
+				}
 			}
 		}
 
-		int qtdCreditosPeriodoAtual = getPeriodo(periodo).getCreditos()
-				- cadeira.getCreditos();
-		int qtdCreditosPeriodoDestino = getPeriodo(periodo).getCreditos()
-				+ cadeira.getCreditos();
-
-		for (ValidadorDePeriodo validador : periodoAtualDaCadeira
-				.getValidador()) {
-			validador.valida(qtdCreditosPeriodoAtual);
-		}
-		for (ValidadorDePeriodo validador : periodoDestinoDaCadeira
-				.getValidador()) {
-			validador.valida(qtdCreditosPeriodoDestino);
-		}
-
-		// remove cadeira do periodo
-		periodoAtualDaCadeira.removerCadeira(cadeira);
-
 		// adiciona essa cadeira no periodo escolhido
 		periodoDestinoDaCadeira.addCadeira(cadeira);
+		
+		// remove cadeira do periodo
+		periodoAtualDaCadeira.removerCadeira(cadeira);
 	}
 
 	/**
@@ -230,18 +211,32 @@ public class PlanoDeCurso extends Model {
 	 */
 	public boolean verificaPrerequisito(String cadeira) {
 		Cadeira cad = mapaDeCadeiras.get(cadeira); // cadeira a ser verificada
-		int periodo_cad = 0; // periodo da cadeira a ser verificada
+		int periodo_cad = 1; // periodo da cadeira a ser verificada
+		
+		int index = 1;
 		for (Periodo p : periodos) {
-			if (p.getCadeiras().contains(cad)) {
-				periodo_cad = p.getNumero();
+			if (p.getCadeiras().contains(cad)){
+				periodo_cad = index;
+			}
+			index++;
+		}
+		
+		//verifica se pelo menos um de seus pre-requisitos não esta alocado no plano
+		for (Cadeira requisito: cad.getRequisitos()){
+			for (Cadeira c: getCadeiraDispniveisOrdenadas()){
+				if (c.getNome().equals(requisito.getNome()))
+					return true;
 			}
 		}
+
+		int periodo_req = 1;
 		for (Periodo p : periodos) {
 			for (Cadeira c : p.getCadeiras()) {
-				if (cad.isPreRequisito(c) && p.getNumero() >= periodo_cad) {
+				if (cad.isPreRequisito(c) && periodo_req >= periodo_cad) {
 					return true;
 				}
 			}
+			periodo_req += 1;
 		}
 		// verifica também recursivamente em seus pre-requisitos
 		for (Cadeira c : cad.getRequisitos()) {
@@ -271,15 +266,10 @@ public class PlanoDeCurso extends Model {
 		return false;
 	}
 
-	public void removeCadeira(String cadeira) {
-		// TODO PADRÃO DE PROJETO: CONTROLLER - para manter o baixo acoplamento
-		// essa classe vai ser a responsável por remover uma cadeira ao periodo
-		// if (getMapCadeirasAlocadas().get(cadeira) == null) {
-		// throw new Exception("Essa Cadeira não está alocada!");
-		// }
+	public void removeCadeira(String cadeira) throws LimiteDeCreditosException {
 		Cadeira removida = mapaDeCadeiras.get(cadeira);
-		// procura pela cadeira entre os periodos.
 
+		// procura pela cadeira entre os periodos.
 		for (Periodo p : periodos) {
 			if (p.getCadeiras().contains(removida)) {
 				p.removerCadeira(removida);
@@ -294,7 +284,11 @@ public class PlanoDeCurso extends Model {
 		}
 	}
 
-	public void atualizaPeriodoAtual() {
+	public void atualizaValidadoresPeriodos() throws PeriodoCursandoException {
 		setPeriodoCursando(periodoCursando);
+	}
+
+	public Map<String, Cadeira> getMapaDeCadeiras() {
+		return mapaDeCadeiras; 
 	}
 }
