@@ -19,7 +19,7 @@ create table periodo (
 
 create table plano_de_curso (
   id                        bigint not null,
-  periodo_cursando          integer,
+  periodo_atual             integer,
   constraint pk_plano_de_curso primary key (id))
 ;
 

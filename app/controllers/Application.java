@@ -72,13 +72,15 @@ public class Application extends Controller {
 		String senha = loginForm.get().password;
 
 		String erro = validate(email, senha);
-
+		
 		if (loginForm.hasErrors() || erro != null) {
 			flash("fail", erro);
 			return badRequest(views.html.login.render(loginForm));
 		} else {
 			// session().clear();
-			session("connected", loginForm.get().email);
+			Usuario u = Usuario.find.where().eq("email", email)
+					.eq("senha", senha).findUnique();
+			session("connected", u.getNome());
 			return redirect(routes.Application.index());
 		}
 	}
