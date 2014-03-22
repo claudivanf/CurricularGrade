@@ -39,7 +39,7 @@ public class PlanoDeCurso extends Model {
 	private final List<Periodo> periodos;
 
 	private Map<String, Cadeira> mapaDeCadeiras;
-	private int periodoCursando;
+	private int periodoAtual;
 
 	public PlanoDeCurso() {
 		this.periodos = new ArrayList<Periodo>();
@@ -82,7 +82,7 @@ public class PlanoDeCurso extends Model {
 				p.addValidador(new ValidadorMax());
 			}
 		}
-		this.periodoCursando = periodoCursando;
+		this.periodoAtual = periodoCursando;
 		return true;
 	}
 
@@ -136,7 +136,7 @@ public class PlanoDeCurso extends Model {
 	}
 
 	public int getPeriodoCursando() {
-		return periodoCursando;
+		return periodoAtual;
 	}
 
 	/**
@@ -285,10 +285,34 @@ public class PlanoDeCurso extends Model {
 	}
 
 	public void atualizaValidadoresPeriodos() throws PeriodoCursandoException {
-		setPeriodoCursando(periodoCursando);
+		setPeriodoCursando(periodoAtual);
 	}
 
 	public Map<String, Cadeira> getMapaDeCadeiras() {
 		return mapaDeCadeiras; 
+	}
+	
+	public int getCreditosPagos(){
+		int creditosPagos = 0;
+		for (int i = 0; i < periodoAtual - 1; i++) {
+			creditosPagos += periodos.get(i).getCreditos();
+		}
+		return creditosPagos;
+	}
+	
+	public int getCreditosAtuais(){
+		return periodos.get(periodoAtual - 1).getCreditos();
+	}
+	
+	public int getCreditosFuturos(){
+		int creditosFuturos = 0;
+		for (int i = periodos.size()-1; i > periodoAtual - 1; i--) {
+			creditosFuturos += periodos.get(i).getCreditos();
+		}
+		return creditosFuturos;
+	}
+	
+	public int getCreditosRestantes(){
+		return 208 - getCreditosPagos();
 	}
 }
