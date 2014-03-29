@@ -1,68 +1,41 @@
 package controllers;
 
 import static play.data.Form.form;
+import exceptions.LimiteDeCreditosException;
+import exceptions.PeriodoCursandoException;
+import generators.GeradorDeUsuario;
 
 import java.util.List;
 
 import models.Cadeira;
-import models.PlanoDeCurso;
 import models.Usuario;
-import models.exceptions.LimiteDeCreditosException;
-import models.exceptions.PeriodoCursandoException;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-public class Application extends Controller {
+public class UsuarioController extends Controller {
 
-	static PlanoDeCurso plano;
-
-	public static Result index() throws PeriodoCursandoException{
-		// carrega o plano referente ao usuario logado
-		// através da sessão.
-		plano = PlanoDeCurso.find.byId(Long.parseLong(session("user_plano_id")));
-		if (plano == null){
-			session().clear();
-			return ok(views.html.login.render(form(Login.class)));
-		}
-		plano.atualizaMapaCadeira(Cadeira.find.all());
-		plano.atualizaValidadoresPeriodos();
-		return ok(views.html.index.render(plano));
-	}
+	static Usuario usuario;
 
 	public static Result login() throws LimiteDeCreditosException, PeriodoCursandoException{
 		// se nao tiver nenhum usuario no BD, cria 30 novos usuarios.
 		if (Usuario.find.all().isEmpty()) {
 			GeradorDeUsuario.geraUsuarios();
 		}
-		return ok(views.html.login.render(form(Login.class)));
+		return ok(views.html.Usuario.login.render(form(Login.class)));
 	}
 
 	public static Result cadastrar() throws LimiteDeCreditosException, PeriodoCursandoException {
 		if (Usuario.find.all().isEmpty()) {
 			GeradorDeUsuario.geraUsuarios();
 		}
-		return ok(views.html.cadastrar.render(form(Cadastrar.class)));
+		return ok(views.html.Usuario.cadastrar.render(form(Cadastrar.class)));
 	}
 
 	public static Result logout() throws LimiteDeCreditosException, PeriodoCursandoException {
 		// apaga todas as sessoes e retorna para a pagina de login
 		session().clear();
-		return ok(views.html.login.render(form(Login.class)));
-	}
-
-	public static Result atualizaPeriodo() throws PeriodoCursandoException{
-		Form<Cadastrar> cadastroForm = form(Cadastrar.class).bindFromRequest();
-		try {
-			int periodo = cadastroForm.get().periodo;
-			plano.setPeriodoCursando(periodo);
-		} catch (IllegalStateException e) {
-			flash("fail", "Periodo Invalido - Não pode ser uma String!");
-		} catch (PeriodoCursandoException e) {
-			flash("fail", e.getMessage());
-		}
-		plano.update();
-		return index();
+		return login();
 	}
 
 	public static Result authenticate() {
@@ -75,13 +48,13 @@ public class Application extends Controller {
 		
 		if (loginForm.hasErrors() || erro != null) {
 			flash("fail", erro);
-			return badRequest(views.html.login.render(loginForm));
+			return badRequest(views.html.Usuario.login.render(loginForm));
 		} else {
 			// session().clear();
 			Usuario u = Usuario.find.where().eq("email", email)
 					.eq("senha", senha).findUnique();
 			session("connected", u.getNome());
-			return redirect(routes.Application.index());
+			return redirect(routes.PlanoDeCursoController.index());
 		}
 	}
 
@@ -97,7 +70,7 @@ public class Application extends Controller {
 				flash("fail", "Email Já Cadastrado");
 				return cadastrar();
 			}
-			Usuario usuario = new Usuario(email, nome, senha);
+			usuario = new Usuario(email, nome, senha);
 			usuario.getPlano().distribuiCaderas(Cadeira.find.all());
 			usuario.getPlano().setPeriodoCursando(periodo);
 			usuario.save();
@@ -119,27 +92,6 @@ public class Application extends Controller {
 		// estabelece uma sessão para guardar o id do usuario
 		session("user_plano_id", String.valueOf(u.get(0).getPlano().getId()));
 		return null;
-	}
-
-	public static Result addCadeira(String cadeira, int periodo) throws PeriodoCursandoException {
-		try {
-			plano.addCadeira(cadeira, periodo);
-			plano.update();
-		} catch (LimiteDeCreditosException e) {
-			flash("fail", e.getMessage() );
-		}
-		return index();
-	}
-
-	public static Result remCadeira(String cadeira) throws PeriodoCursandoException {
-		try {
-			plano.removeCadeira(cadeira);
-		} catch (LimiteDeCreditosException e) {
-			flash("fail", e.getMessage() + ": Alguma cadeira nao pôde ser removida, " +
-					"pois possui o periodo com mínimo de credidos insuficientes");
-		}
-		plano.update();
-		return index();
 	}
 
 	public static class Login {

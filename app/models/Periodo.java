@@ -13,9 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import models.exceptions.LimiteDeCreditosException;
-import models.validators.ValidadorDePeriodo;
+import exceptions.LimiteDeCreditosException;
+
 import play.db.ebean.Model;
+import validators.ValidadorDePeriodo;
 
 /**
  * Entidade que representa um período

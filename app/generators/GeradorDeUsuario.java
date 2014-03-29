@@ -1,9 +1,9 @@
-package controllers;
+package generators;
 
+import exceptions.LimiteDeCreditosException;
+import exceptions.PeriodoCursandoException;
 import models.Cadeira;
 import models.Usuario;
-import models.exceptions.LimiteDeCreditosException;
-import models.exceptions.PeriodoCursandoException;
 
 public class GeradorDeUsuario {
 

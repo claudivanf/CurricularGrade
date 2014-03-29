@@ -1,5 +1,7 @@
 package models;
 
+import helpers.HashHelper;
+
 import java.rmi.activation.ActivationException;
 
 import javax.persistence.CascadeType;

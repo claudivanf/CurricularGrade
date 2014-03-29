@@ -1,11 +1,12 @@
 import models.Cadeira;
 import models.PlanoDeCurso;
-import models.exceptions.LimiteDeCreditosException;
-import models.exceptions.PeriodoCursandoException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import exceptions.LimiteDeCreditosException;
+import exceptions.PeriodoCursandoException;
 
 import MOCK.GerenciadorDeCadeiras;
 

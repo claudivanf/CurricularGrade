@@ -16,11 +16,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import models.exceptions.LimiteDeCreditosException;
-import models.exceptions.PeriodoCursandoException;
-import models.validators.ValidadorMax;
-import models.validators.ValidadorMin;
+import exceptions.LimiteDeCreditosException;
+import exceptions.PeriodoCursandoException;
+
 import play.db.ebean.Model;
+import validators.ValidadorMax;
+import validators.ValidadorMin;
 
 /**
  * Entidade que representa o Plano de Curso do sistema.

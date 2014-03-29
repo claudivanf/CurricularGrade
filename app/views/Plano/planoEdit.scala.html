@@ -7,46 +7,16 @@
 <head>
 	<title>Plano De Curso</title>
 
-	<script type='text/javascript' src="@routes.Assets.at("javascripts/funcoes.js")"></script>
-	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
 	<!-- Latest compiled and minified JS & CSS -->
 	<script src="//code.jquery.com/jquery.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
-	
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$(".popover-top").popover({
-				placement : 'top', html:"true"
-			});
-			$(".popover-right").popover({
-				placement : 'right', html:"true"
-			});
-			$(".popover-bottom").popover({
-				placement : 'bottom', html:"true"
-			});
-			$(".popover-left").popover({
-				placement : 'left', html:"true"
-			});
-		});
-		// Funcao que adiciona os periodos ao tooltip do botao mover da cadeira
-		function contentPopover($elem, $periodo, $size_periodos){
-			var botao = document.getElementById($elem.id);
-			var cont = botao.getAttribute('data-content');
-			var htmlForm = "Escolha o período: <br/>";
-			for(var i=1; i <= $size_periodos; i++){
-				if(i != $periodo+1) {
-					htmlForm += "<a href='/addCadeira/"
-					 + $elem.id.substr(5) + "/" + i + 
-					" '><span class='badge'>" + i + "</span></a>";
-				}
-			}
-			botao.setAttribute('data-content' , htmlForm);
-		}
-	</script>
+
+	<script type='text/javascript' src="@routes.Assets.at("javascripts/funcoes2.js")"></script>
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
 </head>
 
-<body style="background-color:rgba(70,70,70,0.2);"> 
+<body> 
 
 <!-- BARRA MENU -->
 @if(session.get("connected")) {
@@ -94,8 +64,7 @@
 }
 
 <!-- DIV DAS CADEIRAS DISPONIVEIS -->
-<div id="div-dispon" class="panel panel-primary" 
-	style="width:250px;height:500px;overflow-y:auto;margin-left:30px;float:left;margin-top:8px;">
+<div id="div-dispon" class="panel panel-primary" >
 	<div class="panel-heading">
 		<center>
 		<h3 class="panel-title">@Messages("cadeirasDisponiveis") </h3>
@@ -104,37 +73,32 @@
 	
 	@for(cadeira <- plano.getCadeiraDispniveisOrdenadas()) {
 	<!-- div cadeira -->
-		<center>
-		<div class="panel panel-success" style="width:200px;margin-top:10px;" > 
-			<div class="panel-heading" style="background-color:#299;color:#eee;font-size:12px;height:50px;">
-				<center> @cadeira.getNome()</center>
+	<center>
+	<div class="panel panel-success" > 
+		<div class="panel-heading">
+			<center> @cadeira.getNome()</center>
+		</div>
+		<div class="panel-body col">
+			<span class="label label-warning"> 
+						@Messages("creditos"): @cadeira.getCreditos() </span>		
+			<div class="button-group">
+				<button id="move-@cadeira.getNome()" type="button" class="btn btn-info popover-right" 
+				data-container="body" data-toggle="popover"
+				data-content="s" onclick="contentPopover(this, -1, @plano.getPeriodos().size())" >Adicionar</button>
 			</div>
-			<div class="panel-body col" style="height:30px;padding:5px;">
-				<div class="row">
-					<div class="col-md-4">
-						<span class="label label-warning"> @Messages("creditos"): @cadeira.getCreditos() </span>		
-					</div>
-					<div class="col-md-8">
-						<div class="button-group">
-							<button id="move-@cadeira.getNome()"type="button" class="btn btn-info popover-right" style="height:20px;width:80px;font-size:12px;padding:0px;float:right;" data-container="body" data-toggle="popover"
-							data-content="s" onclick="contentPopover(this, -1, @plano.getPeriodos().size())" >Adicionar</button>
-						</div>
-					</div>
-				</div>
-				
-			</div>
-		</div>	
-		</center>
+			
+		</div>
+	</div>	
+	</center>
 	}	  
 </div>
 
 <!-- Div periodos -->
-<div id="periodos" style="width:500px;float:left;margin-left:50px;">
-	<div id="titlePeriodos" style="margin-bottom:10px;">
+<div id="periodos">
+	<div id="titlePeriodos">
 	<center>
 	<!-- form periodo atual --> 
-	<form style="margin:0;font-size:14px;"
-	action="@routes.Application.atualizaPeriodo" method="post">
+	<form action="@routes.PlanoDeCursoController.atualizaPeriodo" method="post">
 	<div>
 		<label class="label label-danger" for="periodo">Período Atual: </label>
 		<input type="number" name="periodo" value="@plano.getPeriodoCursando()" id="periodo"/>
@@ -142,18 +106,18 @@
 	</div>
 	</form>
 	<br/>
-	<span class="label label-info" style="font-size:20px;margin-top:20px;">
-	Períodos: </span>
+	<span class="label label-info">	Períodos: </span>
+	<br/>
 	</center>
 	</div>
 	<!-- Nav tabs -->
 	<center>
-	<ul class="nav nav-pills" style="width:410px;">
+	<ul class="nav nav-pills">
 		@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
 			@if(plano.getPeriodoCursando() == index+1){
 				<li class="active"><a href="#periodo@(index+1)" data-toggle="tab">
 			}else{
-				<li><a href="#periodo@(index+1)" data-toggle="tab">
+				<li onclick="resetPopovers()"><a href="#periodo@(index+1)" data-toggle="tab">
 			}
 			@(index+1)</a></li>
 		}
@@ -161,7 +125,7 @@
 	</center>
 
 	<!-- Tab panes -->
-	<div class="tab-content" style="height:500px;">
+	<div class="tab-content">
 		@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
 		@if(plano.getPeriodoCursando() == index+1){
 		<div class="tab-pane active" id="periodo@(index+1)">
@@ -170,15 +134,14 @@
 		}
 			<!-- DIV DO PERIODO -->
 			@if(index+1 < plano.getPeriodoCursando()) {
-			<div id="@index" class="panel panel-default" style="background-color:#fcc;width:500px;border:3px groove;">
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#fcc;width:500px;border:3px groove;">
 			} else{
 			@if(index+1 == plano.getPeriodoCursando()) {
-			<div id="@index" class="panel panel-default" style="background-color:#cfc;width:500px;border:3px groove;">
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#cfc;width:500px;border:3px groove;">
 			}else{
-			<div id="@index" class="panel panel-default" style="background-color:#999;width:500px;border:3px groove;">
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#999;width:500px;border:3px groove;">
 			}
 			}
-
 				<!--- BODY DIV PERIODO -->
 				<div class="panel-body">
 					@for(cadeira <- periodo.getCadeiras()) {
@@ -195,26 +158,23 @@
 							<center> @cadeira.getNome()</center>
 						</div>
 						<div class="panel-body col" style="height:30px;padding:5px;">
-							<div class="row">
-								<div class="col-md-4">
-									<span class="label label-warning"> @Messages("creditos"): @cadeira.getCreditos() </span>		
-								</div>
-								<div class="col-md-8">
-									<div class="button-group">
-									<button id="move-@cadeira.getNome()"type="button" class="btn btn-info popover-right" style="height:20px;width:80px;font-size:12px;padding:0px;float:right;" data-container="body" data-toggle="popover"
-									data-content="s" onclick="contentPopover(this, @index, @plano.getPeriodos().size())" >Mover</button>
-									</div>
-								</div>
-							</div>							
+							<span class="label label-warning" style="float:left;height:20px;padding-top:5px;"> 
+							@Messages("creditos"): @cadeira.getCreditos() </span>		
+							<div class="button-group">
+								<button id="move-@cadeira.getNome()"type="button" class="btn btn-info popover-right" style="height:20px;width:80px;font-size:12px;padding:0px;float:right;" 
+								data-container="body" data-toggle="popover"	data-content="s" 
+								onclick="contentPopover(this, @index, @plano.getPeriodos().size())" >Mover</button>
+							</div>
 						</div>
 					</div>		  	
 					}
 					
-					</div>
-				<!-- Footer div periodo -->
+					</div> <!-- fim div cadeira -->
+				<!-- FOOTER div periodo -->
 				<div class="panel-footer">
 					<center>
-					<span class="label label-success" style="font-size:17px;"> @Messages("creditos") Do Periodo: @periodo.getCreditos() </span>
+					<span class="label label-success" style="font-size:17px;"> 
+					@Messages("creditos") Do Periodo: @periodo.getCreditos() </span>
 					</center>
 				</div>
 			</div> <!-- Fim div periodo -->
@@ -227,9 +187,9 @@
 
 <!-- DIV INFORMAÇÕES E LEGENDA-->	
 <center>
-<div id="INFOS" style="position:relative;width:300px;height:200px;top:40px;float:left;">
+<div id="INFOS">
 		
-	<div id="Legenda" style="position:relative;border-radius:15px;float:left;left:20px;">
+	<div id="Legenda">
 		<ul>
 			<a href="#" class="list-group-item active">Legenda</a>
 			<li class="list-group-item">
@@ -243,18 +203,13 @@
 			</li>
 		</ul>
 	</div>
-	<div id="Informacoes" style="position:relative;border-radius:15px;float:left;right:20px;">
+	<div id="Informacoes">
 		<ul>
 			<a href="#" class="list-group-item active">Informações</a>
-			<li class="list-group-item">
-				<span class="badge">@plano.getCreditosPagos</span> Créditos Já Pagos
-			</li>
-			<li class="list-group-item"><span class="badge">@plano.getCreditosAtuais</span>Créditos Que Estou Cursando
-			</li>
-			<li class="list-group-item"><span class="badge">@plano.getCreditosFuturos</span>Créditos Futuros 
-			</li>
-			<li class="list-group-item"><span class="badge">@plano.getCreditosRestantes</span>Créditos Restantes Para Concluir
-			</li>
+			<li class="list-group-item"><span class="badge">@plano.getCreditosPagos</span> Créditos Já Pagos</li>
+			<li class="list-group-item"><span class="badge">@plano.getCreditosAtuais</span>Créditos Que Estou Cursando</li>
+			<li class="list-group-item"><span class="badge">@plano.getCreditosFuturos</span>Créditos Futuros </li>
+			<li class="list-group-item"><span class="badge">@plano.getCreditosRestantes</span>Créditos Restantes Para Concluir</li>
 		</ul>
 	</div>
 </div>

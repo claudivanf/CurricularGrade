@@ -1,4 +1,4 @@
-@(form: Form[Application.Login])
+@(form: Form[UsuarioController.Login])
 
 @if(session.get("connected")) {
 	<script>window.location.href = "/home" </script>
@@ -15,7 +15,7 @@
 <body>
 <div class="container">
 	<section id="content">
-		@helper.form(routes.Application.authenticate) {
+		@helper.form(routes.UsuarioController.authenticate) {
 			<h1>Login</h1>
 			@if(flash.contains("fail")) {
     		<p class="fail" style="">

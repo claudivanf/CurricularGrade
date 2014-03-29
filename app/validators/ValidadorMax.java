@@ -1,6 +1,6 @@
-package models.validators;
+package validators;
 
-import models.exceptions.LimiteDeCreditosException;
+import exceptions.LimiteDeCreditosException;
 
 public class ValidadorMax implements ValidadorDePeriodo {
 
