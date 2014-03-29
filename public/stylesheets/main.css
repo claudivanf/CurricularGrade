@@ -13,7 +13,6 @@ body{margin: 0 auto;background-color:rgba(70,70,70,0.2);}
 #periodos .label-info{font-size:20px;margin-top:20px;}
 #periodos .nav-pills{width:410px;margin-top: 15px;}
 #peridos .tab-content{height:450px;}
-#periodos .panel-default{}
 #INFOS{position:relative;width:300px;height:200px;top:40px;float:left;}
 #Legenda{position:relative;border-radius:15px;float:left;left:20px;}
 #Informacoes{position:relative;border-radius:15px;float:left;right:20px;}
