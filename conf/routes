@@ -8,7 +8,7 @@ GET     /                           controllers.UsuarioController.login()
 # Home page
 GET     /home                       controllers.PlanoDeCursoController.index()
 POST    /atualizaPeriodoAtual		controllers.PlanoDeCursoController.atualizaPeriodo()
-GET     /atualizaPeriodoAtual		controllers.PlanoDeCursoController.index()
+GET    /atualizaPeriodoAtual		controllers.PlanoDeCursoController.index()
 
 # Login page
 GET     /login                  controllers.UsuarioController.login()

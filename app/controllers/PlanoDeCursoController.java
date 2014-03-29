@@ -33,7 +33,7 @@ public class PlanoDeCursoController extends Controller {
 	public static Result atualizaPeriodo() throws PeriodoCursandoException{
 		Form<PeriodoUpdate> periodoForm = form(PeriodoUpdate.class).bindFromRequest();
 		try {
-			int periodo = periodoForm.get().periodo;
+			int periodo = Integer.parseInt(periodoForm.data().values().toArray()[0].toString());
 			plano.setPeriodoCursando(periodo);
 		} catch (IllegalStateException e) {
 			flash("fail", "Periodo Invalido - Não pode ser uma String!");
