@@ -200,7 +200,9 @@ public class PlanoDeCurso extends Model {
 		periodoDestinoDaCadeira.addCadeira(cadeira);
 		
 		// remove cadeira do periodo
-		periodoAtualDaCadeira.removerCadeira(cadeira);
+		if(periodoAtualDaCadeira != null){
+			periodoAtualDaCadeira.removerCadeira(cadeira);
+		}
 	}
 
 	/**
@@ -212,7 +214,6 @@ public class PlanoDeCurso extends Model {
 	public boolean verificaPrerequisito(String cadeira) {
 		Cadeira cad = mapaDeCadeiras.get(cadeira); // cadeira a ser verificada
 		int periodo_cad = 1; // periodo da cadeira a ser verificada
-		
 		int index = 1;
 		for (Periodo p : periodos) {
 			if (p.getCadeiras().contains(cad)){

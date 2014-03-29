@@ -24,8 +24,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#febbbb', end
 #li{background-color: #ddd;width:240px;height:40px;margin:10px;border-radius:20px;text-align:center;}
 #li a{font-size: 20px;text-decoration: none}
 h2{margin:0px auto;}
-#periodos{width: 75%;height:500px;overflow-y:auto;float:right;position:relative;margin-right:40px;
-margin-top: 25px;}
+#//periodos{width: 75%;height:500px;overflow-y:auto;float:right;position:relative;margin-right:40px;margin-top: 25px;}
 #addPeriodo{background-color:#000;margin-left:80px;margin-top: -10px;}
 #addPeriodo a{color:#fff;text-decoration:none;}
 .periodo{width: 220px;height:500px;float: left;40px;border-bottom-right-radius:40px;

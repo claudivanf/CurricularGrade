@@ -6,6 +6,7 @@
 GET     /home                       controllers.Application.index()
 GET     /                           controllers.Application.login()
 POST     /atualizaPeriodoAtual		controllers.Application.atualizaPeriodo()
+GET     /atualizaPeriodoAtual		controllers.Application.index()
 
 # Login page
 GET     /login                  controllers.Application.login()
@@ -17,6 +18,8 @@ POST    /verify                 controllers.Application.verificaUsuario()
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 POST    /addCadeira/:cadeira/:periodo  controllers.Application.addCadeira(cadeira:String,periodo:Int)
+GET     /addCadeira/:cadeira/:periodo  controllers.Application.addCadeira(cadeira:String,periodo:Int)
+
 POST    /remCadeira/:cadeira           controllers.Application.remCadeira(cadeira:String)
 GET     /remCadeira/:cadeira           controllers.Application.remCadeira(cadeira:String)
 
