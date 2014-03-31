@@ -33,7 +33,7 @@ public class PlanoDeCursoTest {
 	public void testaDadosPlano() {
 		Assert.assertEquals(10, plano.getPeriodos().size());
 		Assert.assertEquals(55, plano.getCadeirasAlocadas().size());
-		Assert.assertEquals(0, plano.getCadeiraDispniveisOrdenadas().size());
+		Assert.assertEquals(0, plano.getCadeirasDisponiveisOrdenadas().size());
 	}
 
 	@Test

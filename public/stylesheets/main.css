@@ -1,18 +1,25 @@
-body{margin: 0 auto;background-color:rgba(70,70,70,0.2);}
-#div-dispon{width:250px;height:500px;overflow-y:auto;margin-left:30px;float:left;margin-top:8px;}
-#div-dispon .panel-success{width:200px;margin-top:10px;}
-#div-dispon div .panel-heading{background-color:#299;color:#eee;font-size:12px;height:50px;}
-#div-dispon .panel-body{height:30px;padding:5px;}
-#div-dispon .panel-body span {float:left;height:20px;padding-top:5px;}
-#div-dispon .button-group button {height:20px;width:80px;font-size:12px;padding:0px;float:right;}
-#periodos{width:500px;float:left;margin-left:50px;}
-#titlePeriodos{margin-bottom:10px;width: 242px;float:left;height: 70px;margin-left:30px;}
-#titlePeriodos .input-group{height: 35px;width: 200px;float:left;}
-#titlePeriodos .btn-primary{float:right;}
-#periodos form{margin:0;font-size:14px;}
-#periodos .label-info{font-size:20px;margin-top:20px;}
-#periodos .nav-pills{width:410px;margin-top: 15px;}
-#peridos .tab-content{height:450px;}
-#INFOS{position:relative;width:300px;height:200px;top:40px;float:left;}
-#Legenda{position:relative;border-radius:15px;float:left;left:20px;}
-#Informacoes{position:relative;border-radius:15px;float:left;right:20px;}
+body, html{background-color:rgb(70,70,70,0.2); width:100%; height:100%;}
+#div-principal{margin:auto; padding:10px; background-color:#fff; width:100%; height:100%;}
+#div-dispon, #div-usuarios{width:20%; height:90%; overflow-y:auto;float:left; margin-top:8px;}
+#div-dispon{ margin-left:30px; }
+#div-usuarios{ margin-right:30px; }
+#div-dispon .panel-success{width:200px; margin-top:10px;}
+#div-dispon div .panel-heading{background-color:#299; color:#eee; font-size:12px;}
+#div-dispon .panel-body{height:30px; padding:5px;}
+#div-dispon .panel-body span {float:left; height:20px; padding-top:5px;}
+#div-dispon .button-group button {height:20px; width:80px; font-size:12px; float:right;}
+#image{	background-image: url(public/images/user.png);width:90px;height:90px;float:left;}
+#periodos{width:55%; height:100%; float:left; padding:10px;}
+#titlePeriodos{width:100%; height:50%; float:left;}
+#titlePeriodos .input-group{height:100%; width:80%; float:left;}
+#titlePeriodos .btn-primary{float:right; width:20%;}
+.user-name{font-size:26px; overflow: hidden; white-space:nowrap; text-overflow:ellipsis;width:150px;
+    display:inline-block;}
+#periodos form{font-size:14px;}
+#periodos .label-info{font-size:20px; margin-top:20px;}
+#periodos .nav-pills{width:410px; margin-top:15px;}
+#periodos .tab-content{height:50%;}
+.panel-default{background-color:#fcc; width:100%; height:100%;}
+#INFOS{position:relative; width:100%; height:100%; top:70px; float:left;}
+#Legenda{float:left; width:100%;}
+#Informacoes{border-radius:15px; float:left; width:60%;}

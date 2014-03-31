@@ -58,42 +58,38 @@ create sequence plano_de_curso_seq;
 
 create sequence usuario_seq;
 
-alter table usuario add constraint fk_usuario_plano_1 foreign key (plano_id) references plano_de_curso (id) on delete restrict on update restrict;
+alter table usuario add constraint fk_usuario_plano_1 foreign key (plano_id) references plano_de_curso (id);
 create index ix_usuario_plano_1 on usuario (plano_id);
 
 
 
-alter table cadeira_requisito add constraint fk_cadeira_requisito_cadeira_01 foreign key (id_disciplina) references cadeira (id) on delete restrict on update restrict;
+alter table cadeira_requisito add constraint fk_cadeira_requisito_cadeira_01 foreign key (id_disciplina) references cadeira (id);
 
-alter table cadeira_requisito add constraint fk_cadeira_requisito_cadeira_02 foreign key (id_requisito) references cadeira (id) on delete restrict on update restrict;
+alter table cadeira_requisito add constraint fk_cadeira_requisito_cadeira_02 foreign key (id_requisito) references cadeira (id);
 
-alter table periodo_cadeira add constraint fk_periodo_cadeira_periodo_01 foreign key (fk_periodo) references periodo (id) on delete restrict on update restrict;
+alter table periodo_cadeira add constraint fk_periodo_cadeira_periodo_01 foreign key (fk_periodo) references periodo (id);
 
-alter table periodo_cadeira add constraint fk_periodo_cadeira_cadeira_02 foreign key (fk_cadeira) references cadeira (id) on delete restrict on update restrict;
+alter table periodo_cadeira add constraint fk_periodo_cadeira_cadeira_02 foreign key (fk_cadeira) references cadeira (id);
 
-alter table plano_periodo add constraint fk_plano_periodo_plano_de_cur_01 foreign key (fk_plano) references plano_de_curso (id) on delete restrict on update restrict;
+alter table plano_periodo add constraint fk_plano_periodo_plano_de_cur_01 foreign key (fk_plano) references plano_de_curso (id);
 
-alter table plano_periodo add constraint fk_plano_periodo_periodo_02 foreign key (fk_periodo) references periodo (id) on delete restrict on update restrict;
+alter table plano_periodo add constraint fk_plano_periodo_periodo_02 foreign key (fk_periodo) references periodo (id);
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
+drop table if exists cadeira cascade;
 
-drop table if exists cadeira;
+drop table if exists cadeira_requisito cascade;
 
-drop table if exists cadeira_requisito;
+drop table if exists periodo cascade;
 
-drop table if exists periodo;
+drop table if exists periodo_cadeira cascade;
 
-drop table if exists periodo_cadeira;
+drop table if exists plano_de_curso cascade;
 
-drop table if exists plano_de_curso;
+drop table if exists plano_periodo cascade;
 
-drop table if exists plano_periodo;
-
-drop table if exists usuario;
-
-SET REFERENTIAL_INTEGRITY TRUE;
+drop table if exists usuario cascade;
 
 drop sequence if exists cadeira_seq;
 

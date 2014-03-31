@@ -5,10 +5,13 @@
 # Initial Page
 GET     /                           controllers.UsuarioController.login()
 
+#User page
+GET 	/meuPlanoDeCurso/:usuario	controllers.PlanoDeCursoController.mostraPlanoDoUsuario(usuario:String)
+
 # Home page
 GET     /home                       controllers.PlanoDeCursoController.index()
-POST    /atualizaPeriodoAtual		controllers.PlanoDeCursoController.atualizaPeriodo()
-GET    /atualizaPeriodoAtual		controllers.PlanoDeCursoController.index()
+POST    /atualizaPeriodo			controllers.PlanoDeCursoController.atualizaPeriodo()
+GET    /atualizaPeriodo			controllers.PlanoDeCursoController.index()
 
 # Login page
 GET     /login                  controllers.UsuarioController.login()

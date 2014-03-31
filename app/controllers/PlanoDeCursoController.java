@@ -8,6 +8,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import exceptions.LimiteDeCreditosException;
 import exceptions.PeriodoCursandoException;
+import generators.GerenciadorDeUsuario;
 
 public class PlanoDeCursoController extends Controller {
 
@@ -27,7 +28,12 @@ public class PlanoDeCursoController extends Controller {
 		}
 		plano.atualizaMapaCadeira(Cadeira.find.all());
 		plano.atualizaValidadoresPeriodos();
-		return ok(views.html.Plano.planoEdit.render(plano));
+		return ok(views.html.Plano.planoEdit.render(plano, GerenciadorDeUsuario.getUsuariosCadastrados()));
+	}
+	
+	public static Result mostraPlanoDoUsuario(String usuarioEmail){
+		PlanoDeCurso pl = GerenciadorDeUsuario.getPlanoDeCurso(usuarioEmail);
+		return ok(views.html.Plano.planoRead.render(pl));
 	}
 
 	public static Result atualizaPeriodo() throws PeriodoCursandoException{

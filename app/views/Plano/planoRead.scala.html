@@ -1,0 +1,38 @@
+@(plano:PlanoDeCurso)
+
+@import helper._
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Plano De Curso</title>
+
+	<!-- Latest compiled and minified JS & CSS -->
+	<script src="//code.jquery.com/jquery.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+
+	<script type='text/javascript' src="@routes.Assets.at("javascripts/funcoes2.js")"></script>
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
+</head>
+<body>
+<div id="div-principal">
+<nav class="navbar navbar-inverse" role="navigation">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="@routes.PlanoDeCursoController.index()">Plano De Curso</a>
+			</div>
+			<p class="navbar-text">Bem Vindo! @session.get("connected")</p>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav">
+				</ul>
+				<ul class="nav navbar-nav navbar-right" style="margin-right:20px;">
+					<a class="navbar-brand" style="font-size: 25px;" href="/logout">Logout</a>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</nav>
+</div>
+</body>
+</html>

@@ -169,7 +169,7 @@ public class PlanoDeCurso extends Model {
 	 * Retorna a lista de cadeira disponíveis para alocação ordenadas em ordem
 	 * alfabética.
 	 */
-	public List<Cadeira> getCadeiraDispniveisOrdenadas() {
+	public List<Cadeira> getCadeirasDisponiveisOrdenadas() {
 		List<Cadeira> cadeirasOrdenadas = new ArrayList<Cadeira>();
 		cadeirasOrdenadas.addAll(getMapCadeirasDisponiveis().values());
 		Collections.sort(cadeirasOrdenadas);
@@ -225,7 +225,7 @@ public class PlanoDeCurso extends Model {
 		
 		//verifica se pelo menos um de seus pre-requisitos não esta alocado no plano
 		for (Cadeira requisito: cad.getRequisitos()){
-			for (Cadeira c: getCadeiraDispniveisOrdenadas()){
+			for (Cadeira c: getCadeirasDisponiveisOrdenadas()){
 				if (c.getNome().equals(requisito.getNome()))
 					return true;
 			}

@@ -3,7 +3,7 @@ package controllers;
 import static play.data.Form.form;
 import exceptions.LimiteDeCreditosException;
 import exceptions.PeriodoCursandoException;
-import generators.GeradorDeUsuario;
+import generators.GerenciadorDeUsuario;
 
 import java.util.List;
 
@@ -20,14 +20,14 @@ public class UsuarioController extends Controller {
 	public static Result login() throws LimiteDeCreditosException, PeriodoCursandoException{
 		// se nao tiver nenhum usuario no BD, cria 30 novos usuarios.
 		if (Usuario.find.all().isEmpty()) {
-			GeradorDeUsuario.geraUsuarios();
+			GerenciadorDeUsuario.geraUsuarios();
 		}
 		return ok(views.html.Usuario.login.render(form(Login.class)));
 	}
 
 	public static Result cadastrar() throws LimiteDeCreditosException, PeriodoCursandoException {
 		if (Usuario.find.all().isEmpty()) {
-			GeradorDeUsuario.geraUsuarios();
+			GerenciadorDeUsuario.geraUsuarios();
 		}
 		return ok(views.html.Usuario.cadastrar.render(form(Cadastrar.class)));
 	}
@@ -59,28 +59,37 @@ public class UsuarioController extends Controller {
 	}
 
 	public static Result verificaUsuario() throws LimiteDeCreditosException,PeriodoCursandoException {
+		
 		Form<Cadastrar> cadastroForm = form(Cadastrar.class).bindFromRequest();
 		String nome = cadastroForm.get().nome;
 		String email = cadastroForm.get().email;
 		String senha = cadastroForm.get().password;
+		
 		try {
+			
 			int periodo = cadastroForm.get().periodo;
-			List<Usuario> u = Usuario.find.where().eq("email", email).findList();
+			
+			List<Usuario> u = GerenciadorDeUsuario.find(email);
 			if (!u.isEmpty()) {
 				flash("fail", "Email Já Cadastrado");
 				return cadastrar();
 			}
+			
 			usuario = new Usuario(email, nome, senha);
 			usuario.getPlano().distribuiCaderas(Cadeira.find.all());
 			usuario.getPlano().setPeriodoCursando(periodo);
 			usuario.save();
+			
 			flash("sucesso", "Usuario Cadastrado Com Sucesso");
+			
 		} catch (IllegalStateException e) {
 			flash("fail", "Periodo Invalido - Não pode ser uma String!");
 		} catch (PeriodoCursandoException e) {
 			flash("fail", e.getMessage());
 		}
+		
 		return cadastrar();
+		
 	}
 
 	public static String validate(String email, String senha) {
