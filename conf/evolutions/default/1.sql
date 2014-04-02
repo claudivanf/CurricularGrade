@@ -9,6 +9,7 @@ create table cadeira (
   creditos                  integer,
   dificuldade               integer,
   periodo_original          integer,
+  grade                     varchar(255),
   constraint pk_cadeira primary key (id))
 ;
 

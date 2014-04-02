@@ -1,74 +1,124 @@
 # --- Sample dataset
-
+ 
 # --- !Ups
-
--- (id, nome, creditos, dificuldade, periodo_original)
+ 
+-- (id, nome, creditos, dificuldade, periodo_original, grade)
 
 -- periodo 1
-insert into cadeira values(1,'Programação I',4,4,1);
-insert into cadeira values(2,'Leitura e Prod. de Textos',4,2,1);
-insert into cadeira values(3,'Cálculo I',4,7,1);
-insert into cadeira values(4,'Algebra Vetorial',4,3,1);
-insert into cadeira values(5,'Int. à Computacação',4,5,1);
-insert into cadeira values(6,'Lab. de Programação I',4,4,1);
--- periodo 2
-insert into cadeira values(7,'Programação II',4,5,2);
-insert into cadeira values(8,'Lab. de Programação II',4,5,2);
-insert into cadeira values(9,'Matemática Discreta',4,5,2);
-insert into cadeira values(10,'Metodologia Científica',4,4,2);
-insert into cadeira values(11,'Teoria dos Grafos',2,3,2);
-insert into cadeira values(12,'Fund. de Física Clássica',4,8,2);
-insert into cadeira values(13,'Cálculo II',4,7,2);
--- periodo 3
-insert into cadeira values(14,'Estrutura de Dados',4,7,3);
-insert into cadeira values(15,'Lab. de Estrutura de Dados',4,7,3);
-insert into cadeira values(16,'Algebra Linear',4,9,3);
-insert into cadeira values(17,'Probabilidade e Est.',4,9,3);
-insert into cadeira values(18,'Teoria da Computação',4,6,3);
-insert into cadeira values(19,'Fund. de Física Moderna',4,7,3);
-insert into cadeira values(20,'Gerência da Informação',4,5,3);
--- periodo 4
-insert into cadeira values(21,'Métodos Estatísticos',4,5,4);
-insert into cadeira values(22,'Paradigmas de Linguagens de Programação',2,5,4);
-insert into cadeira values(23,'Org. e Arquitetura de Computadores I',4,5,4);
-insert into cadeira values(24,'Lab. de Org. e Arquitetura de Computadores',4,5,4);
-insert into cadeira values(25,'Lógica Matemática',4,5,4);
-insert into cadeira values(26,'Sistemas de Informação I',4,5,4);
-insert into cadeira values(27,'Engenharia de Software I',4,5,4);
--- periodo 5
-insert into cadeira values(28,'Análise e Técnicas de Algoritmos',4,9,5);
-insert into cadeira values(29,'Redes de Computadores',4,5,5);
-insert into cadeira values(30,'Compiladores',4,9,5);
-insert into cadeira values(31,'Banco de Dados I',4,5,5);
-insert into cadeira values(32,'Sistemas de Informação II',4,5,5);
-insert into cadeira values(33,'Laboratório de Engenharia de Software',2,5,5);
-insert into cadeira values(34,'Informática e Sociedade',2,5,5);
--- periodo 6
-insert into cadeira values(35,'Sistemas Operacionais',4,5,6);
-insert into cadeira values(36,'Interconexão de Redes de Computadores',2,5,6);
-insert into cadeira values(37,'Lab. de Interconexão de Redes de Computadores',2,5,6);
-insert into cadeira values(38,'Inteligência Artificial I',4,5,6);
-insert into cadeira values(39,'Banco de Dados II',4,5,6);
-insert into cadeira values(40,'Direito e Cidadania',4,5,6);
-insert into cadeira values(41,'Optativa 1',4,3,6);
-insert into cadeira values(42,'Optativa 2',4,3,6);
--- periodo 7
-insert into cadeira values(43,'Métodos e Software Númericos',4,5,7);
-insert into cadeira values(44,'Aval. de Desempenho de Sist. Discretos',4,5,7);
-insert into cadeira values(45,'Projeto em Computação I',4,5,7);
-insert into cadeira values(46,'Optativa 3',4,3,7);
-insert into cadeira values(47,'Optativa 4',4,3,7);
-insert into cadeira values(48,'Optativa 5',4,3,7);
-insert into cadeira values(49,'Optativa 6',4,3,7);
--- periodo 8
-insert into cadeira values(50,'Projeto em Computação II',6,5,8);
-insert into cadeira values(51,'Optativa 7',4,3,8);
-insert into cadeira values(52,'Optativa 8',4,3,8);
-insert into cadeira values(53,'Optativa 9',4,3,8);
-insert into cadeira values(54,'Optativa 10',4,3,8);
-insert into cadeira values(55,'Optativa 11',2,3,8);
+insert into cadeira values(1,'Programação I',4,4,1,'OFICIAL');
+insert into cadeira values(2,'Leitura e Prod. de Textos',4,2,1,'OFICIAL');
+insert into cadeira values(3,'Cálculo I',4,7,1,'OFICIAL');
+insert into cadeira values(4,'Álgebra Vetorial',4,3,1,'OFICIAL');
+insert into cadeira values(5,'Int. à Computacação',4,5,1,'OFICIAL');
+insert into cadeira values(6,'Lab. de Programação I',4,4,1,'OFICIAL');
+insert into cadeira values(7,'Programação II',4,5,2,'OFICIAL');
+insert into cadeira values(8,'Lab. de Programação II',4,5,2,'OFICIAL');
+insert into cadeira values(9,'Matemática Discreta',4,5,2,'OFICIAL');
+insert into cadeira values(10,'Metodologia Científica',4,4,2,'OFICIAL');
+insert into cadeira values(11,'Teoria dos Grafos',2,3,2,'OFICIAL');
+insert into cadeira values(12,'Física Clássica',4,8,2,'OFICIAL');
+insert into cadeira values(13,'Cálculo II',4,7,2,'OFICIAL');
+insert into cadeira values(14,'Estrutura de Dados',4,7,3,'OFICIAL');
+insert into cadeira values(15,'Lab. de Estrutura de Dados',4,7,3,'OFICIAL');
+insert into cadeira values(16,'Algebra Linear',4,9,3,'OFICIAL');
+insert into cadeira values(17,'Probabilidade e Est.',4,9,3,'OFICIAL');
+insert into cadeira values(18,'Teoria da Computação',4,6,3,'OFICIAL');
+insert into cadeira values(19,'Física Moderna',4,7,3,'OFICIAL');
+insert into cadeira values(20,'Gerência da Informação',4,5,3,'OFICIAL');
+insert into cadeira values(21,'Métodos Estatísticos',4,5,4,'OFICIAL');
+insert into cadeira values(22,'Paradigmas de Linguagens de Programação',2,5,4,'OFICIAL');
+insert into cadeira values(23,'Org. e Arquitetura de Computadores I',4,5,4,'OFICIAL');
+insert into cadeira values(24,'Lab. de Org. e Arquitetura de Computadores',4,5,4,'OFICIAL');
+insert into cadeira values(25,'Lógica Matemática',4,5,4,'OFICIAL');
+insert into cadeira values(26,'Sistemas de Informação I',4,5,4,'OFICIAL');
+insert into cadeira values(27,'Engenharia de Software I',4,5,4,'OFICIAL');
+insert into cadeira values(28,'Análise e Técnicas de Algoritmos',4,9,5,'OFICIAL');
+insert into cadeira values(29,'Redes de Computadores',4,5,5,'OFICIAL');
+insert into cadeira values(30,'Compiladores',4,9,5,'OFICIAL');
+insert into cadeira values(31,'Banco de Dados I',4,5,5,'OFICIAL');
+insert into cadeira values(32,'Sistemas de Informação II',4,5,5,'OFICIAL');
+insert into cadeira values(33,'Laboratório de Engenharia de Software',2,5,5,'OFICIAL');
+insert into cadeira values(34,'Informática e Sociedade',2,5,5,'OFICIAL');
+insert into cadeira values(35,'Sistemas Operacionais',4,5,6,'OFICIAL');
+insert into cadeira values(36,'Interconexão de Redes de Computadores',2,5,6,'OFICIAL');
+insert into cadeira values(37,'Lab. de Interconexão de Redes de Computadores',2,5,6,'OFICIAL');
+insert into cadeira values(38,'Inteligência Artificial I',4,5,6,'OFICIAL');
+insert into cadeira values(39,'Banco de Dados II',4,5,6,'OFICIAL');
+insert into cadeira values(40,'Direito e Cidadania',4,5,6,'OFICIAL');
+insert into cadeira values(43,'Métodos e Software Númericos',4,5,7,'OFICIAL');
+insert into cadeira values(44,'Aval. de Desempenho de Sist. Discretos',4,5,7,'OFICIAL');
+insert into cadeira values(45,'Projeto em Computação I',4,5,7,'OFICIAL');
+insert into cadeira values(50,'Projeto em Computação II',6,5,8,'OFICIAL');
+insert into cadeira values(41,'Optativa 1',4,3,6,'OFICIAL');
+insert into cadeira values(42,'Optativa 2',4,3,6,'OFICIAL');
+insert into cadeira values(46,'Optativa 3',4,3,7,'OFICIAL');
+insert into cadeira values(47,'Optativa 4',4,3,7,'OFICIAL');
+insert into cadeira values(48,'Optativa 5',4,3,7,'OFICIAL');
+insert into cadeira values(49,'Optativa 6',4,3,7,'OFICIAL');
+insert into cadeira values(51,'Optativa 7',4,3,8,'OFICIAL');
+insert into cadeira values(52,'Optativa 8',4,3,8,'OFICIAL');
+insert into cadeira values(53,'Optativa 9',4,3,8,'OFICIAL');
+insert into cadeira values(54,'Optativa 10',4,3,8,'OFICIAL');
+insert into cadeira values(55,'Optativa 11',2,3,8,'OFICIAL');
 
--- relacionamentos
+-- GRADE MAIS COMUM 
+insert into cadeira values(56,'Programação I',4,4,1,'MAIS_COMUM');
+insert into cadeira values(57,'Leitura e Prod. de Textos',4,2,1,'MAIS_COMUM');
+insert into cadeira values(58,'Cálculo I',4,7,1,'MAIS_COMUM');
+insert into cadeira values(59,'Álgebra Vetorial',4,3,1,'MAIS_COMUM');
+insert into cadeira values(60,'Int. à Computacação',4,5,1,'MAIS_COMUM');
+insert into cadeira values(61,'Lab. de Programação I',4,4,1,'MAIS_COMUM');
+insert into cadeira values(62,'Programação II',4,5,2,'MAIS_COMUM');
+insert into cadeira values(63,'Lab. de Programação II',4,5,2,'MAIS_COMUM');
+insert into cadeira values(64,'Matemática Discreta',4,5,2,'MAIS_COMUM');
+insert into cadeira values(65,'Metodologia Científica',4,4,6,'MAIS_COMUM');
+insert into cadeira values(66,'Teoria dos Grafos',2,3,2,'MAIS_COMUM');
+insert into cadeira values(67,'Física Clássica',4,8,2,'MAIS_COMUM');
+insert into cadeira values(68,'Cálculo II',4,7,2,'MAIS_COMUM');
+insert into cadeira values(69,'Estrutura de Dados',4,7,3,'MAIS_COMUM');
+insert into cadeira values(70,'Lab. de Estrutura de Dados',4,7,3,'MAIS_COMUM');
+insert into cadeira values(71,'Algebra Linear',4,9,3,'MAIS_COMUM');
+insert into cadeira values(72,'Probabilidade e Est.',4,9,3,'MAIS_COMUM');
+insert into cadeira values(73,'Teoria da Computação',4,6,3,'MAIS_COMUM');
+insert into cadeira values(74,'Física Moderna',4,7,3,'MAIS_COMUM');
+insert into cadeira values(75,'Gerência da Informação',4,5,3,'MAIS_COMUM');
+insert into cadeira values(76,'Métodos Estatísticos',4,5,5,'MAIS_COMUM');
+insert into cadeira values(77,'Paradigmas de Linguagens de Programação',2,5,4,'MAIS_COMUM');
+insert into cadeira values(78,'Org. e Arquitetura de Computadores I',4,5,4,'MAIS_COMUM');
+insert into cadeira values(79,'Lab. de Org. e Arquitetura de Computadores',4,5,4,'MAIS_COMUM');
+insert into cadeira values(80,'Lógica Matemática',4,5,4,'MAIS_COMUM');
+insert into cadeira values(81,'Sistemas de Informação I',4,5,4,'MAIS_COMUM');
+insert into cadeira values(82,'Engenharia de Software I',4,5,5,'MAIS_COMUM');
+insert into cadeira values(83,'Análise e Técnicas de Algoritmos',4,9,5,'MAIS_COMUM');
+insert into cadeira values(84,'Redes de Computadores',4,5,6,'MAIS_COMUM');
+insert into cadeira values(85,'Compiladores',4,9,8,'MAIS_COMUM');
+insert into cadeira values(86,'Banco de Dados I',4,5,5,'MAIS_COMUM');
+insert into cadeira values(87,'Sistemas de Informação II',4,5,6,'MAIS_COMUM');
+insert into cadeira values(88,'Laboratório de Engenharia de Software',2,5,6,'MAIS_COMUM');
+insert into cadeira values(89,'Informática e Sociedade',2,5,2,'MAIS_COMUM');
+insert into cadeira values(90,'Sistemas Operacionais',4,5,7,'MAIS_COMUM');
+insert into cadeira values(91,'Interconexão de Redes de Computadores',2,5,7,'MAIS_COMUM');
+insert into cadeira values(92,'Lab. de Interconexão de Redes de Computadores',2,5,7,'MAIS_COMUM');
+insert into cadeira values(93,'Inteligência Artificial I',4,5,8,'MAIS_COMUM');
+insert into cadeira values(94,'Banco de Dados II',4,5,7,'MAIS_COMUM');
+insert into cadeira values(95,'Direito e Cidadania',4,5,4,'MAIS_COMUM');
+insert into cadeira values(96,'Métodos e Software Númericos',4,5,8,'MAIS_COMUM');
+insert into cadeira values(97,'Aval. de Desempenho de Sist. Discretos',4,5,8,'MAIS_COMUM');
+insert into cadeira values(98,'Projeto em Computação I',4,5,8,'MAIS_COMUM');
+insert into cadeira values(99,'Projeto em Computação II',6,5,9,'MAIS_COMUM');
+insert into cadeira values(100,'Optativa 1',4,3,5,'MAIS_COMUM');
+insert into cadeira values(101,'Optativa 2',4,3,5,'MAIS_COMUM');
+insert into cadeira values(102,'Optativa 3',4,3,6,'MAIS_COMUM');
+insert into cadeira values(103,'Optativa 4',4,3,7,'MAIS_COMUM');
+insert into cadeira values(104,'Optativa 5',4,3,7,'MAIS_COMUM');
+insert into cadeira values(105,'Optativa 6',4,3,9,'MAIS_COMUM');
+insert into cadeira values(106,'Optativa 7',4,3,9,'MAIS_COMUM');
+insert into cadeira values(107,'Optativa 8',4,3,9,'MAIS_COMUM');
+insert into cadeira values(108,'Optativa 9',4,3,9,'MAIS_COMUM');
+insert into cadeira values(109,'Optativa 10',4,3,9,'MAIS_COMUM');
+insert into cadeira values(110,'Optativa 11',2,3,9,'MAIS_COMUM');
+
+-- requisitos grade oficial
 insert into cadeira_requisito values(7,1);
 insert into cadeira_requisito values(7,5);
 insert into cadeira_requisito values(7,6);
@@ -136,6 +186,77 @@ insert into cadeira_requisito values(44,17);
 insert into cadeira_requisito values(45,10);
 insert into cadeira_requisito values(45,33);
 insert into cadeira_requisito values(50,45);
+
+-- requisitos grade mais comum
+
+insert into cadeira_requisito values(62,56);
+insert into cadeira_requisito values(62,60);
+insert into cadeira_requisito values(62,61);
+insert into cadeira_requisito values(63,56);
+insert into cadeira_requisito values(63,60);
+insert into cadeira_requisito values(63,61);
+insert into cadeira_requisito values(66,56);
+insert into cadeira_requisito values(66,61);
+insert into cadeira_requisito values(67,58);
+insert into cadeira_requisito values(67,59);
+insert into cadeira_requisito values(68,58);
+insert into cadeira_requisito values(69,62);
+insert into cadeira_requisito values(69,63);
+insert into cadeira_requisito values(69,66);
+insert into cadeira_requisito values(70,62);
+insert into cadeira_requisito values(70,63);
+insert into cadeira_requisito values(70,66);
+insert into cadeira_requisito values(71,59);
+insert into cadeira_requisito values(72,68);
+insert into cadeira_requisito values(73,60);
+insert into cadeira_requisito values(73,64);
+insert into cadeira_requisito values(73,66);
+insert into cadeira_requisito values(74,67);
+insert into cadeira_requisito values(74,68);
+insert into cadeira_requisito values(76,71);
+insert into cadeira_requisito values(76,72);
+insert into cadeira_requisito values(77,73);
+insert into cadeira_requisito values(77,69);
+insert into cadeira_requisito values(77,70);
+insert into cadeira_requisito values(78,69);
+insert into cadeira_requisito values(78,70);
+insert into cadeira_requisito values(78,74);
+insert into cadeira_requisito values(79,69);
+insert into cadeira_requisito values(79,70);
+insert into cadeira_requisito values(79,74);
+insert into cadeira_requisito values(80,73);
+insert into cadeira_requisito values(81,75);
+insert into cadeira_requisito values(82,72);
+insert into cadeira_requisito values(82,62);
+insert into cadeira_requisito values(82,63);
+insert into cadeira_requisito values(83,68);
+insert into cadeira_requisito values(83,69);
+insert into cadeira_requisito values(83,70);
+insert into cadeira_requisito values(83,80);
+insert into cadeira_requisito values(84,78);
+insert into cadeira_requisito values(84,79);
+insert into cadeira_requisito values(85,77);
+insert into cadeira_requisito values(85,78);
+insert into cadeira_requisito values(85,79);
+insert into cadeira_requisito values(86,81);
+insert into cadeira_requisito values(87,81);
+insert into cadeira_requisito values(88,82);
+insert into cadeira_requisito values(90,78);
+insert into cadeira_requisito values(90,79);
+insert into cadeira_requisito values(91,84);
+insert into cadeira_requisito values(92,84);
+insert into cadeira_requisito values(93,76);
+insert into cadeira_requisito values(93,77);
+insert into cadeira_requisito values(93,83);
+insert into cadeira_requisito values(94,86);
+insert into cadeira_requisito values(94,87);
+insert into cadeira_requisito values(96,71);
+insert into cadeira_requisito values(96,83);
+insert into cadeira_requisito values(97,72);
+insert into cadeira_requisito values(98,65);
+insert into cadeira_requisito values(98,88);
+insert into cadeira_requisito values(99,98);
+
 # --- !Downs
 
 delete from cadeira;

@@ -23,18 +23,23 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 
 	@Id
 	public Long id;
+	
 	private String nome;
+	
 	private int creditos;
-	// TODO changed BD structure
+	
 	@ManyToMany
 	@JoinTable(name = "cadeira_requisito", joinColumns = @JoinColumn(name = "id_disciplina"), inverseJoinColumns = @JoinColumn(name = "id_requisito"))
 	private List<Cadeira> requisitos;
 	
 	private int dificuldade; // dificuldade de 1 - 10
+	
 	private int periodoOriginal; //Periodo original da disciplina segundo a grade curricular
+	
+	private String grade;
 
 	public Cadeira() {
-		setRequisitos(new ArrayList<Cadeira>());
+		requisitos = new ArrayList<Cadeira>();
 	}
 
 	public Cadeira(String nome, int dificuldade) {
@@ -58,8 +63,6 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		return this.getRequisitos().contains(c);
 	}
 
-	// TODO PADRÃO DE PROJETO: INFORMATION EXPERT - a classe cadeira é a
-	// responsável por guardar e adicionar pre-requisitos
 	public void addDependentes(Cadeira... c) {
 		Cadeira[] lista = c;
 		for (Cadeira cadeira : lista) {
@@ -106,8 +109,6 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
  	public void setPeriodoOriginal(int periodo){
  		this.periodoOriginal = periodo;
  	}
-	// TODO Removed get and set Periodo, Cadeira Shouldn't know in what periodo
-	// it is
 
 	public static Finder<Long, Cadeira> find = new Finder<Long, Cadeira>(
 			Long.class, Cadeira.class);

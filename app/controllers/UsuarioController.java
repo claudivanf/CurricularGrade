@@ -29,7 +29,7 @@ public class UsuarioController extends Controller {
 		if (Usuario.find.all().isEmpty()) {
 			GeradorDeUsuario.geraUsuarios();
 		}
-		return ok(views.html.Usuario.cadastrar.render(form(Cadastrar.class)));
+		return ok(views.html.Usuario.cadastrar.render(form(Cadastrar.class), 10));
 	}
 
 	public static Result logout() throws LimiteDeCreditosException, PeriodoCursandoException {
@@ -58,11 +58,12 @@ public class UsuarioController extends Controller {
 		}
 	}
 
-	public static Result verificaUsuario() throws LimiteDeCreditosException,PeriodoCursandoException {
+	public static Result cadastraUsuario() throws LimiteDeCreditosException,PeriodoCursandoException {
 		Form<Cadastrar> cadastroForm = form(Cadastrar.class).bindFromRequest();
 		String nome = cadastroForm.get().nome;
 		String email = cadastroForm.get().email;
 		String senha = cadastroForm.get().password;
+		String grade = cadastroForm.get().grade;
 		try {
 			int periodo = cadastroForm.get().periodo;
 			List<Usuario> u = Usuario.find.where().eq("email", email).findList();
@@ -71,7 +72,7 @@ public class UsuarioController extends Controller {
 				return cadastrar();
 			}
 			usuario = new Usuario(email, nome, senha);
-			usuario.getPlano().distribuiCaderas(Cadeira.find.all());
+			usuario.getPlano().distribuiCaderas(Cadeira.find.where().eq("grade", grade).findList());
 			usuario.getPlano().setPeriodoCursando(periodo);
 			usuario.save();
 			flash("sucesso", "Usuario Cadastrado Com Sucesso");
@@ -104,5 +105,6 @@ public class UsuarioController extends Controller {
 		public String email;
 		public String password;
 		public int periodo;
+		public String grade;
 	}
 }
