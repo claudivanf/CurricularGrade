@@ -27,7 +27,9 @@ public class PlanoDeCursoController extends Controller {
 		}
 		plano.atualizaMapaCadeira(Cadeira.find.all());
 		plano.atualizaValidadoresPeriodos();
-		return ok(views.html.Plano.planoEdit.render(plano));
+		return ok(views.html.Plano.planoEdit.render(
+					plano,views.html.modalPlano.render(plano)
+		));
 	}
 
 	public static Result atualizaPeriodo() throws PeriodoCursandoException{

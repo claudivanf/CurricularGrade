@@ -1,4 +1,4 @@
-@(plano: PlanoDeCurso)
+@(plano: PlanoDeCurso, navbar: Html)
 
 @import helper._
 <!DOCTYPE html>
@@ -13,6 +13,12 @@
 
 	<script type='text/javascript' src="@routes.Assets.at("javascripts/funcoes2.js")"></script>
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
+
+	<script> 
+	function showModalPlano(){
+		$("#modal-plano").modal('show');
+	}
+	</script>
 </head>
 
 <body> 
@@ -168,6 +174,9 @@
 	</div>
 </div> <!-- Fim div de todos os periodos -->
 
+<!-- BOTAO PLANO MODAL -->
+<button onclick="showModalPlano()" value="" style="float:left;margin-left:50px;margin-right:200px;margin-bottom:20px;">mostrar plano inteiro</button>
+
 <!-- Form Atualizar periodo -->
 <div id="titlePeriodos">
 	<!-- Tittle Periodo Atual -->
@@ -215,5 +224,24 @@
 </div>
 </center>
 
+<div class="modal fade" id="modal-plano">
+	<div class="modal-dialog" style="width:1200px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Plano De Curso</h4>
+			</div>
+			<div class="modal-body">
+				@navbar
+			</div>
+			<div class="modal-footer">
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+	$("#modal-plano").modal('hide');
+</script>
+</div>
 </body>
 </html>

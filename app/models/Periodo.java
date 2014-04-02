@@ -129,6 +129,10 @@ public class Periodo extends Model {
 		return cadeiras;
 	}
 
+	public boolean isEmpty(){
+		return cadeiras.isEmpty();
+	}
+
 	public Cadeira getCadeira(String cadeira) {
 		for (Cadeira c : cadeiras) {
 			if (c.getNome().equals(cadeira)) {
