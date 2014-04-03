@@ -6,8 +6,8 @@ body{margin: 0 auto;background-color:rgba(70,70,70,0.2);}
 #div-dispon .panel-body span {float:left;height:20px;padding-top:5px;}
 #div-dispon .button-group button {height:20px;width:80px;font-size:12px;padding:0px;float:right;}
 #periodos{width:500px;float:left;margin-left:50px;}
-#titlePeriodos{margin-bottom:10px;width: 242px;float:left;height: 70px;margin-left:30px;}
-#titlePeriodos .input-group{height: 35px;width: 200px;float:left;}
+#titlePeriodos{margin-bottom:10px;width: 190px;float:left;height: 70px;margin-left:30px;margin-right:200px;}
+#titlePeriodos .input-group{height: 35px;width: 190px;float:left;}
 #titlePeriodos .btn-primary{float:right;}
 #periodos form{margin:0;font-size:14px;}
 #periodos .label-info{font-size:20px;margin-top:20px;}

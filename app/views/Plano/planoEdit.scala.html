@@ -1,4 +1,4 @@
-@(plano: PlanoDeCurso, navbar: Html)
+@(plano: PlanoDeCurso, modalPlano: Html, modalErro:Html)
 
 @import helper._
 <!DOCTYPE html>
@@ -42,28 +42,6 @@
 	</nav>
 } else {
 	
-}
-
-<!-- MODAL DE ERRO  -->
-@if(flash.contains("fail")) {
-	<div class="modal fade" id="modal-id">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">ERRO</h4>
-				</div>
-				<div class="modal-body">
-					@flash.get("fail")
-				</div>
-				<div class="modal-footer">
-				</div>
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-	<script> 
-		$("#modal-id").modal('show');
-	</script>
 }
 
 <!-- DIV DAS CADEIRAS DISPONIVEIS -->
@@ -175,7 +153,10 @@
 </div> <!-- Fim div de todos os periodos -->
 
 <!-- BOTAO PLANO MODAL -->
-<button onclick="showModalPlano()" value="" style="float:left;margin-left:50px;margin-right:200px;margin-bottom:20px;">mostrar plano inteiro</button>
+<button onclick="showModalPlano()" class="btn btn-primary" 
+	style="float:left;margin-left:50px;margin-right:200px;margin-bottom:20px;">
+<span class="glyphicon glyphicon-fullscreen"> </span>
+	mostrar plano inteiro</button>
 
 <!-- Form Atualizar periodo -->
 <div id="titlePeriodos">
@@ -186,11 +167,19 @@
 	<!-- form periodo atual -->
 	<form action="@routes.PlanoDeCursoController.atualizaPeriodo" method="post">
 		<div class="input-group">
-			<input id="periodo" type="number" class="form-control" name="periodo"
-				value="@plano.getPeriodoCursando()">
-			<span class="input-group-addon">[1-@plano.getPeriodos().size()]</span>
+			<span class="input-group-addon">Atualizar</span>
+			<select class="form-control" name="periodo" id="periodo" style="width:70px;display:inline;">
+  				@for(i <- 1 to plano.getPeriodos().size() ){
+  					@if(i == plano.getPeriodoCursando()){
+						<option selected="selected">@i</option>
+  					} else {
+  						<option>@i</option>
+  					}
+  				}
+			</select>
+			<input type="submit" class="btn btn-primary" value="ok">
 		</div>
-		<input type="submit" class="btn btn-primary" value="ok">
+		
 	</form>
 </div>
 
@@ -224,24 +213,10 @@
 </div>
 </center>
 
-<div class="modal fade" id="modal-plano">
-	<div class="modal-dialog" style="width:1200px;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Plano De Curso</h4>
-			</div>
-			<div class="modal-body">
-				@navbar
-			</div>
-			<div class="modal-footer">
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<script>
-	$("#modal-plano").modal('hide');
-</script>
+
+@modalPlano
+@modalErro
+
 </div>
 </body>
 </html>

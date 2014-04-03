@@ -21,6 +21,7 @@ create table periodo (
 create table plano_de_curso (
   id                        bigint not null,
   periodo_atual             integer,
+  grade                     varchar(255),
   constraint pk_plano_de_curso primary key (id))
 ;
 

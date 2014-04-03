@@ -25,10 +25,12 @@ public class PlanoDeCursoController extends Controller {
 			session().clear();
 			return redirect(routes.UsuarioController.login());
 		}
-		plano.atualizaMapaCadeira(Cadeira.find.all());
+		plano.atualizaMapaCadeira(Cadeira.find.where().eq("grade",plano.getGrade()).findList());
 		plano.atualizaValidadoresPeriodos();
 		return ok(views.html.Plano.planoEdit.render(
-					plano,views.html.modalPlano.render(plano)
+					plano,
+					views.html.modalPlano.render(plano),
+					views.html.modalDeErro.render()
 		));
 	}
 

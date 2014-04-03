@@ -72,6 +72,7 @@ public class UsuarioController extends Controller {
 				return cadastrar();
 			}
 			usuario = new Usuario(email, nome, senha);
+			usuario.getPlano().setGrade(grade);
 			usuario.getPlano().distribuiCaderas(Cadeira.find.where().eq("grade", grade).findList());
 			usuario.getPlano().setPeriodoCursando(periodo);
 			usuario.save();
