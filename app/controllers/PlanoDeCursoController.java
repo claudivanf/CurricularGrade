@@ -26,14 +26,24 @@ public class PlanoDeCursoController extends Controller {
 			session().clear();
 			return redirect(routes.UsuarioController.login());
 		}
-		plano.atualizaMapaCadeira(Cadeira.find.all());
+		plano.atualizaMapaCadeira(Cadeira.find.where().eq("grade",plano.getGrade()).findList());
 		plano.atualizaValidadoresPeriodos();
-		return ok(views.html.Plano.planoEdit.render(plano, GerenciadorDeUsuario.getUsuariosCadastrados()));
+		return ok(views.html.Plano.planoEdit.render(
+			plano, 
+			GerenciadorDeUsuario.getUsuariosCadastrados(),
+					views.html.modalPlano.render(plano),
+					views.html.modalDeErro.render()
+			));
 	}
 	
 	public static Result mostraPlanoDoUsuario(String usuarioEmail){
 		PlanoDeCurso pl = GerenciadorDeUsuario.getPlanoDeCurso(usuarioEmail);
-		return ok(views.html.Plano.planoRead.render(pl));
+		return ok(views.html.Plano.planoEdit.render(
+					plano,
+					GerenciadorDeUsuario.getUsuariosCadastrados(),
+					views.html.modalPlano.render(plano),
+					views.html.modalDeErro.render()
+		));
 	}
 
 	public static Result atualizaPeriodo() throws PeriodoCursandoException{

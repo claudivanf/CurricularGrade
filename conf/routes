@@ -17,7 +17,7 @@ GET    /atualizaPeriodo			controllers.PlanoDeCursoController.index()
 GET     /login                  controllers.UsuarioController.login()
 GET     /cadastrar              controllers.UsuarioController.cadastrar()
 POST    /auth                   controllers.UsuarioController.authenticate() 
-POST    /verify                 controllers.UsuarioController.verificaUsuario() 
+POST    /cadastrar                 controllers.UsuarioController.cadastraUsuario() 
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

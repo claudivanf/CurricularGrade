@@ -41,7 +41,8 @@ public class PlanoDeCurso extends Model {
 
 	private Map<String, Cadeira> mapaDeCadeiras;
 	private int periodoAtual;
-
+	private String grade;
+	
 	public PlanoDeCurso() {
 		this.periodos = new ArrayList<Periodo>();
 		for (int i = 1; i <= 10; i++) {
@@ -49,7 +50,14 @@ public class PlanoDeCurso extends Model {
 		}
 		this.mapaDeCadeiras = new HashMap<String, Cadeira>();
 	}
-
+	
+	public String getGrade(){
+		return grade;
+	}
+	
+	public void setGrade(String grade){
+		this.grade = grade;
+	}
 	public static Finder<Long, PlanoDeCurso> find = new Finder<Long, PlanoDeCurso>(
 			Long.class, PlanoDeCurso.class);
 

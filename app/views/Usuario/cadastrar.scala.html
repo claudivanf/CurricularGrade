@@ -1,4 +1,4 @@
-@(form: Form[UsuarioController.Cadastrar])
+@(form: Form[UsuarioController.Cadastrar], numPeriodos: Integer)
 @if(flash.contains("sucesso")) {
 	<script>
 	alert('@flash.get("sucesso")');
@@ -6,19 +6,22 @@
 	</script>
 }
 
-
 <html>
 <head>
 <title>Cadastramento</title>
 <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/login.css")">    
 <link rel="stylesheet" href="@routes.Assets.at("stylesheets/login.css")">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+<!-- Latest compiled and minified JS & CSS -->
+<script src="//code.jquery.com/jquery.js"></script>
+<script	src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
 	<section id="content">
-		@helper.form(routes.UsuarioController.verificaUsuario) {
+		@helper.form(routes.UsuarioController.cadastraUsuario) {
 			<h1>Cadastramento</h1>
 			@if(flash.contains("fail")) {
     		<p class="fail" style="">
@@ -34,12 +37,29 @@
 			<div>
 				<input type="password" placeholder="Password" required="" id="password" name="password"/>
 			</div>
-			<div>
-				<input type="number" name="periodo" placeholder="Periodo" id="periodo"/>
+			<center>
+			<div style="width:280px;height:40px;">
+				<label for="periodo" style="">Periodo Cursando:</label>
+				<select class="form-control" name="periodo" id="periodo" style="width:70px;display:inline;">
+	  				@for(i <- 1 to numPeriodos ){
+	  					<option>@i</option>
+	  				}
+				</select>
 			</div>
+			<div style="width:280px;height:40px;">
+				<label for="grade" style="">Tipo Da Grade</label>
+				<select class="form-control" name="grade" id="grade" style="width:170px;display:inline;">
+	  				<option>OFICIAL</option>
+	  				<option>MAIS_COMUM</option>
+				</select>
+			</div>
+			</center>
 			<div>
 				<input type="submit" value="Finalizar" />
 			</div>
+			<div> 
+ 				<input type="back" value="Voltar" onClick="history.go(-1)"/> 
+ 			</div>
 		}<!-- form -->
 		</section><!-- content -->
 	</div><!-- container -->

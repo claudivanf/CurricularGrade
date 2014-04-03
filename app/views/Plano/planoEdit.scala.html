@@ -1,4 +1,4 @@
-@(plano: PlanoDeCurso, usuarios:List[Usuario])
+@(plano: PlanoDeCurso, usuarios:List[Usuario], modalPlano: Html, modalErro:Html)
 
 @import helper._
 <!DOCTYPE html>
@@ -13,149 +13,131 @@
 
 	<script type='text/javascript' src="@routes.Assets.at("javascripts/funcoes2.js")"></script>
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
+
+	<script> 
+	function showModalPlano(){
+		$("#modal-plano").modal('show');
+	}
+	</script>
 </head>
 
 <body> 
 <div id="div-principal">
-	<!-- BARRA MENU -->
-	@if(session.get("connected")) {
-		<nav class="navbar navbar-inverse" role="navigation">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Plano De Curso</a>
-			</div>
-			<p class="navbar-text">Bem Vindo! @session.get("connected")</p>
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse navbar-ex1-collapse">
-				<ul class="nav navbar-nav">
-				</ul>
-				<ul class="nav navbar-nav navbar-right" style="margin-right:20px;">
-					<a class="navbar-brand" style="font-size: 25px;" href="/logout">Logout</a>
-				</ul>
-			</div><!-- /.navbar-collapse -->
-		</nav>
-	} else {
-		
-	}
-	
-	<!-- MODAL DE ERRO  -->
-	@if(flash.contains("fail")) {
-		<div class="modal fade" id="modal-id">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">ERRO</h4>
-					</div>
-					<div class="modal-body">
-						@flash.get("fail")
-					</div>
-					<div class="modal-footer">
-					</div>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-		<script> 
-			$("#modal-id").modal('show');
-		</script>
-	}
-	
-	<!-- DIV DAS CADEIRAS DISPONIVEIS -->
-	<div id="div-dispon" class="panel panel-primary" >
-		<div class="panel-heading">
-			<center>
-			<h3 class="panel-title">@Messages("cadeirasDisponiveis") </h3>
-			</center>
+<!-- BARRA MENU -->
+@if(session.get("connected")) {
+	<nav class="navbar navbar-inverse" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Plano De Curso</a>
 		</div>
-		
-		@for(cadeira <- plano.getCadeirasDisponiveisOrdenadas()) {
-		<!-- div cadeira -->
+		<p class="navbar-text">Bem Vindo! @session.get("connected")</p>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
+			<ul class="nav navbar-nav">
+			</ul>
+			<ul class="nav navbar-nav navbar-right" style="margin-right:20px;">
+				<a class="navbar-brand" style="font-size: 25px;" href="/logout">Logout</a>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</nav>
+} else {
+	
+}
+
+<!-- DIV DAS CADEIRAS DISPONIVEIS -->
+<div id="div-dispon" class="panel panel-primary" >
+	<div class="panel-heading">
 		<center>
-		<div class="panel panel-success" > 
-			<div class="panel-heading">
-				<center> @cadeira.getNome()</center>
-			</div>
-			<div class="panel-body col">
-				<span class="label label-warning"> 
-							@Messages("creditos"): @cadeira.getCreditos() </span>		
-				<div class="button-group">
-					<button id="move-@cadeira.getNome()" type="button" class="btn btn-info popover-right" 
-					data-container="body" data-toggle="popover"
-					data-content="s" onclick="contentPopover(this, -1, @plano.getPeriodos().size())" >Adicionar</button>
-				</div>
-				
-			</div>
-		</div>	
+		<h3 class="panel-title">@Messages("cadeirasDisponiveis") </h3>
 		</center>
-		}	  
 	</div>
 	
-	<!-- Div periodos -->
-	<div id="periodos">
-		<center>
-		<!-- Tittle Periodos -->
-		<a href="#" class="list-group-item active" style="margin-bottom:-15px;">Periodos</a>
-		<!-- Nav tabs -->
-		<ul class="nav nav-pills">
-			@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
-				@if(plano.getPeriodoCursando() == index+1){
-					<li class="active"><a href="#periodo@(index+1)" data-toggle="tab">
-				}else{
-					<li onclick="resetPopovers()"><a href="#periodo@(index+1)" data-toggle="tab">
-				}
-				@(index+1)</a></li>
-			}
-		</ul>
-		</center>
-	
-		<!-- Tab panes -->
-		<div class="tab-content">
-			@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
+	@for(cadeira <- plano.getCadeiraDispniveisOrdenadas()) {
+	<!-- div cadeira -->
+	<center>
+	<div class="panel panel-success" > 
+		<div class="panel-heading">
+			<center> @cadeira.getNome()</center>
+		</div>
+		<div class="panel-body col">
+			<span class="label label-warning"> 
+						@Messages("creditos"): @cadeira.getCreditos() </span>		
+			<div class="button-group">
+				<button id="move-@cadeira.getNome()" type="button" class="btn btn-info popover-right" 
+				data-container="body" data-toggle="popover"
+				data-content="s" onclick="contentPopover(this, -1, @plano.getPeriodos().size())" >Adicionar</button>
+			</div>
+			
+		</div>
+	</div>	
+	</center>
+	}	  
+</div>
+
+<!-- Div periodos -->
+<div id="periodos">
+	<center>
+	<!-- Tittle Periodos -->
+	<a href="#" class="list-group-item active" style="margin-bottom:-15px;">Periodos</a>
+	<!-- Nav tabs -->
+	<ul class="nav nav-pills">
+		@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
 			@if(plano.getPeriodoCursando() == index+1){
-			<div class="tab-pane active" id="periodo@(index+1)" style="width:100%;height:90%;border:3px;">
+				<li class="active"><a href="#periodo@(index+1)" data-toggle="tab">
 			}else{
-			<div class="tab-pane" id="periodo@(index+1)" style="width:100%; height:90%;border:3px;border-color:">
+				<li onclick="resetPopovers()"><a href="#periodo@(index+1)" data-toggle="tab">
 			}
-				<!-- DIV DO PERIODO -->
-				@if(index+1 < plano.getPeriodoCursando()) {
-				<div id="Periodo@index" class="panel panel-default">
-				} else{
-				@if(index+1 == plano.getPeriodoCursando()) {
-				<div id="Periodo@index" class="panel panel-default">
-				}else{
-				<div id="Periodo@index" class="panel panel-default">
-				}
-				}
-					<!--- BODY DIV PERIODO -->
-					<div class="panel-body">
-						@for(cadeira <- periodo.getCadeiras()) {
-	
-						<!-- div cadeira -->
-						<div class="panel panel-success" style="width:200px;float:left;margin-left:35px;"> 
-						@if(plano.verificaPrerequisito(cadeira.getNome())){
-							<div class="panel-heading" style="background-color:#900;color:#eee;font-size:12px;height:80px;">
-						}else{
-							<div class="panel-heading" style="background-color:#299;color:#eee;font-size:12px;height:80px;">
-						}
-								<button type="button" class="close" style="left:8px;top:-5px;"
-								onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')">&times;</button>
-								<center style="font-size:14px;font-weight:bold;"> @cadeira.getNome()</center>
+			@(index+1)</a></li>
+		}
+	</ul>
+	</center>
+
+	<!-- Tab panes -->
+	<div class="tab-content">
+		@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
+		@if(plano.getPeriodoCursando() == index+1){
+		<div class="tab-pane active" id="periodo@(index+1)">
+		}else{
+		<div class="tab-pane" id="periodo@(index+1)">
+		}
+			<!-- DIV DO PERIODO -->
+			@if(index+1 < plano.getPeriodoCursando()) {
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#fcc;width:500px;border:3px groove;">
+			} else{
+			@if(index+1 == plano.getPeriodoCursando()) {
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#cfc;width:500px;border:3px groove;">
+			}else{
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#999;width:500px;border:3px groove;">
+			}
+			}
+				<!--- BODY DIV PERIODO -->
+				<div class="panel-body">
+					@for(cadeira <- periodo.getCadeiras()) {
+
+					<!-- div cadeira -->
+					<div class="panel panel-success" style="width:200px;float:left;margin-left:10px;"> 
+					@if(plano.verificaPrerequisito(cadeira.getNome())){
+						<div class="panel-heading" style="background-color:#900;color:#eee;font-size:12px;height:50px;">
+					}else{
+						<div class="panel-heading" style="background-color:#299;color:#eee;font-size:12px;height:50px;">
+					}
+							<button type="button" class="close" style="left:8px;top:-5px;"
+							onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')">&times;</button>
+							<center> @cadeira.getNome()</center>
+						</div>
+						<div class="panel-body col" style="height:30px;padding:5px;">
+							<span class="label label-warning" style="float:left;height:20px;padding-top:5px;"> 
+							@Messages("creditos"): @cadeira.getCreditos() </span>		
+							<div class="button-group">
+								<button id="move-@cadeira.getNome()"type="button" class="btn btn-info popover-right" style="height:20px;width:80px;font-size:12px;padding:0px;float:right;" 
+								data-container="body" data-toggle="popover"	data-content="s" 
+								onclick="contentPopover(this, @index, @plano.getPeriodos().size())" >Mover</button>
 							</div>
-							<div class="panel-body col" style="height:40px;padding:5px;">
-								<span class="label label-warning" style="font-size:12px;float:left;width:85px;height:30px;padding-top:10px;"> 
-								@Messages("creditos"): @cadeira.getCreditos() </span>		
-								<div class="button-group">
-									<button id="move-@cadeira.getNome()"type="button" class="btn btn-info popover-right" style="height:30px;width:85px;font-size:14px;padding:0px;float:right;" 
-									data-container="body" data-toggle="popover"	data-content="s" 
-									onclick="contentPopover(this, @index, @plano.getPeriodos().size())" >Mover</button>
-								</div>
-							</div>
-						</div>		  	
-						}
-						
+						</div>
+					</div>		  	
+					}
+					
 					</div> <!-- fim div cadeira -->
-				</div> <!-- Fim div periodo -->
-				
 				<!-- FOOTER div periodo -->
 				<div class="panel-footer">
 					<center>
@@ -163,63 +145,75 @@
 							@Messages("creditos") Do Periodo: @periodo.getCreditos() </span>
 					</center>
 				</div>
-				
-			</div> <!-- Fim tab periodo -->
-			}
-		
-	
-	
-	<!-- DIV INFORMAÇÕES E LEGENDA-->	
+			</div> <!-- Fim div periodo -->
+
+		</div> <!-- Fim tab periodo -->
+		}
+	</div>
+</div> <!-- Fim div de todos os periodos -->
+
+<!-- BOTAO PLANO MODAL -->
+<button onclick="showModalPlano()" class="btn btn-primary" 
+	style="float:left;margin-left:50px;margin-right:200px;margin-bottom:20px;">
+<span class="glyphicon glyphicon-fullscreen"> </span>
+	mostrar plano inteiro</button>
+
+<!-- Form Atualizar periodo -->
+<div id="titlePeriodos">
+	<!-- Tittle Periodo Atual -->
 	<center>
-		<div id="INFOS">
-		<div style="float:left; width:40%; height:100%;">
-			<!-- Tittle Periodo Atual --><!-- Form Atualizar periodo -->
-				<div id="titlePeriodos">
-					<center>
-						<a href="#" class="list-group-item active">Período Atual</a>
-					</center>
-					
-					<!-- form periodo atual -->
-					<form action="@routes.PlanoDeCursoController.atualizaPeriodo" method="post">
-						<div class="input-group">
-							<input id="periodo" type="number" class="form-control" name="periodo"
-								value="@plano.getPeriodoCursando()">
-							<span class="input-group-addon">[1-@plano.getPeriodos().size()]</span>
-						</div>
-						<input type="submit" class="btn btn-primary" value="ok">
-					</form>
-					
-				</div>
-				<div id="Legenda">
-					<ul>
-						<a href="#" class="list-group-item active">Legenda</a>
-						<li class="list-group-item">
-							<span class="badge" style="background-color:#fcc;">.</span> Períodos Anteriores
-						</li>
-						<li class="list-group-item">
-							<span class="badge" style="background-color:#cfc;">.</span>Período Atual
-						</li>
-						<li class="list-group-item">
-							<span class="badge" style="background-color:#999;">.</span>Períodos Posteriores
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div id="Informacoes">
-				<ul>
-					<a href="#" class="list-group-item active">Informações</a>
-					<li class="list-group-item"><span class="badge">@plano.getCreditosPagos</span> Créditos Já Pagos</li>
-					<li class="list-group-item"><span class="badge">@plano.getCreditosAtuais</span>Créditos Que Estou Cursando</li>
-					<li class="list-group-item"><span class="badge">@plano.getCreditosFuturos</span>Créditos Futuros </li>
-					<li class="list-group-item"><span class="badge">@plano.getCreditosRestantes</span>Créditos Restantes Para Concluir</li>
-				</ul>
-			</div>
-		</div>
+	<a href="#" class="list-group-item active">Período Atual</a>
 	</center>
+	<!-- form periodo atual -->
+	<form action="@routes.PlanoDeCursoController.atualizaPeriodo" method="post">
+		<div class="input-group">
+			<span class="input-group-addon">Atualizar</span>
+			<select class="form-control" name="periodo" id="periodo" style="width:70px;display:inline;">
+  				@for(i <- 1 to plano.getPeriodos().size() ){
+  					@if(i == plano.getPeriodoCursando()){
+						<option selected="selected">@i</option>
+  					} else {
+  						<option>@i</option>
+  					}
+  				}
+			</select>
+			<input type="submit" class="btn btn-primary" value="ok">
 		</div>
 		
-	</div> <!-- Fim div de todos os periodos -->
-	<div id="div-usuarios" class="panel panel-primary" >
+	</form>
+</div>
+
+<!-- DIV INFORMAÇÕES E LEGENDA-->	
+<center>
+<div id="INFOS">
+		
+	<div id="Legenda">
+		<ul>
+			<a href="#" class="list-group-item active">Legenda</a>
+			<li class="list-group-item">
+				<span class="badge" style="background-color:#fcc;">.</span> Períodos Anteriores
+			</li>
+			<li class="list-group-item">
+				<span class="badge" style="background-color:#cfc;">.</span>Período Atual
+			</li>
+			<li class="list-group-item">
+				<span class="badge" style="background-color:#999;">.</span>Períodos Posteriores
+			</li>
+		</ul>
+	</div>
+	<div id="Informacoes">
+		<ul>
+			<a href="#" class="list-group-item active">Informações</a>
+			<li class="list-group-item"><span class="badge">@plano.getCreditosPagos</span> Créditos Já Pagos</li>
+			<li class="list-group-item"><span class="badge">@plano.getCreditosAtuais</span>Créditos Que Estou Cursando</li>
+			<li class="list-group-item"><span class="badge">@plano.getCreditosFuturos</span>Créditos Futuros </li>
+			<li class="list-group-item"><span class="badge">@plano.getCreditosRestantes</span>Créditos Restantes Para Concluir</li>
+		</ul>
+	</div>
+</div>
+</center>
+
+<div id="div-usuarios" class="panel panel-primary" >
 		<div class="panel-heading">
 			<center>
 			<h3 class="panel-title">@Messages("usuariosDisponiveis") </h3>
@@ -240,6 +234,10 @@
 				
 		}	 
 	</div>
+
+@modalPlano
+@modalErro
+
 </div>
 </body>
 </html>
