@@ -302,6 +302,47 @@ public class PlanoDeCurso extends Model {
 	public Map<String, Cadeira> getMapaDeCadeiras() {
 		return mapaDeCadeiras; 
 	}
+
+	public String getRequisitosInvalidos(String cadeira){
+		Cadeira cad = mapaDeCadeiras.get(cadeira);
+		String retorno = "<p> Requisitos Não Satisfeitos: </p> " +
+				"<div style='border:1px solid #fff;width:100%;margin-bottom:10px;' > </div>" +
+				getRequisitosInvalidosRec(cad);
+		return retorno;
+	}
+	
+	public String getRequisitosInvalidosRec(Cadeira cad) {
+		String retorno = "";
+		for(Cadeira c: cad.getRequisitos()) {
+			if(getCadeirasDisponiveisOrdenadas().contains(c)) {
+				retorno += "<p>" + c.getNome() + "</p>";
+			}
+		}
+		int periodoCadeira = 1;
+		for(Periodo p: periodos) {
+			if(p.getCadeiras().contains(cad)){
+				break;
+			}
+			periodoCadeira++;
+		}
+		int periodoRequisito = 1;
+		for(Periodo p: periodos) {
+			for (Cadeira c: cad.getRequisitos()) {
+				if(p.getCadeiras().contains(c)){
+					if (periodoRequisito >= periodoCadeira) {
+						// se o periodo do requisito for maior ou igual ao 
+						// da cadeira, adiciona o requisito à string
+						retorno += "<p>" + c.getNome() + "</p>";
+					} else {
+						// verifica os requisitos dos requisitos
+						retorno += getRequisitosInvalidosRec(c);
+					}
+				}
+			}
+			periodoRequisito++;
+		}	
+		return retorno;
+	}
 	
 	public int getCreditosPagos(){
 		int creditosPagos = 0;

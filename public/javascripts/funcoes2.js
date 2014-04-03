@@ -16,6 +16,15 @@ $(document).ready(function(){
 	$('.popover-right').on('shown.bs.popover', function () {
 		$( ".popover-right" ).not($(this)).popover('hide');
 	});
+	
+	$(".popover-bottom").hover(
+	  function() {
+		  	$(this).popover("show");
+	  }, function() {
+			 $(this).popover("hide");
+	  }
+	);
+	
 });
 
 
@@ -40,6 +49,20 @@ function contentPopover($elem, $periodo, $size_periodos){
 		}
 	}
 	botao.setAttribute('data-content' , htmlForm);
+}
+
+function cadeiraVermelhaPopover($elem) {
+	var divCadeira = document.getElementById($elem.id);
+	var cont = divCadeira.getAttribute('data-content');
+	var htmlForm = "Os seguintes requisitos estão inválidos: <br/>";
+	for(var i=1; i <= $size_periodos; i++){
+		if(i != $periodo+1) {
+			htmlForm += "<a href='/addCadeira/"
+			+ $elem.id.substr(5) + "/" + i + 
+			" '><span class='badge'>" + i + "</span></a>";
+		}
+	}
+	divCadeira.setAttribute('data-content' , htmlForm);	
 }
 
 // funcao que remove uma cadeira
