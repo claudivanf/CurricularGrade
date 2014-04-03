@@ -230,7 +230,6 @@ public class PlanoDeCurso extends Model {
 			}
 			index++;
 		}
-		
 		//verifica se pelo menos um de seus pre-requisitos não esta alocado no plano
 		for (Cadeira requisito: cad.getRequisitos()){
 			for (Cadeira c: getCadeirasDisponiveisOrdenadas()){

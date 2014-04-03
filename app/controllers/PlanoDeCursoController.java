@@ -38,12 +38,9 @@ public class PlanoDeCursoController extends Controller {
 	
 	public static Result mostraPlanoDoUsuario(String usuarioEmail){
 		PlanoDeCurso pl = GerenciadorDeUsuario.getPlanoDeCurso(usuarioEmail);
-		return ok(views.html.Plano.planoEdit.render(
-					plano,
-					GerenciadorDeUsuario.getUsuariosCadastrados(),
-					views.html.modalPlano.render(plano),
-					views.html.modalDeErro.render()
-		));
+		pl.atualizaMapaCadeira(Cadeira.find.where().eq("grade",pl.getGrade()).findList());
+		return ok(views.html.Plano.planoRead.render(
+					pl ));
 	}
 
 	public static Result atualizaPeriodo() throws PeriodoCursandoException{

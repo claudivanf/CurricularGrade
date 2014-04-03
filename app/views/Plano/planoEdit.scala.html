@@ -22,24 +22,24 @@
 </head>
 
 <body> 
-<div id="div-principal">
+
 <!-- BARRA MENU -->
 @if(session.get("connected")) {
-	<nav class="navbar navbar-inverse" role="navigation">
-		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header">
-			<a class="navbar-brand" href="#">Plano De Curso</a>
-		</div>
-		<p class="navbar-text">Bem Vindo! @session.get("connected")</p>
-		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="collapse navbar-collapse navbar-ex1-collapse">
-			<ul class="nav navbar-nav">
-			</ul>
-			<ul class="nav navbar-nav navbar-right" style="margin-right:20px;">
-				<a class="navbar-brand" style="font-size: 25px;" href="/logout">Logout</a>
-			</ul>
-		</div><!-- /.navbar-collapse -->
-	</nav>
+<nav class="navbar navbar-inverse" role="navigation">
+	<!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+		<a class="navbar-brand" href="#">Plano De Curso</a>
+	</div>
+	<p class="navbar-text">Bem Vindo! @session.get("connected")</p>
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse navbar-ex1-collapse">
+		<ul class="nav navbar-nav">
+		</ul>
+		<ul class="nav navbar-nav navbar-right" style="margin-right:20px;">
+			<a class="navbar-brand" style="font-size: 25px;" href="/logout">Logout</a>
+		</ul>
+	</div><!-- /.navbar-collapse -->
+</nav>
 } else {
 	
 }
@@ -52,7 +52,7 @@
 		</center>
 	</div>
 	
-	@for(cadeira <- plano.getCadeiraDispniveisOrdenadas()) {
+	@for(cadeira <- plano.getCadeirasDisponiveisOrdenadas()) {
 	<!-- div cadeira -->
 	<center>
 	<div class="panel panel-success" > 
@@ -134,10 +134,10 @@
 								onclick="contentPopover(this, @index, @plano.getPeriodos().size())" >Mover</button>
 							</div>
 						</div>
-					</div>		  	
+					</div> <!--  fim div cadeira -->		  	
 					}
 					
-					</div> <!-- fim div cadeira -->
+				</div> <!-- fim body periodo -->
 				<!-- FOOTER div periodo -->
 				<div class="panel-footer">
 					<center>
@@ -149,7 +149,7 @@
 
 		</div> <!-- Fim tab periodo -->
 		}
-	</div>
+	</div> <!-- fim tab content -->
 </div> <!-- Fim div de todos os periodos -->
 
 <!-- BOTAO PLANO MODAL -->
@@ -213,31 +213,27 @@
 </div>
 </center>
 
-<div id="div-usuarios" class="panel panel-primary" >
-		<div class="panel-heading">
-			<center>
-			<h3 class="panel-title">@Messages("usuariosDisponiveis") </h3>
-			</center>
-		</div>
-		
-		@for(usuario <- usuarios) {
-		
-		<!-- div cadeira -->
-		<form action="@routes.PlanoDeCursoController.mostraPlanoDoUsuario(usuario.getEmail())" method="get">
-			<button title = "@usuario.getNome()"; style="background-color:#fff; width:100%;height:100px;">
-				<div style="width:90px;height:90px;background-color:#238681; float:left;">
-					<img src="images/user.png" width="100%" height="100%" />
-				</div>
-				<span class="user-name" id="@usuario.getNome()" type="button"> @usuario.getNome() </span>
-			</button>
-		</form>
-				
-		}	 
+<div id="div-usuarios" class="panel panel-primary" style="background-color:#000;">
+	<div class="panel-heading">
+		<center>
+		<h3 class="panel-title">@Messages("usuariosDisponiveis") </h3>
+		</center>
 	</div>
+	
+	@for(usuario <- usuarios) {
+	<form action="@routes.PlanoDeCursoController.mostraPlanoDoUsuario(usuario.getEmail())" method="get">
+		<div style="width:90px;height:90px;background-color:#238681; float:left;margin:10px;">
+		<button title = "@usuario.getNome()"; style="">
+			<img src="assets/images/aluno.png" width="60px" height="60px" />
+			<span class="user-name" id="@usuario.getNome()" type="button"> @usuario.getNome() </span>
+		</button>
+		</div>
+	</form>
+	}	 
+</div>
 
 @modalPlano
 @modalErro
 
-</div>
 </body>
 </html>

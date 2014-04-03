@@ -19,20 +19,98 @@
 <body>
 <div id="div-principal">
 <nav class="navbar navbar-inverse" role="navigation">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<a class="navbar-brand" href="@routes.PlanoDeCursoController.index()">Plano De Curso</a>
-			</div>
-			<p class="navbar-text">Bem Vindo! @session.get("connected")</p>
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse navbar-ex1-collapse">
-				<ul class="nav navbar-nav">
-				</ul>
-				<ul class="nav navbar-nav navbar-right" style="margin-right:20px;">
-					<a class="navbar-brand" style="font-size: 25px;" href="/logout">Logout</a>
-				</ul>
-			</div><!-- /.navbar-collapse -->
-		</nav>
+	<!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+		<a class="navbar-brand" href="@routes.PlanoDeCursoController.index()">Plano De Curso</a>
+	</div>
+	<p class="navbar-text">Bem Vindo! @session.get("connected")</p>
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse navbar-ex1-collapse">
+		<ul class="nav navbar-nav">
+		</ul>
+		<ul class="nav navbar-nav navbar-right" style="margin-right:20px;">
+			<a class="navbar-brand" style="font-size: 25px;" href="/logout">Logout</a>
+		</ul>
+	</div><!-- /.navbar-collapse -->
+</nav>
 </div>
+<button>VOLTAR</button>
+
+<!-- Div periodos -->
+<div id="periodos" style="width:100%;">
+	<!--
+	<center>
+	 Tittle Periodos 
+	<a href="#" class="list-group-item active" style="margin-bottom:-15px;">Periodos</a>
+	</center>
+	-->
+
+	@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
+		@if(periodo.isEmpty()) {
+
+		} else {
+			<!-- DIV DO PERIODO -->
+			@if(index+1 < plano.getPeriodoCursando()) {
+			<div id="Periodo@index" class="panel panel-default" 
+				style="background-color:#fcc;width:180px;border:3px groove;float:left;height:550px;overflow-y:auto;">
+			} else{
+			@if(index+1 == plano.getPeriodoCursando()) {
+			<div id="Periodo@index" class="panel panel-default" 
+				style="background-color:#cfc;width:180px;border:3px groove;float:left;height:550px;overflow-y:auto;">
+			}else{
+			<div id="Periodo@index" class="panel panel-default" 
+				style="background-color:#999;width:180px;border:3px groove;float:left;height:550px;overflow-y:auto;">
+			}
+			}
+			<!--- BODY DIV PERIODO -->
+			<div class="panel-body" style="width:150px;">
+				@for(cadeira <- periodo.getCadeiras()) {
+
+				<!-- div cadeira -->
+				<div class="panel panel-success" style="width:150px;margin-right:25px;"> 
+				@if(plano.verificaPrerequisito(cadeira.getNome())){
+					<div class="panel-heading" style="background-color:#900;color:#eee;font-size:10px;height:50px;">
+				}else{
+					<div class="panel-heading" style="background-color:#299;color:#eee;font-size:10px;height:50px;">
+				}
+					<!--
+						<button type="button" class="close" style="left:8px;top:-5px;"
+						onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')">&times;</button>
+					-->
+						<center> @cadeira.getNome()</center>
+
+					</div>
+					<!--
+					<div class="panel-body col" style="height:30px;padding:5px;">
+						
+						<span class="label label-warning" style="float:left;height:20px;padding-top:5px;"> 
+						@Messages("creditos"): @cadeira.getCreditos() </span>		
+						<div class="button-group">
+							<button id="move-@cadeira.getNome()"type="button" class="btn btn-info popover-right" style="height:20px;width:80px;font-size:12px;padding:0px;float:right;" 
+							data-container="body" data-toggle="popover"	data-content="s" 
+							onclick="contentPopover(this, @index, @plano.getPeriodos().size())" >Mover</button>
+							
+						</div>
+					</div>
+					-->
+				</div> <!-- fim div cadeira -->
+				}
+			
+			</div> <!-- fim panel body -->
+			<!-- FOOTER div periodo -->
+			<!--
+			<div class="panel-footer">
+				<center>
+				<span class="label label-success" style="font-size:17px;"> 
+				@Messages("creditos") Do Periodo: @periodo.getCreditos() </span>
+				</center>
+			</div>
+			-->
+		</div> <!-- Fim div periodo -->
+	 	}
+	}
+</div> <!-- Fim div de todos os periodos -->
+
+
 </body>
 </html>
