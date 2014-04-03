@@ -40,7 +40,9 @@ public class PlanoDeCurso extends Model {
 	private final List<Periodo> periodos;
 
 	private Map<String, Cadeira> mapaDeCadeiras;
+	
 	private int periodoAtual;
+	
 	private String grade;
 	
 	public PlanoDeCurso() {

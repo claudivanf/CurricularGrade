@@ -118,6 +118,58 @@ insert into cadeira values(108,'Optativa 9',4,3,9,'MAIS_COMUM');
 insert into cadeira values(109,'Optativa 10',4,3,9,'MAIS_COMUM');
 insert into cadeira values(110,'Optativa 11',2,3,9,'MAIS_COMUM');
 
+-- NOVA GRADE ============================================================
+
+insert into cadeira values(111,'Matemática Discreta',4,4,1,'NOVA_GRADE');
+insert into cadeira values(112,'Programação I',4,2,1,'NOVA_GRADE');
+insert into cadeira values(113,'Laboratório de Programação I',4,7,1,'NOVA_GRADE');
+insert into cadeira values(114,'Introdução à Computação',4,3,1,'NOVA_GRADE');
+insert into cadeira values(115,'Optativa Geral 1',4,5,1,'NOVA_GRADE');
+insert into cadeira values(116,'Matemática Discreta II',4,4,2,'NOVA_GRADE');
+insert into cadeira values(117,'Cálculo I',4,5,2,'NOVA_GRADE');
+insert into cadeira values(118,'Programação II',4,5,2,'NOVA_GRADE');
+insert into cadeira values(119,'Laboratório De Programação II',4,5,2,'NOVA_GRADE');
+insert into cadeira values(120,'Optativa Geral 2',4,4,2,'NOVA_GRADE');
+insert into cadeira values(121,'Álgebra Linear',4,8,3,'NOVA_GRADE');
+insert into cadeira values(122,'Teoria dos Grafos',4,3,3,'NOVA_GRADE');
+insert into cadeira values(123,'Cálculo II',4,7,3,'NOVA_GRADE');
+insert into cadeira values(124,'Estrutura de Dados',4,7,3,'NOVA_GRADE');
+insert into cadeira values(125,'Lab. de Estrutura de Dados',4,7,3,'NOVA_GRADE');
+insert into cadeira values(126,'Lógica Para Computação',4,9,3,'NOVA_GRADE');
+insert into cadeira values(127,'Introdução à Probabilidade',4,9,4,'NOVA_GRADE');
+insert into cadeira values(128,'Projeto de Software',4,6,4,'NOVA_GRADE');
+insert into cadeira values(129,'Paradigmas de Linguagem de Programação',4,7,4,'NOVA_GRADE');
+insert into cadeira values(130,'Banco de Dados I',4,5,4,'NOVA_GRADE');
+insert into cadeira values(131,'Org. e Arquitetura de Computadores',4,5,4,'NOVA_GRADE');
+insert into cadeira values(132,'Lab de Org. e Arquitetura de Computadores',4,5,4,'NOVA_GRADE');
+insert into cadeira values(133,'Estatística Aplicada',4,5,5,'NOVA_GRADE');
+insert into cadeira values(134,'Análise de Sistemas',4,5,5,'NOVA_GRADE');
+insert into cadeira values(135,'Engenharia de Software',4,5,5,'NOVA_GRADE');
+insert into cadeira values(136,'Rede de Computadores',4,5,5,'NOVA_GRADE');
+insert into cadeira values(137,'Sistemas Operacionais',4,5,5,'NOVA_GRADE');
+insert into cadeira values(138,'Teoria da Computação',4,9,5,'NOVA_GRADE');
+insert into cadeira values(139,'Metodologia Científica',4,5,6,'NOVA_GRADE');
+insert into cadeira values(140,'Programação Concorrente',4,9,6,'NOVA_GRADE');
+insert into cadeira values(141,'Inteligência Artificial',4,5,6,'NOVA_GRADE');
+insert into cadeira values(142,'Optativa Específica 1',4,5,6,'NOVA_GRADE');
+insert into cadeira values(143,'Optativa Específica 2',4,5,6,'NOVA_GRADE');
+insert into cadeira values(144,'Análise e Técnicas de Algoritmos',4,5,7,'NOVA_GRADE');
+insert into cadeira values(145,'Compiladores',4,5,7,'NOVA_GRADE');
+insert into cadeira values(146,'Optativa Específica 3',4,5,7,'NOVA_GRADE');
+insert into cadeira values(147,'Optativa Específica 4',4,5,7,'NOVA_GRADE');
+insert into cadeira values(148,'Optativa Geral 3',4,5,7,'NOVA_GRADE');
+insert into cadeira values(149,'Projeto Em Computação I',4,5,8,'NOVA_GRADE');
+insert into cadeira values(150,'Optativa Específica 5',4,5,8,'NOVA_GRADE');
+insert into cadeira values(151,'Optativa Específica 6',4,5,8,'NOVA_GRADE');
+insert into cadeira values(152,'Optativa Geral 4',4,5,8,'NOVA_GRADE');
+insert into cadeira values(153,'Trabalho de Conclusão de Curso I',4,5,8,'NOVA_GRADE');
+insert into cadeira values(154,'Projeto em Computação II',4,5,9,'NOVA_GRADE');
+insert into cadeira values(155,'Optativa Específica 7',4,5,9,'NOVA_GRADE');
+insert into cadeira values(156,'Optativa Específica 8',4,5,9,'NOVA_GRADE');
+insert into cadeira values(157,'Optativa Específica 9',4,5,9,'NOVA_GRADE');
+insert into cadeira values(158,'Optativa Específica 10',4,5,9,'NOVA_GRADE');
+insert into cadeira values(159,'Trabalho de Conclusão de Curso II',4,5,9,'NOVA_GRADE');
+
 -- requisitos grade oficial
 insert into cadeira_requisito values(7,1);
 insert into cadeira_requisito values(7,5);
@@ -256,6 +308,30 @@ insert into cadeira_requisito values(97,72);
 insert into cadeira_requisito values(98,65);
 insert into cadeira_requisito values(98,88);
 insert into cadeira_requisito values(99,98);
+
+-- requisitos nova grade
+insert into cadeira_requisito values(116,111);
+insert into cadeira_requisito values(118,112);
+insert into cadeira_requisito values(118,113);
+insert into cadeira_requisito values(119,112);
+insert into cadeira_requisito values(119,113);
+insert into cadeira_requisito values(121,111);
+insert into cadeira_requisito values(123,117);
+insert into cadeira_requisito values(124,118);
+insert into cadeira_requisito values(124,119);
+insert into cadeira_requisito values(125,118);
+insert into cadeira_requisito values(125,119);
+insert into cadeira_requisito values(126,111);
+insert into cadeira_requisito values(127,116);
+insert into cadeira_requisito values(127,117);
+insert into cadeira_requisito values(130,124);
+insert into cadeira_requisito values(133,127);
+insert into cadeira_requisito values(138,129);
+insert into cadeira_requisito values(140,137);
+insert into cadeira_requisito values(141,138);
+insert into cadeira_requisito values(149,135);
+insert into cadeira_requisito values(154,149);
+insert into cadeira_requisito values(159,153);
 
 # --- !Downs
 
