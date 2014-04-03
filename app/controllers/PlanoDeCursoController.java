@@ -29,8 +29,7 @@ public class PlanoDeCursoController extends Controller {
 		plano.atualizaMapaCadeira(Cadeira.find.where().eq("grade",plano.getGrade()).findList());
 		plano.atualizaValidadoresPeriodos();
 		return ok(views.html.Plano.planoEdit.render(
-			plano, 
-			GerenciadorDeUsuario.getUsuariosCadastrados(),
+			plano, GerenciadorDeUsuario.getUsuariosCadastrados(),
 					views.html.modalPlano.render(plano),
 					views.html.modalDeErro.render()
 			));
@@ -71,8 +70,7 @@ public class PlanoDeCursoController extends Controller {
 		try {
 			plano.removeCadeira(cadeira);
 		} catch (LimiteDeCreditosException e) {
-			flash("fail", e.getMessage() + ": Alguma cadeira nao pôde ser removida, " +
-					"pois possui o periodo com mínimo de credidos insuficientes");
+			flash("fail", e.getMessage() );
 		}
 		plano.update();
 		return index();

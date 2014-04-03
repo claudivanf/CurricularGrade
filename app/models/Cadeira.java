@@ -37,6 +37,9 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 	private int periodoOriginal; //Periodo original da disciplina segundo a grade curricular
 	
 	private String grade;
+	
+	public static Finder<Long, Cadeira> find = new Finder<Long, Cadeira>(
+			Long.class, Cadeira.class);
 
 	public Cadeira() {
 		requisitos = new ArrayList<Cadeira>();
@@ -53,7 +56,28 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		this(nome, dificuldade);
 		this.creditos = creditos;
 	}
+	public int getCreditos() { return this.creditos; }
 
+	public void setCreditos(int creditos) { this.creditos = creditos; }
+
+	public String getNome() { return this.nome; }
+
+	public void setNome(String nome) { this.nome = nome; }
+
+	public int getDificuldade() { return dificuldade; }
+
+	public void setDificuldade(int dificuldade) { this.dificuldade = dificuldade; }
+
+	public List<Cadeira> getRequisitos() { return requisitos; }
+
+	public void setRequisitos(List<Cadeira> preRequisitos) { this.requisitos = preRequisitos; }
+	
+	public int getPeriodoOriginal(){ return periodoOriginal; }
+ 	
+ 	public void setPeriodoOriginal(int periodo){ this.periodoOriginal = periodo; }
+
+	public String getGrade() { return grade; }
+	
 	/**
 	 * Retorna verdadeiro caso a cadeira {@code c} seja pre-requisito, Seguindo
 	 * o padrão Information Expert, quem deve saber se uma cadeira é
@@ -69,49 +93,6 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 			getRequisitos().add(cadeira);
 		}
 	}
-
-	public int getCreditos() {
-		return this.creditos;
-	}
-
-	public void setCreditos(int creditos) {
-		this.creditos = creditos;
-	}
-
-	public String getNome() {
-		return this.nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public int getDificuldade() {
-		return dificuldade;
-	}
-
-	public void setDificuldade(int dificuldade) {
-		this.dificuldade = dificuldade;
-	}
-
-	public List<Cadeira> getRequisitos() {
-		return requisitos;
-	}
-
-	public void setRequisitos(List<Cadeira> preRequisitos) {
-		this.requisitos = preRequisitos;
-	}
-	
-	public int getPeriodoOriginal(){
- 		return periodoOriginal;
- 	}
- 	
- 	public void setPeriodoOriginal(int periodo){
- 		this.periodoOriginal = periodo;
- 	}
-
-	public static Finder<Long, Cadeira> find = new Finder<Long, Cadeira>(
-			Long.class, Cadeira.class);
 
 	public int compareTo(Cadeira cadeira) {
 		return getNome().compareTo(cadeira.getNome());

@@ -66,7 +66,6 @@ public class UsuarioController extends Controller {
 		String senha = cadastroForm.get().password;
 		String grade = cadastroForm.get().grade;
 		try {
-			
 			int periodo = cadastroForm.get().periodo;
 			
 			List<Usuario> u = GerenciadorDeUsuario.find(email);

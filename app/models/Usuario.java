@@ -16,22 +16,26 @@ import play.db.ebean.Model;
 
 import com.google.common.base.Objects;
 
+import exceptions.PeriodoCursandoException;
+
 @Entity
 public class Usuario extends Model {
 
 	private static final long serialVersionUID = 1L;
-	// TODO User Id should be the email
+	
 	@Id
 	@Required
 	@Email
 	private String email;
+	
 	@Required
 	private String nome;
+	
 	@Required
 	private String senha;
+	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PlanoDeCurso plano;
-	private int periodoAtual;
 
 	public static Finder<String, Usuario> find = new Finder<String, Usuario>(
 			String.class, Usuario.class);
@@ -41,37 +45,28 @@ public class Usuario extends Model {
 		this.nome = nome;
 		this.senha = senha;
 		plano = new PlanoDeCurso();
-		setPeriodoAtual(1);
 	}
+	
+	public String getEmail() { return email; }
 
-	public int getPeriodoAtual() {
-		return this.periodoAtual;
-	}
+	public void setEmail(String email) { this.email = email; }
 
-	public void setPeriodoAtual(int numPeriodo) {
-		this.periodoAtual = numPeriodo;
-	}
+	public String getNome() { return nome; }
 
-	public String getEmail() {
-		return email;
-	}
+	public void setNome(String nome) { this.nome = nome; }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	public PlanoDeCurso getPlano() { return plano; }
 
-	public String getNome() {
-		return nome;
-	}
+	public void setPlano(PlanoDeCurso plano) { this.plano = plano; }
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public int getPeriodoAtual() { return this.getPlano().getPeriodoCursando(); }
+
+	public void setPeriodoAtual(int numPeriodo) throws PeriodoCursandoException {
+		this.getPlano().setPeriodoCursando(numPeriodo);
 	}
 
 	// TODO criar classe de hash para senha, aumentar seguranca :p
-	public String getSenha() {
-		return senha;
-	}
+	public String getSenha() { return senha; }
 
 	public void setSenha(String senha) {
 		try {
@@ -79,14 +74,6 @@ public class Usuario extends Model {
 		} catch (ActivationException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public PlanoDeCurso getPlano() {
-		return plano;
-	}
-
-	public void setPlano(PlanoDeCurso plano) {
-		this.plano = plano;
 	}
 
 	public boolean autenticar(String senhaASerAutenticada) {

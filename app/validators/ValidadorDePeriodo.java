@@ -1,8 +1,11 @@
 package validators;
 
-import exceptions.LimiteDeCreditosException;
-
-
 public interface ValidadorDePeriodo {
-	public boolean valida(int creditos) throws LimiteDeCreditosException;
+	
+	/**
+	 * Retorna se a operação é válida ou não para com o período.
+	 * 
+	 * @param creditos
+	 */
+	public boolean valida(int creditos);
 }
