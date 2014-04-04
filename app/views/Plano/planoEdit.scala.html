@@ -176,7 +176,7 @@
 		<!-- form periodo atual -->
 		<form action="@routes.PlanoDeCursoController.atualizaPeriodo" method="post">
 			<div class="input-group">
-				<span class="input-group-addon">Atualizar</span>
+				<span class="input-group-addon">Atualizar Periodo</span>
 				<select class="form-control" name="periodo" id="periodo" style="width:70px;display:inline;">
 	  				@for(i <- 1 to plano.getPeriodos().size() ){
 	  					@if(i == plano.getPeriodoCursando()){
