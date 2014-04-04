@@ -1,37 +1,108 @@
-body{margin: 0 auto;background-color:rgba(70,70,70,0.2);}
+body{margin: 0 auto;
+background: #fcfff4; /* Old browsers */
+background: -moz-linear-gradient(-45deg,  #fcfff4 0%, #dfe5d7 40%, #b3bead 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#fcfff4), color-stop(40%,#dfe5d7), color-stop(100%,#b3bead)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(-45deg,  #fcfff4 0%,#dfe5d7 40%,#b3bead 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(-45deg,  #fcfff4 0%,#dfe5d7 40%,#b3bead 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(-45deg,  #fcfff4 0%,#dfe5d7 40%,#b3bead 100%); /* IE10+ */
+background: linear-gradient(135deg,  #fcfff4 0%,#dfe5d7 40%,#b3bead 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#b3bead',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+.navbar-inverse{margin-bottom:35px;}
 #div-principal{margin:auto; padding:10px; background-color:#fff; width:100%; height:100%;}
-#div-dispon{width:250px;height:500px;overflow-y:auto;margin-left:30px;float:left;margin-top:8px;}
-#div-dispon{ margin-left:30px; }
-#div-usuarios{position:relative;float:left;width:150px;top:-140px;overflow-y:auto;height:550px;}
-#div-dispon .panel-success{width:200px; margin-top:10px;}
+#div-usuarios, #div-dispon{
+background: #f2f6f8; /* Old browsers */
+background: -moz-linear-gradient(-45deg,  #f2f6f8 0%, #d8e1e7 50%, #b5c6d0 51%, #e0eff9 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#f2f6f8), color-stop(50%,#d8e1e7), color-stop(51%,#b5c6d0), color-stop(100%,#e0eff9)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(-45deg,  #f2f6f8 0%,#d8e1e7 50%,#b5c6d0 51%,#e0eff9 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(-45deg,  #f2f6f8 0%,#d8e1e7 50%,#b5c6d0 51%,#e0eff9 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(-45deg,  #f2f6f8 0%,#d8e1e7 50%,#b5c6d0 51%,#e0eff9 100%); /* IE10+ */
+background: linear-gradient(135deg,  #f2f6f8 0%,#d8e1e7 50%,#b5c6d0 51%,#e0eff9 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+#div-dispon .panel-success{display:inline;float:left;margin:5px;}
+#div-dispon .panel-success .panel-heading{height:50px;}
+#periodos .list-group-item, #divAtualizaPeriodo .list-group-item, #INFOS .active,
+#div-usuarios .panel-heading, #div-dispon .panel-heading, footer{
+background: #45484d; /* Old browsers */
+background: -moz-linear-gradient(-45deg,  #45484d 0%, #000000 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(-45deg,  #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(-45deg,  #45484d 0%,#000000 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(-45deg,  #45484d 0%,#000000 100%); /* IE10+ */
+background: linear-gradient(135deg,  #45484d 0%,#000000 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+#div-dispon .panel-success .panel-heading, #cadeira-verde{
+	background: #1e5799; /* Old browsers */
+background: -moz-linear-gradient(top,  #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1e5799), color-stop(50%,#2989d8), color-stop(51%,#207cca), color-stop(100%,#7db9e8)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
+}
+/*========================== CSS div cadeiras disponíveis ============================= */
+#div-dispon{height:530px;overflow-y:auto;margin-left:30px;float:left;margin-top:8px;width:250px;
+margin-left:30px;text-shadow:1px 1px 1px #000;}
+#div-dispon .panel-success{width:200px; margin-top:10px;
+-webkit-box-shadow: 6px 6px 6px -1px rgba(48, 50, 50, 0.77);
+-moz-box-shadow:    6px 6px 6px -1px rgba(48, 50, 50, 0.77);
+box-shadow:         6px 6px 6px -1px rgba(48, 50, 50, 0.77)}
 #div-dispon div .panel-heading{background-color:#299; color:#eee; font-size:12px;}
 #div-dispon .panel-body{height:30px; padding:5px;}
 #div-dispon .panel-body span {float:left; height:20px; padding-top:5px;}
-#div-dispon .button-group button {height:20px; width:80px; font-size:12px; float:right;padding:0px;}
-#image{	background-image: url(assets/images/user.png);width:90px;height:90px;float:left;}
-#periodos{width:500px;float:left;margin-left:50px;}
-#titlePeriodos{margin-bottom:10px;width: 190px;float:left;height: 70px;margin-left:30px;margin-right:200px;}
-#titlePeriodos .input-group{height: 35px;width: 190px;float:left;}
-#titlePeriodos .btn-primary{float:right;}
-.user-name{font-size:20px; overflow: hidden; white-space:nowrap; text-overflow:ellipsis;width:100px;
-    display:inline-block;}
+#div-dispon .button-group button {height:20px; width:80px; font-size:12px; float:right;padding:0px;
+text-shadow:1px 1px 1px #000;}
+/* =========== Div Periodos ================================================== */
+#periodos{width:500px;position:realtive;float:left;margin-left: 40px;height:550px;}
+#periodos .panel-body{height:410px;}
 #periodos form{font-size:14px;}
 #periodos .label-info{font-size:20px; margin-top:20px;}
 #periodos .nav-pills{width:410px; margin-top:15px;}
-#peridos .tab-content{height:450px;}
+#periodos .tab-content {height:450px;}
+.tab-pane{height:450px;}
+#periodos .panel-success{text-shadow:1px 1px 1px #000;
+-webkit-box-shadow: 6px 6px 6px -1px rgba(48, 50, 50, 0.77);
+-moz-box-shadow:    6px 6px 6px -1px rgba(48, 50, 50, 0.77);
+box-shadow:         6px 6px 6px -1px rgba(48, 50, 50, 0.77)
+}
 .panel-default{background-color:#fcc; width:100%; height:100%;}
-#INFOS{position:relative;width:300px;height:200px;top:40px;float:left;}
-#Legenda{position:relative;border-radius:15px;float:left;left:20px;}
-#Informacoes{position:relative;border-radius:15px;float:left;right:20px;}
-.popover{
-    background-color: #000;
-    color:#fff;
-    border-color:#000;
-    border-radius:10px;
+/* =================== CSS DIV USUARIO ================================== */
+#div-usuarios{position:relative;float:left;width:210px;overflow-y:auto;height:530px;}
+#div-usuarios form{border-bottom:4px outset;}
+#div-usuarios label{width:100px;}
+#div-usuarios #image-user{width:75px;margin-top:10px;}
+#div-usuarios #nome-user{position:relative;float:right;top:-60px;font-size:15px;left:-13px;}
+#painel-usuario{background:transparent;border:none;}
+#painel-usuario button{font-size:15px; float:right;position:relative;top:-60px;left:-5px;}
+/* =================== CSS Div atualizar periodo ========================= */
+#divAtualizaPeriodo{margin-bottom:10px;width: 190px;height: 70px;position:relative;float:left;margin-left:40px;}
+#divAtualizaPeriodo .input-group{height: 35px;width: 190px;float:left;}
+#divAtualizaPeriodo .btn-primary{float:right;}
+/* =================== CSS infos e legenda =============================== */
+#div-infos-legenda{width:300px;height:400px;float:left;}
+#INFOS{width:300px;height:200px;margin-left:-40px;}
+#Legenda{border-radius:15px;float:left;width:300px;margin-bottom:27px;margin-top:27px;}
+#Informacoes{border-radius:15px;float:left;width:300px;}
+/* ================== CSS div cadeiras alocadas =================================== */
+#cadeira-vermelha{color:#eee;font-size:12px;height:50px;
+background: #f31303; /* Old browsers */
+background: -moz-linear-gradient(top,  #f31303 0%, #f94f4f 37%, #c60d00 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f31303), color-stop(37%,#f94f4f), color-stop(100%,#c60d00)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #f31303 0%,#f94f4f 37%,#c60d00 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #f31303 0%,#f94f4f 37%,#c60d00 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #f31303 0%,#f94f4f 37%,#c60d00 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #f31303 0%,#f94f4f 37%,#c60d00 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f31303', endColorstr='#c60d00',GradientType=0 ); /* IE6-9 */
 }
-.popover.right .arrow:after{
-	border-right-color:#000;
+#cadeira-verde{color:#eee;font-size:12px;height:50px;
 }
-.popover.bottom .arrow:after{
-	border-bottom-color:#000;
-}
+/* ======================== POPOVER ============================================== */
+.popover{ background-color: #000; color:#fff; border-color:#000; border-radius:10px;}
+.popover.right .arrow:after{border-right-color:#000;}
+.popover.bottom .arrow:after{	border-bottom-color:#000;}
+
+footer{height:30px;float:left;width:100%;color:#fff;font-family:cursive;padding-top:5px;}

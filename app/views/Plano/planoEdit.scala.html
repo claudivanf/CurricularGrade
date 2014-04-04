@@ -76,9 +76,16 @@
 
 <!-- Div periodos -->
 <div id="periodos">
+	<!-- BOTAO PLANO MODAL -->
+			<button onclick="showModalPlano()" class="btn btn-primary" style="position:relative;float:right;top:-30px;">
+				<span class="glyphicon glyphicon-fullscreen"> </span> 
+				mostrar plano inteiro
+			</button>
 	<center>
 	<!-- Tittle Periodos -->
-	<a href="#" class="list-group-item active" style="margin-bottom:-15px;">Periodos</a>
+	<a href="#" class="list-group-item active" style="margin-bottom:-15px;">
+	<span style="position:relative;left:70px;"> Periodos </span></a> 
+	
 	<!-- Nav tabs -->
 	<ul class="nav nav-pills">
 		@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
@@ -117,11 +124,11 @@
 					<!-- div cadeira -->
 					<div class="panel panel-success" style="width:200px;float:left;margin-left:10px;"> 
 					@if(plano.verificaPrerequisito(cadeira.getNome())){
-						<div class="panel-heading popover-bottom" style="background-color:#900;color:#eee;font-size:12px;height:50px;"
+						<div id="cadeira-vermelha" class="panel-heading popover-bottom"
 						data-container="body" data-toggle="popover"
 						data-content="@plano.getRequisitosInvalidos(cadeira.getNome())" >
 					}else{
-						<div class="panel-heading" style="background-color:#299;color:#eee;font-size:12px;height:50px;">
+						<div id="cadeira-verde" class="panel-heading">
 					}
 							<button type="button" class="close" style="left:8px;top:-5px;"
 							onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')">&times;</button>
@@ -153,41 +160,37 @@
 		}
 	</div> <!-- fim tab content -->
 </div> <!-- Fim div de todos os periodos -->
-
-<!-- BOTAO PLANO MODAL -->
-<button onclick="showModalPlano()" class="btn btn-primary" 
-	style="float:left;margin-left:50px;margin-right:200px;margin-bottom:20px;">
-<span class="glyphicon glyphicon-fullscreen"> </span>
-	mostrar plano inteiro</button>
-
-<!-- Form Atualizar periodo -->
-<div id="titlePeriodos">
-	<!-- Tittle Periodo Atual -->
-	<center>
-	<a href="#" class="list-group-item active">Período Atual</a>
-	</center>
-	<!-- form periodo atual -->
-	<form action="@routes.PlanoDeCursoController.atualizaPeriodo" method="post">
-		<div class="input-group">
-			<span class="input-group-addon">Atualizar</span>
-			<select class="form-control" name="periodo" id="periodo" style="width:70px;display:inline;">
-  				@for(i <- 1 to plano.getPeriodos().size() ){
-  					@if(i == plano.getPeriodoCursando()){
-						<option selected="selected">@i</option>
-  					} else {
-  						<option>@i</option>
-  					}
-  				}
-			</select>
-			<input type="submit" class="btn btn-primary" value="ok">
-		</div>
-		
-	</form>
-</div>
+<center>
+<div id="div-infos-legenda">
 
 <!-- DIV INFORMAÇÕES E LEGENDA-->	
 <center>
 <div id="INFOS">
+
+	<!-- Form Atualizar periodo -->
+	<div id="divAtualizaPeriodo">
+		<!-- Tittle Periodo Atual -->
+		<center>
+		<a href="#" class="list-group-item active">Período Atual</a>
+		</center>
+		<!-- form periodo atual -->
+		<form action="@routes.PlanoDeCursoController.atualizaPeriodo" method="post">
+			<div class="input-group">
+				<span class="input-group-addon">Atualizar</span>
+				<select class="form-control" name="periodo" id="periodo" style="width:70px;display:inline;">
+	  				@for(i <- 1 to plano.getPeriodos().size() ){
+	  					@if(i == plano.getPeriodoCursando()){
+							<option selected="selected">@i</option>
+	  					} else {
+	  						<option>@i</option>
+	  					}
+	  				}
+				</select>
+				<input type="submit" class="btn btn-primary" value="ok">
+			</div>
+			
+		</form>
+	</div>
 		
 	<div id="Legenda">
 		<ul>
@@ -215,6 +218,10 @@
 </div>
 </center>
 
+</div> <!-- Fim div periodos e legenda -->
+</center>
+
+
 <div id="div-usuarios" class="panel panel-primary" style="background-color:#000;">
 	<div class="panel-heading">
 		<center>
@@ -224,18 +231,25 @@
 	
 	@for(usuario <- usuarios) {
 	<form action="@routes.PlanoDeCursoController.mostraPlanoDoUsuario(usuario.getEmail())" method="get">
-		<div style="width:90px;height:90px;background-color:#238681; float:left;margin:10px;">
-		<button title = "@usuario.getNome()"; style="">
-			<img src="assets/images/aluno.png" width="60px" height="60px" />
-			<span class="user-name" id="@usuario.getNome()" type="button"> @usuario.getNome() </span>
+	<div id="painel-usuario" class="panel panel-default">
+		<div id="image-user"> <img width="70" height="70" src="@routes.Assets.at("images/aluno.png")"/> </div>
+		<label id="nome-user" class="label label-success">  @usuario.getNome() </label>
+		<button title="Visualizar Plano" class="btn btn-primary" id="@usuario.getNome()" type="submit" >
+			<span class="glyphicon glyphicon-eye-open"> </span>
+			Ver Plano
 		</button>
-		</div>
+	</div>
 	</form>
 	}	 
 </div>
 
 @modalPlano
 @modalErro
-
 </body>
+<footer>
+<center> 
+<small> Projeto Da Disciplina de Sistemas de Informação I - Universidade Federal de Campina Grande</small>
+<span> - Março 2014 </span>
+</center>
+ </footer>
 </html>
