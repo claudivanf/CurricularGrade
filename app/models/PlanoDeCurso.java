@@ -3,8 +3,10 @@ package models;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -300,27 +302,29 @@ public class PlanoDeCurso extends Model {
 	public String getRequisitosInvalidos(String cadeira){
 		Cadeira cad = mapaDeCadeiras.get(cadeira);
 		String retorno = "<p> Requisitos Não Satisfeitos: </p> " +
-				"<div style='border:1px solid #fff;width:100%;margin-bottom:10px;' > </div>" +
-				getRequisitosInvalidosRec(cad);
+				"<div style='border:1px solid #fff;width:100%;margin-bottom:10px;' > </div>";
+		for (String s: getRequisitosInvalidosRec(cad)) {
+			retorno+= "<p>" + s + "</p>";
+		}
 		return retorno;
 	}
 	
-	public String getRequisitosInvalidosRec(Cadeira cad) {
-		String retorno = "";
+	public Set<String> getRequisitosInvalidosRec(Cadeira cad) {
+		Set<String> requisitos = new HashSet<String>(); 
 		
 		for (Cadeira req: cad.getRequisitos()) {
 			if(getPeriodoDaCadeira(req) == -1) {
-				retorno += "<p>" + req.getNome() + "</p>";
+				requisitos.add(req.getNome());
 			} else if (getPeriodoDaCadeira(req) >= getPeriodoDaCadeira(cad)) {
 				// se o periodo do requisito for maior ou igual ao 
 				// da cadeira, adiciona o requisito à string
-				retorno += "<p>" + req.getNome() + "</p>";
+				requisitos.add(req.getNome());
 			} else {
 				// verifica os requisitos dos requisitos
-				retorno += getRequisitosInvalidosRec(req);
+				requisitos.addAll(getRequisitosInvalidosRec(req));
 			}
 		}	
-		return retorno;
+		return requisitos;
 	}
 	
 	public int getCreditosPagos(){
