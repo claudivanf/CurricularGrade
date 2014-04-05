@@ -30,4 +30,11 @@ public class CadeiraTest {
 		Assert.assertTrue(c1.equals(c4));
 
 	}
+
+	// TODO   
+	// TESTAR O EQUALS DE CADEIRA - FAZER PARA QUANDO É IGUAL E PARA QND NÃO É
+	// em vez de fazer isso ->c2.getRequisitos().contains(c3) && c2.getRequisitos().size() == 1
+	// faz 2 asserts
+	// TESTA O COMPARE TO DE CADEIRA
+	// TESTA CONSTRUTOR
 }

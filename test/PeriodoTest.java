@@ -94,5 +94,13 @@ public class PeriodoTest {
 		Assert.assertTrue(p1.getDificuldadeTotal() == 13);
 
 	}
+	
+	// TODO
+	// TESTAR OS VALIDADORES DE MAX E MIN DOS PERIODOS
+	// TESTAR A EXeÇÃO de quando ultrapassa o limite de cretidos e quando
+	// remove uma cadeira e o limite minimo eh insuficiente
+	// testa metodos validaAdd e validaRem
+	// testa o isEmpty
+	// testa o getCreditos
 
 }

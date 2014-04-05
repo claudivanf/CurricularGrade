@@ -30,4 +30,8 @@ public class UsuarioTest {
 		usr.setSenha("12346");
 		Assert.assertTrue(usr.getSenha().equals("12346"));
 	}
+	
+	// TODO 
+	// TESTA O EQUALS 
+	// TESTA O PLANO DE CURSO SE É o que deveria ser
 }

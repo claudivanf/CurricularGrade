@@ -187,4 +187,10 @@ public class PlanoDeCursoTest {
 		Assert.assertEquals(false, plano.verificaPrerequisito(p1.getNome()));
 		Assert.assertEquals(false, plano.verificaPrerequisito(lpt.getNome()));
 	}
+	
+	// TESTA GET REQUISITOS INVALIDOS
+	// TESTA GET CREDITOS PAGOS, ATUAIS, FUTUROS e RESTANTES
+	// TESTA MUDANÇA DE VALIDADORES QUANDO SETADO UM PERIODO ATUAL DIFERENTE DO QUE JA ERA
+	// TESTA EXCEÇÕES QND ADICIONADA E REMOVIDA UMA CADEIRA - dica: ver na
+	// interface grafica o formato das exceções 
 }

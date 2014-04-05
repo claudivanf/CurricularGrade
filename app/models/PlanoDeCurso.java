@@ -286,6 +286,13 @@ public class PlanoDeCurso extends Model {
 		return false;
 	}
 
+	/**
+	 * Remove uma cadeira e seus prerequisitos do plano de curso, lança um
+	 * exceção quando um dos validadores do periodo não é satisfeito
+	 * 
+	 * @param cadeira
+	 * @throws LimiteDeCreditosException
+	 */
 	public void removeCadeira(String cadeira) throws LimiteDeCreditosException {
 		Cadeira removida = mapaDeCadeiras.get(cadeira);
 		Periodo periodoDaCadera = getPeriodo(getPeriodoDaCadeira(removida));
@@ -311,6 +318,12 @@ public class PlanoDeCurso extends Model {
 		}
 	}
 
+	/**
+	 * Retorna uma string para ser usada no popover contendo os requisitos não
+	 * satisfeitos que fazem com que a cadeira seja inválida[vermelha]
+	 * 
+	 * @param cadeira
+	 */
 	public String getRequisitosInvalidos(String cadeira) {
 		Cadeira cad = mapaDeCadeiras.get(cadeira);
 		String retorno = "<p> Requisitos Não Satisfeitos: </p> "
@@ -320,7 +333,7 @@ public class PlanoDeCurso extends Model {
 		}
 		return retorno;
 	}
-
+	
 	public Set<String> getRequisitosInvalidosRec(Cadeira cad) {
 		Set<String> requisitos = new HashSet<String>();
 
