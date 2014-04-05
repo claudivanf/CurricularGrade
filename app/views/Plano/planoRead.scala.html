@@ -130,18 +130,11 @@
 					}else{
 						<div id="cadeira-verde" class="panel-heading">
 					}
-							<button type="button" class="close" style="left:8px;top:-5px;"
-							onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')">&times;</button>
-							<center> @cadeira.getNome()</center>
+						<center> @cadeira.getNome()</center>
 						</div>
 						<div class="panel-body col" style="height:30px;padding:5px;">
 							<span class="label label-warning" style="float:left;height:20px;padding-top:5px;"> 
 							@Messages("creditos"): @cadeira.getCreditos() </span>		
-							<div class="button-group">
-								<button id="move-@cadeira.getNome()"type="button" class="btn btn-info popover-right" style="height:20px;width:80px;font-size:12px;padding:0px;float:right;" 
-								data-container="body" data-toggle="popover"	data-content="s" 
-								onclick="contentPopover(this, @index, @plano.getPeriodos().size())" >Mover</button>
-							</div>
 						</div>
 					</div> <!--  fim div cadeira -->		  	
 					}

@@ -1,4 +1,4 @@
-body{margin: 0 auto;width:1360px;
+body{margin: 0 auto;width:1200px;
 background: #fcfff4; /* Old browsers */
 background: -moz-linear-gradient(-45deg,  #fcfff4 0%, #dfe5d7 40%, #b3bead 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#fcfff4), color-stop(40%,#dfe5d7), color-stop(100%,#b3bead)); /* Chrome,Safari4+ */
@@ -20,8 +20,6 @@ background: -ms-linear-gradient(-45deg,  #f2f6f8 0%,#d8e1e7 50%,#b5c6d0 51%,#e0e
 background: linear-gradient(135deg,  #f2f6f8 0%,#d8e1e7 50%,#b5c6d0 51%,#e0eff9 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
-#div-dispon .panel-success{display:inline;float:left;margin:5px;}
-#div-dispon .panel-success .panel-heading{height:50px;}
 #periodos .list-group-item, #divAtualizaPeriodo .list-group-item, #INFOS .active,
 #div-usuarios .panel-heading, #div-dispon .panel-heading, footer{
 background: #45484d; /* Old browsers */
@@ -45,9 +43,11 @@ background: linear-gradient(to bottom,  #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
 }
 /*========================== CSS div cadeiras disponíveis ============================= */
-#div-dispon{height:530px;overflow-y:auto;margin-left:30px;float:left;width:250px;
+#div-dispon{height:530px;overflow-y:auto;margin-left:30px;float:left;width:230px;
 margin-left:30px;text-shadow:1px 1px 1px #000;}
-#div-dispon .panel-success{width:200px; margin-top:10px;
+#div-dispon .panel-success{display:inline;float:left;margin:5px;}
+#div-dispon .panel-success .panel-heading{height:50px;}
+#div-dispon .panel-success{width:200px; margin-top:10px;margin-left:13px;
 -webkit-box-shadow: 6px 6px 6px -1px rgba(48, 50, 50, 0.77);
 -moz-box-shadow:    6px 6px 6px -1px rgba(48, 50, 50, 0.77);
 box-shadow:         6px 6px 6px -1px rgba(48, 50, 50, 0.77)}
@@ -57,7 +57,7 @@ box-shadow:         6px 6px 6px -1px rgba(48, 50, 50, 0.77)}
 #div-dispon .button-group button {height:20px; width:80px; font-size:12px; float:right;padding:0px;
 text-shadow:1px 1px 1px #000;}
 /* =========== Div Periodos ================================================== */
-#periodos{width:500px;position:realtive;float:left;margin-left: 40px;height:550px;}
+#periodos{width:450px;position:realtive;float:left;margin-left: 20px;height:550px;}
 #periodos .panel-body{height:410px;}
 #periodos form{font-size:14px;}
 #periodos .label-info{font-size:20px; margin-top:20px;}
@@ -79,14 +79,14 @@ box-shadow:         6px 6px 6px -1px rgba(48, 50, 50, 0.77)
 #painel-usuario{background:transparent;border:none;}
 #painel-usuario button{font-size:15px; float:right;position:relative;top:-60px;left:-5px;}
 /* =================== CSS Div atualizar periodo ========================= */
-#divAtualizaPeriodo{margin-bottom:10px;width: 260px;height: 70px;position:relative;float:left;margin-left:40px;}
-#divAtualizaPeriodo .input-group{height: 35px;width: 260px;float:left;}
-#divAtualizaPeriodo .btn-primary{float:right;width:58px;}
+#divAtualizaPeriodo{margin-bottom:10px;width: 220px;height: 70px;position:relative;float:left;margin-left:40px;}
+#divAtualizaPeriodo .input-group{height: 35px;width: 220px;float:left;}
+#divAtualizaPeriodo .btn-primary{float:right;width:38px;}
 /* =================== CSS infos e legenda =============================== */
-#div-infos-legenda{width:300px;height:400px;float:left;}
-#INFOS{width:300px;height:200px;margin-left:-40px;}
-#Legenda{border-radius:15px;float:left;width:300px;margin-bottom:27px;margin-top:27px;}
-#Informacoes{border-radius:15px;float:left;width:300px;}
+#div-infos-legenda{width:260px;height:400px;float:left;}
+#INFOS{width:260px;height:200px;margin-left:-40px;}
+#Legenda{border-radius:15px;float:left;width:260px;margin-bottom:15px;margin-top:15px;}
+#Informacoes{border-radius:15px;float:left;width:260px;}
 /* ================== CSS div cadeiras alocadas =================================== */
 #cadeira-vermelha{color:#eee;font-size:12px;height:50px;
 background: #f31303; /* Old browsers */
@@ -105,4 +105,4 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f31303', end
 .popover.right .arrow:after{border-right-color:#000;}
 .popover.bottom .arrow:after{	border-bottom-color:#000;}
 
-footer{height:30px;float:left;width:100%;color:#fff;font-family:cursive;padding-top:5px;}
+footer{height:30px;float:left;width:100%;color:#fff;font-family:cursive;padding-top:5px;position:relative; bottom:0px;}

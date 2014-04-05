@@ -22,23 +22,22 @@ import exceptions.PeriodoCursandoException;
 public class Usuario extends Model {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Required
 	@Email
 	private String email;
-	
+
 	@Required
 	private String nome;
-	
+
 	@Required
 	private String senha;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PlanoDeCurso plano;
 
-	public static Finder<String, Usuario> find = new Finder<String, Usuario>(
-			String.class, Usuario.class);
+	public static Finder<String, Usuario> find = new Finder<String, Usuario>(String.class, Usuario.class);
 
 	public Usuario(String email, String nome, String senha) {
 		this.email = email;
@@ -46,27 +45,43 @@ public class Usuario extends Model {
 		this.senha = senha;
 		plano = new PlanoDeCurso();
 	}
-	
-	public String getEmail() { return email; }
 
-	public void setEmail(String email) { this.email = email; }
+	public String getEmail() {
+		return email;
+	}
 
-	public String getNome() { return nome; }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-	public void setNome(String nome) { this.nome = nome; }
+	public String getNome() {
+		return nome;
+	}
 
-	public PlanoDeCurso getPlano() { return plano; }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-	public void setPlano(PlanoDeCurso plano) { this.plano = plano; }
+	public PlanoDeCurso getPlano() {
+		return plano;
+	}
 
-	public int getPeriodoAtual() { return this.getPlano().getPeriodoCursando(); }
+	public void setPlano(PlanoDeCurso plano) {
+		this.plano = plano;
+	}
+
+	public int getPeriodoAtual() {
+		return this.getPlano().getPeriodoCursando();
+	}
 
 	public void setPeriodoAtual(int numPeriodo) throws PeriodoCursandoException {
 		this.getPlano().setPeriodoCursando(numPeriodo);
 	}
 
 	// TODO criar classe de hash para senha, aumentar seguranca :p
-	public String getSenha() { return senha; }
+	public String getSenha() {
+		return senha;
+	}
 
 	public void setSenha(String senha) {
 		try {
@@ -98,7 +113,6 @@ public class Usuario extends Model {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equal(this.nome, other.getNome())
-				&& Objects.equal(this.senha, other.getSenha());
+		return Objects.equal(this.nome, other.getNome()) && Objects.equal(this.senha, other.getSenha());
 	}
 }

@@ -109,12 +109,12 @@
 		}
 			<!-- DIV DO PERIODO -->
 			@if(index+1 < plano.getPeriodoCursando()) {
-			<div id="Periodo@index" class="panel panel-default" style="background-color:#fcc;width:500px;border:3px groove;">
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#fcc;width:450px;border:3px groove;">
 			} else{
 			@if(index+1 == plano.getPeriodoCursando()) {
-			<div id="Periodo@index" class="panel panel-default" style="background-color:#cfc;width:500px;border:3px groove;">
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#cfc;width:450px;border:3px groove;">
 			}else{
-			<div id="Periodo@index" class="panel panel-default" style="background-color:#999;width:500px;border:3px groove;">
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#999;width:450px;border:3px groove;">
 			}
 			}
 				<!--- BODY DIV PERIODO -->
@@ -122,7 +122,7 @@
 					@for(cadeira <- periodo.getCadeiras()) {
 
 					<!-- div cadeira -->
-					<div class="panel panel-success" style="width:200px;float:left;margin-left:10px;"> 
+					<div class="panel panel-success" style="width:180px;float:left;margin-left:10px;"> 
 					@if(plano.verificaPrerequisito(cadeira.getNome())){
 						<div id="cadeira-vermelha" class="panel-heading popover-bottom"
 						data-container="body" data-toggle="popover"
@@ -176,8 +176,8 @@
 		<!-- form periodo atual -->
 		<form action="@routes.PlanoDeCursoController.atualizaPeriodo" method="post">
 			<div class="input-group">
-				<span class="input-group-addon">Atualizar Periodo</span>
-				<select class="form-control" name="periodo" id="periodo" style="width:70px;display:inline;">
+				<span class="input-group-addon">Atualizar</span>
+				<select class="form-control" name="periodo" id="periodo" style="width:60px;display:inline;">
 	  				@for(i <- 1 to plano.getPeriodos().size() ){
 	  					@if(i == plano.getPeriodoCursando()){
 							<option selected="selected">@i</option>
@@ -245,11 +245,12 @@
 
 @modalPlano
 @modalErro
-</body>
 <footer>
 <center> 
 <small> Projeto Da Disciplina de Sistemas de Informação I - Universidade Federal de Campina Grande</small>
 <span> - Março 2014 </span>
 </center>
  </footer>
+</body>
+
 </html>

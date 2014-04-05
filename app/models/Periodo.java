@@ -36,45 +36,59 @@ public class Periodo extends Model {
 
 	private List<ValidadorDePeriodo> validadores;
 
-	public static Finder<Long, Periodo> find = new Finder<Long, Periodo>(
-			Long.class, Periodo.class);
-	
+	public static Finder<Long, Periodo> find = new Finder<Long, Periodo>(Long.class, Periodo.class);
+
 	public Periodo() {
 		cadeiras = new ArrayList<Cadeira>();
 		validadores = new ArrayList<ValidadorDePeriodo>();
 	}
 
-	public Long getId() { return id; }
-	
-	public void clearValidadores() { validadores.clear(); }
+	public Long getId() {
+		return id;
+	}
 
-	public void setCadeiras(List<Cadeira> cadeiras) { this.cadeiras = cadeiras; }
+	public void clearValidadores() {
+		validadores.clear();
+	}
 
-	public List<ValidadorDePeriodo> getValidadores() { return validadores; }
+	public void setCadeiras(List<Cadeira> cadeiras) {
+		this.cadeiras = cadeiras;
+	}
 
-	public void setValidadores(List<ValidadorDePeriodo> validadores) { this.validadores = validadores; }
+	public List<ValidadorDePeriodo> getValidadores() {
+		return validadores;
+	}
 
-	public void addValidador(ValidadorDePeriodo validador) { this.validadores.add(validador); }
+	public void setValidadores(List<ValidadorDePeriodo> validadores) {
+		this.validadores = validadores;
+	}
 
-	public List<Cadeira> getListaCadeiras() { return cadeiras; }
+	public void addValidador(ValidadorDePeriodo validador) {
+		this.validadores.add(validador);
+	}
 
-	public boolean isEmpty(){ return cadeiras.isEmpty(); }
+	public List<Cadeira> getListaCadeiras() {
+		return cadeiras;
+	}
+
+	public boolean isEmpty() {
+		return cadeiras.isEmpty();
+	}
 
 	public void addCadeira(Cadeira cadeira) throws LimiteDeCreditosException {
-		if(!validaAdd(cadeira)){
+		if (!validaAdd(cadeira)) {
 			throw new LimiteDeCreditosException("Limite Máximo Ultrapassado");
 		}
 		cadeiras.add(cadeira);
 	}
 
-	public void removerCadeira(Cadeira cadeira)
-			throws LimiteDeCreditosException {
-		if(!validaRem(cadeira)){
+	public void removerCadeira(Cadeira cadeira) throws LimiteDeCreditosException {
+		if (!validaRem(cadeira)) {
 			throw new LimiteDeCreditosException("Limite Mínimo Insuficiente");
 		}
 		cadeiras.remove(cadeira);
 	}
-	
+
 	/**
 	 * Retorna se a operação de adicionar é válida ou não.
 	 * 
@@ -82,13 +96,13 @@ public class Periodo extends Model {
 	 */
 	public boolean validaAdd(Cadeira cadeira) {
 		for (ValidadorDePeriodo validador : validadores) {
-			if(!validador.valida(getCreditos() + cadeira.getCreditos())){
+			if (!validador.valida(getCreditos() + cadeira.getCreditos())) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Retorna se a operação de remover é válida ou não.
 	 * 
@@ -97,7 +111,7 @@ public class Periodo extends Model {
 	 */
 	public boolean validaRem(Cadeira cadeira) {
 		for (ValidadorDePeriodo validador : validadores) {
-			if(!validador.valida(getCreditos() - cadeira.getCreditos())){
+			if (!validador.valida(getCreditos() - cadeira.getCreditos())) {
 				return false;
 			}
 		}
