@@ -1,9 +1,7 @@
-@(plano:PlanoDeCurso)
+@(plano: PlanoDeCurso)
 
 @import helper._
-
 <!DOCTYPE html>
-
 <html>
 <head>
 	<title>Plano De Curso</title>
@@ -15,13 +13,22 @@
 
 	<script type='text/javascript' src="@routes.Assets.at("javascripts/funcoes2.js")"></script>
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
+
+	<script> 
+	function showModalPlano(){
+		$("#modal-plano").modal('show');
+	}
+	</script>
 </head>
-<body>
-<div id="div-principal">
+
+<body> 
+
+<!-- BARRA MENU -->
+@if(session.get("connected")) {
 <nav class="navbar navbar-inverse" role="navigation">
 	<!-- Brand and toggle get grouped for better mobile display -->
 	<div class="navbar-header">
-		<a class="navbar-brand" href="@routes.PlanoDeCursoController.index()">Plano De Curso</a>
+		<a class="navbar-brand" href="#">Plano De Curso</a>
 	</div>
 	<p class="navbar-text">Bem Vindo! @session.get("connected")</p>
 	<!-- Collect the nav links, forms, and other content for toggling -->
@@ -33,84 +40,132 @@
 		</ul>
 	</div><!-- /.navbar-collapse -->
 </nav>
+} else {
+	
+}
+
+<!-- DIV DAS CADEIRAS DISPONIVEIS -->
+<div id="div-dispon" class="panel panel-primary" >
+	<div class="panel-heading">
+		<center>
+		<h3 class="panel-title">@Messages("cadeirasDisponiveis") </h3>
+		</center>
+	</div>
+	
+	@for(cadeira <- plano.getCadeirasDisponiveisOrdenadas()) {
+	<!-- div cadeira -->
+	<center>
+	<div class="panel panel-success" > 
+		<div class="panel-heading">
+			<center> @cadeira.getNome()</center>
+		</div>
+		<div class="panel-body col">
+			<span class="label label-warning"> 
+						@Messages("creditos"): @cadeira.getCreditos() </span>		
+			<div class="button-group">
+				<button id="move-@cadeira.getNome()" type="button" class="btn btn-info popover-right" 
+				data-container="body" data-toggle="popover"
+				data-content="s" onclick="contentPopover(this, -1, @plano.getPeriodos().size())" >Adicionar</button>
+			</div>
+			
+		</div>
+	</div>	
+	</center>
+	}	  
 </div>
-<button>VOLTAR</button>
 
 <!-- Div periodos -->
-<div id="periodos" style="width:100%;">
-	<!--
+<div id="periodos" style="width:75%;">
+	<!-- BOTAO PLANO MODAL -->
+			<button onclick="showModalPlano()" class="btn btn-primary" style="position:relative;float:right;top:-30px;">
+				<span class="glyphicon glyphicon-fullscreen"> </span> 
+				mostrar plano inteiro
+			</button>
 	<center>
-	 Tittle Periodos 
-	<a href="#" class="list-group-item active" style="margin-bottom:-15px;">Periodos</a>
+	<!-- Tittle Periodos -->
+	<a href="#" class="list-group-item active" style="margin-bottom:-15px;">
+	<span style="position:relative;left:70px;"> Periodos </span></a> 
+	
+	<!-- Nav tabs -->
+	<ul class="nav nav-pills">
+		@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
+			@if(plano.getPeriodoCursando() == index+1){
+				<li class="active"><a href="#periodo@(index+1)" data-toggle="tab">
+			}else{
+				<li onclick="resetPopovers()"><a href="#periodo@(index+1)" data-toggle="tab">
+			}
+			@(index+1)</a></li>
+		}
+	</ul>
 	</center>
-	-->
 
-	@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
-		@if(periodo.isEmpty()) {
-
-		} else {
+	<!-- Tab panes -->
+	<div class="tab-content" style="width:100%;">
+		@for((periodo, index) <- plano.getPeriodos().zipWithIndex){
+		@if(plano.getPeriodoCursando() == index+1){
+		<div class="tab-pane active" id="periodo@(index+1)" style="width:100%;">
+		}else{
+		<div class="tab-pane" id="periodo@(index+1)" style="width:100%;">
+		}
 			<!-- DIV DO PERIODO -->
 			@if(index+1 < plano.getPeriodoCursando()) {
-			<div id="Periodo@index" class="panel panel-default" 
-				style="background-color:#fcc;width:180px;border:3px groove;float:left;height:550px;overflow-y:auto;">
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#fcc;width:100%;border:3px groove;">
 			} else{
 			@if(index+1 == plano.getPeriodoCursando()) {
-			<div id="Periodo@index" class="panel panel-default" 
-				style="background-color:#cfc;width:180px;border:3px groove;float:left;height:550px;overflow-y:auto;">
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#cfc;width:100%;border:3px groove;">
 			}else{
-			<div id="Periodo@index" class="panel panel-default" 
-				style="background-color:#999;width:180px;border:3px groove;float:left;height:550px;overflow-y:auto;">
+			<div id="Periodo@index" class="panel panel-default" style="background-color:#999;width:100%;border:3px groove;">
 			}
 			}
-			<!--- BODY DIV PERIODO -->
-			<div class="panel-body" style="width:150px;">
-				@for(cadeira <- periodo.getCadeiras()) {
+				<!--- BODY DIV PERIODO -->
+				<div class="panel-body">
+					@for(cadeira <- periodo.getCadeiras()) {
 
-				<!-- div cadeira -->
-				<div class="panel panel-success" style="width:150px;margin-right:25px;"> 
-				@if(plano.verificaPrerequisito(cadeira.getNome())){
-					<div class="panel-heading" style="background-color:#900;color:#eee;font-size:10px;height:50px;">
-				}else{
-					<div class="panel-heading" style="background-color:#299;color:#eee;font-size:10px;height:50px;">
-				}
-					<!--
-						<button type="button" class="close" style="left:8px;top:-5px;"
-						onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')">&times;</button>
-					-->
-						<center> @cadeira.getNome()</center>
-
-					</div>
-					<!--
-					<div class="panel-body col" style="height:30px;padding:5px;">
-						
-						<span class="label label-warning" style="float:left;height:20px;padding-top:5px;"> 
-						@Messages("creditos"): @cadeira.getCreditos() </span>		
-						<div class="button-group">
-							<button id="move-@cadeira.getNome()"type="button" class="btn btn-info popover-right" style="height:20px;width:80px;font-size:12px;padding:0px;float:right;" 
-							data-container="body" data-toggle="popover"	data-content="s" 
-							onclick="contentPopover(this, @index, @plano.getPeriodos().size())" >Mover</button>
-							
+					<!-- div cadeira -->
+					<div class="panel panel-success" style="width:200px;float:left;margin-left:10px;"> 
+					@if(plano.verificaPrerequisito(cadeira.getNome())){
+						<div id="cadeira-vermelha" class="panel-heading popover-bottom"
+						data-container="body" data-toggle="popover"
+						data-content="@plano.getRequisitosInvalidos(cadeira.getNome())" >
+					}else{
+						<div id="cadeira-verde" class="panel-heading">
+					}
+							<button type="button" class="close" style="left:8px;top:-5px;"
+							onclick="remCadeira('@cadeira.getNome()', '@plano.isPreRequisito(cadeira.getNome())')">&times;</button>
+							<center> @cadeira.getNome()</center>
 						</div>
-					</div>
-					-->
-				</div> <!-- fim div cadeira -->
-				}
-			
-			</div> <!-- fim panel body -->
-			<!-- FOOTER div periodo -->
-			<!--
-			<div class="panel-footer">
-				<center>
-				<span class="label label-success" style="font-size:17px;"> 
-				@Messages("creditos") Do Periodo: @periodo.getCreditos() </span>
-				</center>
-			</div>
-			-->
-		</div> <!-- Fim div periodo -->
-	 	}
-	}
-</div> <!-- Fim div de todos os periodos -->
+						<div class="panel-body col" style="height:30px;padding:5px;">
+							<span class="label label-warning" style="float:left;height:20px;padding-top:5px;"> 
+							@Messages("creditos"): @cadeira.getCreditos() </span>		
+							<div class="button-group">
+								<button id="move-@cadeira.getNome()"type="button" class="btn btn-info popover-right" style="height:20px;width:80px;font-size:12px;padding:0px;float:right;" 
+								data-container="body" data-toggle="popover"	data-content="s" 
+								onclick="contentPopover(this, @index, @plano.getPeriodos().size())" >Mover</button>
+							</div>
+						</div>
+					</div> <!--  fim div cadeira -->		  	
+					}
+					
+				</div> <!-- fim body periodo -->
+				<!-- FOOTER div periodo -->
+				<div class="panel-footer">
+					<center>
+						<span class="label label-success" style="font-size:17px;"> 
+							@Messages("creditos") Do Periodo: @periodo.getCreditos() </span>
+					</center>
+				</div>
+			</div> <!-- Fim div periodo -->
 
-
+		</div> <!-- Fim tab periodo -->
+		}
+	</div> <!-- fim tab content -->
+	</div>
 </body>
+
+<footer>
+<center> 
+<small> Projeto Da Disciplina de Sistemas de Informação I - Universidade Federal de Campina Grande</small>
+<span> - Março 2014 </span>
+</center>
+ </footer>
 </html>
