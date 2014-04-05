@@ -5,10 +5,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import MOCK.GerenciadorDeCadeiras;
 import exceptions.LimiteDeCreditosException;
 import exceptions.PeriodoCursandoException;
-
-import MOCK.GerenciadorDeCadeiras;
 
 /**
  * 
@@ -70,25 +69,49 @@ public class PlanoDeCursoTest {
 
 	@Test
 	public void testaAdicionarCadeira() {
-		Cadeira p1 = plano.getMapaDeCadeiras().get("Programação I");
 		Cadeira c1 = plano.getMapaDeCadeiras().get("Cálculo I");
 
 		try {
 			plano.addCadeira("Programação I", 2);
 		} catch (LimiteDeCreditosException e) {
-			Assert.assertEquals("Limite de Créditos Ultrapassado",
-					e.getMessage());
+			Assert.assertEquals("Limite de Créditos Ultrapassado", e.getMessage());
 		}
 		try {
 			plano.addCadeira("Cálculo I", 10);
-			Assert.assertEquals(c1,
-					plano.getPeriodo(10).getCadeira(c1.getNome()));
+			Assert.assertEquals(c1, plano.getPeriodo(10).getCadeira(c1.getNome()));
 		} catch (LimiteDeCreditosException e) {
 			Assert.fail("nao devia ter lançado exceptio");
 		}
 
 		Assert.assertEquals(5, plano.getPeriodo(1).getCadeiras().size());
 		Assert.assertEquals(1, plano.getPeriodo(10).getCadeiras().size());
+
+		try {
+			plano.addCadeira("qw", 1);
+		} catch (LimiteDeCreditosException e) {
+			Assert.fail("Era pra permitir a adicao de cadeiras");
+		}
+
+		Assert.assertTrue(plano.getCadeirasAlocadas().size() == 1);
+		Assert.assertTrue(plano.getPeriodo(1).getCadeiras().size() == 1);
+
+		try {
+			plano.addCadeira(null, 1);
+			Assert.fail("Nao deveria permitir a adicao de cadeiras");
+		} catch (Exception e) {
+		}
+
+		try {
+			plano.addCadeira("qwe", -1);
+			Assert.fail("Nao deveria permitir a adicao de cadeiras");
+		} catch (Exception e) {
+		}
+
+		try {
+			plano.addCadeira(null, 0);
+			Assert.fail("Nao deveria permitir a adicao de cadeiras");
+		} catch (Exception e) {
+		}
 
 	}
 
@@ -110,8 +133,7 @@ public class PlanoDeCursoTest {
 
 		try {
 			plano.addCadeira("Programação I", 10);
-			Assert.assertEquals(p1,
-					plano.getPeriodo(10).getCadeira(p1.getNome()));
+			Assert.assertEquals(p1, plano.getPeriodo(10).getCadeira(p1.getNome()));
 		} catch (LimiteDeCreditosException e) {
 			Assert.fail("nao devia ter lançado exceptio");
 		}
@@ -129,8 +151,7 @@ public class PlanoDeCursoTest {
 			plano.addCadeira("Programação I", 2);
 			Assert.fail("nao devia ter passado");
 		} catch (LimiteDeCreditosException e) {
-			Assert.assertEquals("Limite de Créditos Ultrapassado",
-					e.getMessage());
+			Assert.assertEquals("Limite de Créditos Ultrapassado", e.getMessage());
 		}
 	}
 

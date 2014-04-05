@@ -23,23 +23,23 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 
 	@Id
 	public Long id;
-	
+
 	private String nome;
-	
+
 	private int creditos;
-	
+
 	@ManyToMany
 	@JoinTable(name = "cadeira_requisito", joinColumns = @JoinColumn(name = "id_disciplina"), inverseJoinColumns = @JoinColumn(name = "id_requisito"))
 	private List<Cadeira> requisitos;
-	
+
 	private int dificuldade; // dificuldade de 1 - 10
-	
-	private int periodoOriginal; //Periodo original da disciplina segundo a grade curricular
-	
+
+	private int periodoOriginal; // Periodo original da disciplina segundo a
+									// grade curricular
+
 	private String grade;
-	
-	public static Finder<Long, Cadeira> find = new Finder<Long, Cadeira>(
-			Long.class, Cadeira.class);
+
+	public static Finder<Long, Cadeira> find = new Finder<Long, Cadeira>(Long.class, Cadeira.class);
 
 	public Cadeira() {
 		requisitos = new ArrayList<Cadeira>();
@@ -56,28 +56,51 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		this(nome, dificuldade);
 		this.creditos = creditos;
 	}
-	public int getCreditos() { return this.creditos; }
 
-	public void setCreditos(int creditos) { this.creditos = creditos; }
+	public int getCreditos() {
+		return this.creditos;
+	}
 
-	public String getNome() { return this.nome; }
+	public void setCreditos(int creditos) {
+		this.creditos = creditos;
+	}
 
-	public void setNome(String nome) { this.nome = nome; }
+	public String getNome() {
+		return this.nome;
+	}
 
-	public int getDificuldade() { return dificuldade; }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-	public void setDificuldade(int dificuldade) { this.dificuldade = dificuldade; }
+	public int getDificuldade() {
+		return dificuldade;
+	}
 
-	public List<Cadeira> getRequisitos() { return requisitos; }
+	public void setDificuldade(int dificuldade) {
+		this.dificuldade = dificuldade;
+	}
 
-	public void setRequisitos(List<Cadeira> preRequisitos) { this.requisitos = preRequisitos; }
-	
-	public int getPeriodoOriginal(){ return periodoOriginal; }
- 	
- 	public void setPeriodoOriginal(int periodo){ this.periodoOriginal = periodo; }
+	public List<Cadeira> getRequisitos() {
+		return requisitos;
+	}
 
-	public String getGrade() { return grade; }
-	
+	public void setRequisitos(List<Cadeira> preRequisitos) {
+		this.requisitos = preRequisitos;
+	}
+
+	public int getPeriodoOriginal() {
+		return periodoOriginal;
+	}
+
+	public void setPeriodoOriginal(int periodo) {
+		this.periodoOriginal = periodo;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
 	/**
 	 * Retorna verdadeiro caso a cadeira {@code c} seja pre-requisito, Seguindo
 	 * o padrão Information Expert, quem deve saber se uma cadeira é
@@ -112,7 +135,6 @@ public class Cadeira extends Model implements Comparable<Cadeira> {
 		if (getClass() != obj.getClass())
 			return false;
 		Cadeira other = (Cadeira) obj;
-		return this.creditos == other.getCreditos() &&
-				this.nome.equals(other.getNome());
+		return this.creditos == other.getCreditos() && this.nome.equals(other.getNome());
 	}
 }
