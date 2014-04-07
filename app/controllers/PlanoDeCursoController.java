@@ -39,7 +39,7 @@ public class PlanoDeCursoController extends Controller {
 		PlanoDeCurso pl = GerenciadorDeUsuario.getPlanoDeCurso(usuarioEmail);
 		pl.atualizaMapaCadeira(Cadeira.find.where().eq("grade",pl.getGrade()).findList());
 		return ok(views.html.Plano.planoRead.render(
-					pl ));
+					pl, views.html.modalPlano.render(pl) ));
 	}
 
 	public static Result atualizaPeriodo() throws PeriodoCursandoException{
